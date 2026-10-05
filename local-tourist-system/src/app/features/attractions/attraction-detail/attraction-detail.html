@@ -1,0 +1,65 @@
+@if (attraction(); as item) {
+  <article class="detail">
+    <button type="button" class="back" (click)="goBack()">← Back to catalogue</button>
+
+    <div class="hero-band">
+      <img [src]="item.imageUrl" [alt]="item.name" />
+      <div class="hero-band-copy">
+        <span class="tag">{{ item.category }}</span>
+        <h1>{{ item.name }}</h1>
+        <p>{{ item.distanceKm }} km from Kandy</p>
+      </div>
+    </div>
+
+    <div class="layout">
+      <section class="info">
+        <h2>About</h2>
+        <p>{{ item.description }}</p>
+
+        <dl>
+          <div>
+            <dt>Opening hours</dt>
+            <dd>{{ item.openingHours }}</dd>
+          </div>
+          <div>
+            <dt>Travel tips</dt>
+            <dd>{{ item.travelTips }}</dd>
+          </div>
+        </dl>
+
+        <div class="actions">
+          @if (itinerary.has(item.id)) {
+            <button type="button" class="btn btn-ghost" (click)="removeFromPlan()">Remove from plan</button>
+            <a class="btn btn-primary" routerLink="/itinerary">View my plan</a>
+          } @else {
+            <button type="button" class="btn btn-primary" (click)="addToPlan()">Add to day plan</button>
+          }
+        </div>
+
+        @if (message()) {
+          <p class="toast" role="status">{{ message() }}</p>
+        }
+      </section>
+
+      <section class="map-panel">
+        <h2>Location</h2>
+        <p class="map-note">Interactive map preview (Google Maps embed — API integration later).</p>
+        @if (mapUrl(); as url) {
+          <iframe
+            title="Map location"
+            [src]="url"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
+        }
+        <p class="coords">{{ item.latitude }}, {{ item.longitude }}</p>
+      </section>
+    </div>
+  </article>
+} @else {
+  <section class="missing">
+    <h1>Attraction not found</h1>
+    <p>That place is not in the sample catalogue.</p>
+    <a class="btn btn-primary" routerLink="/">Back to explore</a>
+  </section>
+}

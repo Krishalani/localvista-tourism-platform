@@ -1,0 +1,151 @@
+.back {
+  background: none;
+  border: 0;
+  color: var(--lv-lake);
+  font: inherit;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 1rem;
+}
+
+.hero-band {
+  position: relative;
+  border-radius: 1.25rem;
+  overflow: hidden;
+  min-height: 260px;
+  margin-bottom: 1.5rem;
+  animation: rise 0.55s ease both;
+}
+
+.hero-band img {
+  width: 100%;
+  height: 100%;
+  min-height: 260px;
+  object-fit: cover;
+  display: block;
+}
+
+.hero-band-copy {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 1.25rem 1.4rem;
+  background: linear-gradient(transparent, color-mix(in srgb, var(--lv-ink) 88%, transparent));
+  color: var(--lv-foam);
+}
+
+.hero-band-copy h1 {
+  margin: 0.25rem 0 0.2rem;
+  font-family: var(--lv-display);
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  line-height: 1.1;
+}
+
+.tag {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--lv-gold);
+  font-weight: 600;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 1.5rem;
+}
+
+.info h2,
+.map-panel h2 {
+  margin: 0 0 0.5rem;
+  font-family: var(--lv-display);
+}
+
+.info p {
+  line-height: 1.6;
+}
+
+dl {
+  margin: 1.25rem 0;
+  display: grid;
+  gap: 0.9rem;
+}
+
+dt {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--lv-lake);
+  margin-bottom: 0.2rem;
+}
+
+dd {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.toast {
+  margin-top: 0.85rem;
+  padding: 0.7rem 0.85rem;
+  border-radius: 0.65rem;
+  background: color-mix(in srgb, var(--lv-leaf) 12%, #fff);
+  color: var(--lv-leaf);
+  font-size: 0.9rem;
+}
+
+.map-panel {
+  background: color-mix(in srgb, #fff 75%, var(--lv-mist));
+  border: 1px solid color-mix(in srgb, var(--lv-leaf) 16%, transparent);
+  border-radius: 1rem;
+  padding: 1rem;
+}
+
+.map-note {
+  margin: 0 0 0.75rem;
+  font-size: 0.85rem;
+  color: color-mix(in srgb, var(--lv-ink) 65%, transparent);
+}
+
+iframe {
+  width: 100%;
+  min-height: 280px;
+  border: 0;
+  border-radius: 0.75rem;
+}
+
+.coords {
+  margin: 0.6rem 0 0;
+  font-size: 0.8rem;
+  color: color-mix(in srgb, var(--lv-ink) 55%, transparent);
+}
+
+.missing {
+  text-align: center;
+  padding: 3rem 1rem;
+}
+
+.missing h1 {
+  font-family: var(--lv-display);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 860px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}

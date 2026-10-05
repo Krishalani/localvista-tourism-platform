@@ -1,0 +1,33 @@
+<section class="itinerary">
+  <header class="head">
+    <div>
+      <h1>My one-day plan</h1>
+      <p>Session-only list — no tourist account. Stored in this browser until you clear it.</p>
+    </div>
+    @if (itinerary.count() > 0) {
+      <button type="button" class="btn btn-ghost" (click)="clear()">Clear plan</button>
+    }
+  </header>
+
+  @if (itinerary.count() === 0) {
+    <div class="empty">
+      <p>Your plan is empty. Browse attractions and add places that fit one day.</p>
+      <a class="btn btn-primary" routerLink="/">Explore attractions</a>
+    </div>
+  } @else {
+    <ol class="stops">
+      @for (item of itinerary.items(); track item.id; let i = $index) {
+        <li>
+          <span class="step">{{ i + 1 }}</span>
+          <img [src]="item.imageUrl" [alt]="''" />
+          <div class="body">
+            <span class="tag">{{ item.category }}</span>
+            <h2><a [routerLink]="['/attractions', item.id]">{{ item.name }}</a></h2>
+            <p>{{ item.distanceKm }} km · {{ item.openingHours }}</p>
+          </div>
+          <button type="button" class="btn btn-ghost" (click)="remove(item.id)">Remove</button>
+        </li>
+      }
+    </ol>
+  }
+</section>
