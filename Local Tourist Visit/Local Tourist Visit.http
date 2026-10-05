@@ -1,6 +1,19 @@
-@Local_Tourist_Visit_HostAddress = http://localhost:5282
+@HostAddress = http://localhost:5282
 
-GET {{Local_Tourist_Visit_HostAddress}}/weatherforecast/
+### Catalogue, with optional search and category filter
+GET {{HostAddress}}/api/attractions?search=temple&categoryIds=1
 Accept: application/json
 
-###
+### Attraction details
+GET {{HostAddress}}/api/attractions/1
+Accept: application/json
+
+### Categories
+GET {{HostAddress}}/api/categories
+Accept: application/json
+
+### Administrator login (returns the bearer token used by the admin endpoints)
+POST {{HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{ "username": "admin", "password": "Kandy@Admin2026" }

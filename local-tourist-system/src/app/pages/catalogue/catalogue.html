@@ -1,0 +1,85 @@
+<section class="hero">
+  <h1>Plan your day in Kandy</h1>
+  <p>Browse attractions within about 25 km of the city, check the details, and build your own one-day visit plan.</p>
+</section>
+
+<section class="filters" aria-label="Search and filter attractions">
+  <label class="search">
+    <span class="visually-hidden">Search attractions by name</span>
+    <input
+      type="search"
+      placeholder="Search by place name, e.g. temple"
+      [value]="state.search()"
+      (input)="onSearch($any($event.target).value)"
+    />
+  </label>
+
+  <div class="chips" role="group" aria-label="Filter by category">
+    @for (category of categories(); track category.id) {
+      <button
+        type="button"
+        class="chip"
+        [class.is-selected]="state.categoryIds().includes(category.id)"
+        [attr.aria-pressed]="state.categoryIds().includes(category.id)"
+        (click)="state.toggleCategory(category.id)"
+      >
+        {{ category.name }}
+      </button>
+    }
+    @if (state.isFiltered()) {
+      <button type="button" class="chip chip--clear" (click)="state.reset()">Clear filters</button>
+    }
+  </div>
+</section>
+
+<p class="visually-hidden" role="status">{{ notice() }}</p>
+
+@let current = result();
+@switch (current.status) {
+  @case ('loading') {
+    <p class="message" role="status">Loading attractions…</p>
+  }
+  @case ('error') {
+    <p class="message message--error" role="alert">
+      The attractions could not be loaded. Check that the server is running and try again.
+    </p>
+  }
+  @case ('ready') {
+    @if (current.data.length === 0) {
+      <div class="message" role="status">
+        <strong>No attractions found.</strong>
+        <p>Try a different name or remove a category filter.</p>
+      </div>
+    } @else {
+      <p class="result-count" role="status">
+        {{ current.data.length }} {{ current.data.length === 1 ? 'attraction' : 'attractions' }}
+      </p>
+      <ul class="card-grid">
+        @for (attraction of current.data; track attraction.id) {
+          <li class="card">
+            <a class="card__media" [routerLink]="['/attractions', attraction.id]" tabindex="-1" aria-hidden="true">
+              <img [appAttractionImage]="attraction.imageUrl" alt="" loading="lazy" />
+            </a>
+            <div class="card__body">
+              <span class="tag">{{ attraction.categoryName }}</span>
+              <h2 class="card__title">
+                <a [routerLink]="['/attractions', attraction.id]">{{ attraction.name }}</a>
+              </h2>
+              @if (attraction.distanceFromKandyKm !== null) {
+                <p class="card__meta">About {{ attraction.distanceFromKandyKm }} km from Kandy</p>
+              }
+              <div class="card__actions">
+                <a class="button button--ghost" [routerLink]="['/attractions', attraction.id]">View details</a>
+                @if (itinerary.contains(attraction.id)) {
+                  <span class="in-plan">✓ In your plan</span>
+                } @else {
+                  <button type="button" class="button" (click)="addToPlan(attraction)">Add to plan</button>
+                }
+              </div>
+            </div>
+          </li>
+        }
+      </ul>
+    }
+  }
+}

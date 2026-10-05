@@ -1,0 +1,92 @@
+<a class="back-link" routerLink="/">← Back to attractions</a>
+
+@let current = result();
+@switch (current.status) {
+  @case ('loading') {
+    <p class="message" role="status">Loading attraction…</p>
+  }
+  @case ('error') {
+    <div class="message message--error" role="alert">
+      @if (current.notFound) {
+        <strong>Attraction not found.</strong>
+        <p>It may have been removed from the catalogue.</p>
+      } @else {
+        <strong>The attraction could not be loaded.</strong>
+        <p>Check that the server is running and try again.</p>
+      }
+    </div>
+  }
+  @case ('ready') {
+    @let attraction = current.data;
+    <article class="detail">
+      <header class="detail__header">
+        <span class="tag">{{ attraction.categoryName }}</span>
+        <h1>{{ attraction.name }}</h1>
+        @if (attraction.distanceFromKandyKm !== null) {
+          <p class="detail__distance">About {{ attraction.distanceFromKandyKm }} km from Kandy city centre</p>
+        }
+      </header>
+
+      <div class="detail__layout">
+        <div>
+          <img class="detail__image" [appAttractionImage]="attraction.imageUrl" [alt]="attraction.name" />
+
+          <section>
+            <h2>About</h2>
+            <p>{{ attraction.description }}</p>
+          </section>
+
+          <section class="info-grid">
+            <div class="info">
+              <h2>Opening hours</h2>
+              <p>{{ attraction.openingHours ?? 'Not available yet.' }}</p>
+            </div>
+            <div class="info">
+              <h2>Travel tips</h2>
+              <p>{{ attraction.travelTips ?? 'Not available yet.' }}</p>
+            </div>
+          </section>
+        </div>
+
+        <aside class="detail__side">
+          <div class="panel">
+            @if (itinerary.contains(attraction.id)) {
+              <p class="in-plan">✓ In your one-day plan</p>
+              <a class="button" routerLink="/my-itinerary">View my plan</a>
+              <button type="button" class="button button--ghost" (click)="removeFromPlan(attraction)">
+                Remove from plan
+              </button>
+            } @else {
+              <button type="button" class="button" (click)="addToPlan(attraction)">Add to my one-day plan</button>
+            }
+            <p class="panel__notice" role="status">{{ notice() }}</p>
+          </div>
+
+          <section class="panel">
+            <h2>Location</h2>
+            @if (mapUrl(); as url) {
+              @if (mapFailed()) {
+                <p class="message message--error" role="alert">The map could not be loaded.</p>
+              } @else {
+                <iframe
+                  class="map"
+                  [src]="url"
+                  [title]="'Map showing ' + attraction.name"
+                  loading="lazy"
+                  referrerpolicy="no-referrer-when-downgrade"
+                  allowfullscreen
+                  (error)="mapFailed.set(true)"
+                ></iframe>
+              }
+              <a class="button button--ghost" [href]="directionsUrl()" target="_blank" rel="noopener">
+                Directions from Kandy
+              </a>
+            } @else {
+              <p class="message">The map location for this attraction has not been added yet.</p>
+            }
+          </section>
+        </aside>
+      </div>
+    </article>
+  }
+}

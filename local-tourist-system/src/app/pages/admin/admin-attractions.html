@@ -1,0 +1,102 @@
+<a class="back-link" routerLink="/admin">← Dashboard</a>
+
+<header class="page-header">
+  <div>
+    <h1>Manage attractions</h1>
+    <p>Add, edit or delete the attractions tourists see in the catalogue.</p>
+  </div>
+  <a class="button" routerLink="/admin/attractions/new">Add attraction</a>
+</header>
+
+@if (notice()) {
+  <p class="message message--success" role="status">{{ notice() }}</p>
+}
+@if (error()) {
+  <p class="message message--error" role="alert">{{ error() }}</p>
+}
+
+@let current = result();
+@switch (current.status) {
+  @case ('loading') {
+    <p class="message" role="status">Loading attractions…</p>
+  }
+  @case ('error') {
+    <p class="message message--error" role="alert">
+      The attractions could not be loaded. Check that the server is running and try again.
+    </p>
+  }
+  @case ('ready') {
+    <label class="search">
+      <span class="visually-hidden">Search records by name</span>
+      <input
+        type="search"
+        placeholder="Search records by name"
+        [value]="search()"
+        (input)="search.set($any($event.target).value)"
+      />
+    </label>
+
+    @if (visible().length === 0) {
+      <p class="message" role="status">No attractions found.</p>
+    } @else {
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Category</th>
+              <th scope="col">Distance</th>
+              <th scope="col"><span class="visually-hidden">Actions</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (attraction of visible(); track attraction.id) {
+              <tr>
+                <td>
+                  <a [routerLink]="['/attractions', attraction.id]">{{ attraction.name }}</a>
+                </td>
+                <td>{{ attraction.categoryName }}</td>
+                <td>{{ attraction.distanceFromKandyKm !== null ? attraction.distanceFromKandyKm + ' km' : '—' }}</td>
+                <td class="table__actions">
+                  <a class="button button--ghost" [routerLink]="['/admin/attractions', attraction.id, 'edit']">
+                    Edit
+                  </a>
+                  <button type="button" class="button button--danger-ghost" (click)="askDelete(attraction)">
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  }
+}
+
+@if (pendingDelete(); as attraction) {
+  <div class="modal-backdrop" (click)="cancelDelete()">
+    <div
+      class="modal"
+      role="alertdialog"
+      aria-modal="true"
+      aria-labelledby="delete-title"
+      aria-describedby="delete-text"
+      (click)="$event.stopPropagation()"
+      (keydown.escape)="cancelDelete()"
+    >
+      <h2 id="delete-title">Delete this attraction?</h2>
+      <p id="delete-text">
+        "{{ attraction.name }}" will be permanently removed from the catalogue. This cannot be undone.
+      </p>
+      <div class="modal__actions">
+        <button type="button" class="button button--ghost" [disabled]="deleting()" (click)="cancelDelete()">
+          Cancel
+        </button>
+        <button type="button" class="button button--danger" [disabled]="deleting()" (click)="confirmDelete()">
+          {{ deleting() ? 'Deleting…' : 'Delete permanently' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

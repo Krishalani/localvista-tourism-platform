@@ -1,0 +1,132 @@
+<a class="back-link" routerLink="/admin/attractions">← Back to attractions</a>
+
+@switch (loadState()) {
+  @case ('loading') {
+    <p class="message" role="status">Loading attraction…</p>
+  }
+  @case ('not-found') {
+    <p class="message message--error" role="alert">Attraction not found. It may have been deleted.</p>
+  }
+  @case ('error') {
+    <p class="message message--error" role="alert">The attraction could not be loaded. Please try again.</p>
+  }
+  @case ('ready') {
+    <div class="form-card">
+      <h1>{{ isEdit() ? 'Edit attraction' : 'Add attraction' }}</h1>
+      <p>Fields marked <span class="required">*</span> are required.</p>
+
+      @if (error()) {
+        <div class="message message--error" role="alert">
+          {{ error() }}
+          @if (serverErrors().length) {
+            <ul>
+              @for (message of serverErrors(); track message) {
+                <li>{{ message }}</li>
+              }
+            </ul>
+          }
+        </div>
+      }
+
+      <form [formGroup]="form" (ngSubmit)="save()" novalidate>
+        <div class="field">
+          <label for="name">Name <span class="required">*</span></label>
+          <input id="name" type="text" formControlName="name" [attr.aria-invalid]="showError('name')" />
+          @if (showError('name')) {
+            <p class="field__error">
+              {{ form.controls.name.hasError('maxlength') ? 'Name can be at most 150 characters.' : 'Name is required.' }}
+            </p>
+          }
+        </div>
+
+        <div class="field">
+          <label for="categoryId">Category <span class="required">*</span></label>
+          <select id="categoryId" formControlName="categoryId" [attr.aria-invalid]="showError('categoryId')">
+            <option [ngValue]="null">Select a category</option>
+            @for (category of categories(); track category.id) {
+              <option [ngValue]="category.id">{{ category.name }}</option>
+            }
+          </select>
+          @if (showError('categoryId')) {
+            <p class="field__error">Category is required.</p>
+          }
+        </div>
+
+        <div class="field">
+          <label for="description">Description <span class="required">*</span></label>
+          <textarea
+            id="description"
+            rows="4"
+            formControlName="description"
+            [attr.aria-invalid]="showError('description')"
+          ></textarea>
+          @if (showError('description')) {
+            <p class="field__error">
+              {{
+                form.controls.description.hasError('maxlength')
+                  ? 'Description can be at most 2000 characters.'
+                  : 'Description is required.'
+              }}
+            </p>
+          }
+        </div>
+
+        <div class="field">
+          <label for="openingHours">Opening hours</label>
+          <input id="openingHours" type="text" formControlName="openingHours" placeholder="Daily 8:00 AM - 5:00 PM" />
+          @if (showError('openingHours')) {
+            <p class="field__error">Opening hours can be at most 200 characters.</p>
+          }
+        </div>
+
+        <div class="field">
+          <label for="travelTips">Travel tips</label>
+          <textarea id="travelTips" rows="3" formControlName="travelTips"></textarea>
+          @if (showError('travelTips')) {
+            <p class="field__error">Travel tips can be at most 1000 characters.</p>
+          }
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="distance">Distance from Kandy (km)</label>
+            <input id="distance" type="number" min="0" max="25" step="0.1" formControlName="distanceFromKandyKm" />
+            @if (showError('distanceFromKandyKm')) {
+              <p class="field__error">Only attractions within 25 km of Kandy can be added (0 to 25).</p>
+            }
+          </div>
+          <div class="field">
+            <label for="latitude">Latitude</label>
+            <input id="latitude" type="number" step="any" formControlName="latitude" placeholder="7.2936" />
+            @if (showError('latitude')) {
+              <p class="field__error">Latitude must be between -90 and 90.</p>
+            }
+          </div>
+          <div class="field">
+            <label for="longitude">Longitude</label>
+            <input id="longitude" type="number" step="any" formControlName="longitude" placeholder="80.6414" />
+            @if (showError('longitude')) {
+              <p class="field__error">Longitude must be between -180 and 180.</p>
+            }
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="imageUrl">Image URL</label>
+          <input id="imageUrl" type="text" formControlName="imageUrl" placeholder="https://… or /images/attractions/…" />
+          <p class="field__hint">Leave empty to show the default placeholder picture.</p>
+          @if (showError('imageUrl')) {
+            <p class="field__error">Image URL can be at most 500 characters.</p>
+          }
+        </div>
+
+        <div class="form-actions">
+          <a class="button button--ghost" routerLink="/admin/attractions">Cancel</a>
+          <button type="submit" class="button" [disabled]="saving()">
+            {{ saving() ? 'Saving…' : isEdit() ? 'Save changes' : 'Add attraction' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  }
+}

@@ -1,0 +1,8 @@
+# .NET build output and IDE state
+bin/
+obj/
+.vs/
+*.user
+
+# Scratch
+*.log
