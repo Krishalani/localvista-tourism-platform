@@ -7,6 +7,7 @@
   min-height: 100dvh;
   display: grid;
   grid-template-rows: auto 1fr auto;
+  overflow-x: hidden;
 }
 
 .topbar {
@@ -19,8 +20,10 @@
 }
 
 .topbar-inner {
-  width: min(var(--lv-max), calc(100% - 2.5rem));
+  width: min(var(--lv-max), 100%);
   margin-inline: auto;
+  padding-inline: var(--lv-gutter);
+  box-sizing: border-box;
   min-height: 4rem;
   display: flex;
   align-items: center;
@@ -111,20 +114,15 @@
 .page {
   width: 100%;
   padding-block: 0 2.75rem;
+  overflow-x: hidden;
 }
 
-/* Landing owns its full-bleed hero; other routes stay within the content width. */
-.page > :not(app-attraction-list) {
-  display: block;
-  width: min(var(--lv-max), calc(100% - 2.5rem));
+/* Real wrapper (not routed host) so encapsulation keeps gutters reliable. */
+.page-inner {
+  width: min(var(--lv-max), 100%);
   margin-inline: auto;
-  padding-top: 1.5rem;
-}
-
-@media (max-width: 720px) {
-  .page > :not(app-attraction-list) {
-    width: min(var(--lv-max), calc(100% - 1.5rem));
-  }
+  padding: 1.75rem var(--lv-gutter) 0;
+  box-sizing: border-box;
 }
 
 .footer {
@@ -134,9 +132,10 @@
 }
 
 .footer-inner {
-  width: min(var(--lv-max), calc(100% - 2.5rem));
+  width: min(var(--lv-max), 100%);
   margin-inline: auto;
-  padding-block: 1.15rem 1.4rem;
+  padding: 1.15rem var(--lv-gutter) 1.4rem;
+  box-sizing: border-box;
   text-align: center;
 }
 
@@ -146,7 +145,6 @@
 
 @media (max-width: 720px) {
   .topbar-inner {
-    width: min(var(--lv-max), calc(100% - 1.5rem));
     min-height: auto;
     padding-block: 0.85rem;
     flex-direction: column;
@@ -156,9 +154,5 @@
   .nav {
     width: 100%;
     justify-content: flex-start;
-  }
-
-  .footer-inner {
-    width: min(var(--lv-max), calc(100% - 1.5rem));
   }
 }

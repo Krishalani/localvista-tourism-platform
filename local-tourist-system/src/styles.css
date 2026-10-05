@@ -9,6 +9,7 @@
   --lv-display: 'Fraunces', Georgia, 'Times New Roman', serif;
   --lv-sans: 'Outfit', 'Segoe UI', sans-serif;
   --lv-max: 1280px;
+  --lv-gutter: clamp(1.75rem, 5vw, 3rem);
   --lv-radius: 1rem;
 }
 
