@@ -1,31 +1,43 @@
 @if (attraction(); as item) {
   <article class="detail">
-    <button type="button" class="back" (click)="goBack()">← Back to catalogue</button>
+    <div class="detail-top">
+      <button type="button" class="back" (click)="goBack()">← Back to places</button>
+    </div>
 
     <div class="hero-band">
       <img [src]="item.imageUrl" [alt]="item.name" />
       <div class="hero-band-copy">
         <span class="tag">{{ item.category }}</span>
         <h1>{{ item.name }}</h1>
-        <p>{{ item.distanceKm }} km from Kandy</p>
+        <p class="hero-meta">{{ item.distanceKm }} km from Kandy</p>
       </div>
     </div>
 
     <div class="layout">
-      <section class="info">
-        <h2>About</h2>
-        <p>{{ item.description }}</p>
+      <section class="info panel">
+        <header class="panel-head">
+          <h2>About this place</h2>
+          <p>{{ item.description }}</p>
+        </header>
 
-        <dl>
-          <div>
-            <dt>Opening hours</dt>
-            <dd>{{ item.openingHours }}</dd>
+        <div class="fact-grid">
+          <div class="fact">
+            <span class="fact-label">Opening hours</span>
+            <p>{{ item.openingHours }}</p>
           </div>
-          <div>
-            <dt>Travel tips</dt>
-            <dd>{{ item.travelTips }}</dd>
+          <div class="fact">
+            <span class="fact-label">Travel tips</span>
+            <p>{{ item.travelTips }}</p>
           </div>
-        </dl>
+          <div class="fact">
+            <span class="fact-label">Distance</span>
+            <p>{{ item.distanceKm }} km from central Kandy</p>
+          </div>
+          <div class="fact">
+            <span class="fact-label">Category</span>
+            <p>{{ item.category }}</p>
+          </div>
+        </div>
 
         <div class="actions">
           @if (itinerary.has(item.id)) {
@@ -41,25 +53,29 @@
         }
       </section>
 
-      <section class="map-panel">
-        <h2>Location</h2>
-        <p class="map-note">Interactive map preview (Google Maps embed — API integration later).</p>
+      <aside class="map-panel panel">
+        <header class="panel-head">
+          <h2>On the map</h2>
+          <p>Preview pin for this stop. Live Maps API comes with the backend phase.</p>
+        </header>
         @if (mapUrl(); as url) {
-          <iframe
-            title="Map location"
-            [src]="url"
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-          ></iframe>
+          <div class="map-frame">
+            <iframe
+              title="Map location"
+              [src]="url"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
         }
         <p class="coords">{{ item.latitude }}, {{ item.longitude }}</p>
-      </section>
+      </aside>
     </div>
   </article>
 } @else {
-  <section class="missing">
-    <h1>Attraction not found</h1>
-    <p>That place is not in the sample catalogue.</p>
+  <section class="missing panel">
+    <h1>Place not found</h1>
+    <p>That attraction is not in the sample catalogue.</p>
     <a class="btn btn-primary" routerLink="/">Back to explore</a>
   </section>
 }
