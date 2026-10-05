@@ -13,11 +13,14 @@
       </div>
     </div>
 
-    <div class="hero-visual" role="img" aria-label="Sri Dalada Maligawa and hills around Kandy">
-      <div class="hero-visual-caption">
-        <span>Featured area</span>
-        <strong>Temple of the Tooth &amp; lake district</strong>
-      </div>
+    <div class="hero-visual">
+      @if (featured(); as spot) {
+        <img [src]="spot.imageUrl" [alt]="spot.name" class="hero-visual-img" />
+        <div class="hero-visual-caption">
+          <span>Featured area</span>
+          <strong>{{ spot.name }}</strong>
+        </div>
+      }
     </div>
   </div>
 </section>

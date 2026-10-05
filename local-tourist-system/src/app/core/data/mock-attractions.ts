@@ -124,7 +124,7 @@ export const MOCK_ATTRACTIONS: Attraction[] = [
     travelTips: 'Dress modestly (cover shoulders and knees). Remove shoes before entering.',
     distanceKm: 0.5,
     imageUrl:
-      'https://images.unsplash.com/photo-1582510003544-4d00b07f73c0?auto=format&fit=crop&w=1200&q=80',
+      'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=1200&q=80',
     latitude: 7.2936,
     longitude: 80.6412,
   },
@@ -208,7 +208,7 @@ export const MOCK_ATTRACTIONS: Attraction[] = [
     travelTips: 'Sunset is popular — arrive early for parking and clear views.',
     distanceKm: 2,
     imageUrl:
-      'https://images.unsplash.com/photo-1483728642387-6c3bdd6cd5ff?auto=format&fit=crop&w=1200&q=80',
+      'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1200&q=80',
     latitude: 7.2905,
     longitude: 80.6355,
   },

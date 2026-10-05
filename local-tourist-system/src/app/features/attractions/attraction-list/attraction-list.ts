@@ -31,6 +31,13 @@ export class AttractionList {
     }),
   );
 
+  /** Featured hero image — Temple of the Tooth when present. */
+  protected readonly featured = computed(
+    () =>
+      this.attractionService.getById(9) ??
+      this.attractionService.getAll()[0],
+  );
+
   constructor() {
     this.route.queryParamMap.subscribe((params) => {
       this.search.set(params.get('q') ?? '');
