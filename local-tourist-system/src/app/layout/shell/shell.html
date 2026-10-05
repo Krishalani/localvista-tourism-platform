@@ -1,28 +1,30 @@
 <div class="shell">
   <header class="topbar">
-    <a routerLink="/" class="brand" aria-label="LocalVista home">
-      <span class="brand-mark" aria-hidden="true"></span>
-      <span class="brand-text">
-        <strong>LocalVista</strong>
-        <small>Kandy day visits</small>
-      </span>
-    </a>
-
-    <nav class="nav" aria-label="Primary">
-      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Explore</a>
-      <a routerLink="/itinerary" routerLinkActive="active">
-        My plan
-        @if (itinerary.count() > 0) {
-          <span class="badge">{{ itinerary.count() }}</span>
-        }
+    <div class="topbar-inner">
+      <a routerLink="/" class="brand" aria-label="LocalVista home">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span class="brand-text">
+          <strong>LocalVista</strong>
+          <small>Kandy day visits</small>
+        </span>
       </a>
-      @if (auth.isAuthenticated()) {
-        <a routerLink="/admin" routerLinkActive="active">Admin</a>
-        <button type="button" class="linkish" (click)="logout()">Log out</button>
-      } @else {
-        <a routerLink="/admin/login" routerLinkActive="active">Admin</a>
-      }
-    </nav>
+
+      <nav class="nav" aria-label="Primary">
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Explore</a>
+        <a routerLink="/itinerary" routerLinkActive="active">
+          My plan
+          @if (itinerary.count() > 0) {
+            <span class="badge">{{ itinerary.count() }}</span>
+          }
+        </a>
+        @if (auth.isAuthenticated()) {
+          <a routerLink="/admin" routerLinkActive="active">Admin</a>
+          <button type="button" class="linkish" (click)="logout()">Log out</button>
+        } @else {
+          <a routerLink="/admin/login" routerLinkActive="active">Admin</a>
+        }
+      </nav>
+    </div>
   </header>
 
   <main class="page">
@@ -30,6 +32,8 @@
   </main>
 
   <footer class="footer">
-    <p>LocalVista — attractions within about 25 km of Kandy. Sample UI with hardcoded data.</p>
+    <div class="footer-inner">
+      <p>LocalVista helps you plan one day around Kandy — sample UI with hardcoded data.</p>
+    </div>
   </footer>
 </div>
