@@ -2,27 +2,40 @@
   color: var(--lv-lake);
   text-decoration: none;
   font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.eyebrow {
+  margin: 0.85rem 0 0.3rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--lv-lake);
+  font-weight: 650;
 }
 
 .form-page h1 {
-  margin: 0.5rem 0 0.25rem;
-  font-family: var(--lv-display);
-  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  margin: 0 0 0.35rem;
+  font-family: var(--lv-sans);
+  font-size: clamp(1.8rem, 3vw, 2.35rem);
+  font-weight: 650;
+  letter-spacing: -0.02em;
 }
 
 .lede {
   margin: 0 0 1.25rem;
   color: color-mix(in srgb, var(--lv-ink) 65%, transparent);
+  max-width: 48ch;
 }
 
 form {
   display: grid;
   gap: 0.9rem;
-  max-width: 720px;
-  padding: 1.15rem;
-  border-radius: 1rem;
-  background: color-mix(in srgb, #fff 86%, var(--lv-mist));
-  border: 1px solid color-mix(in srgb, var(--lv-leaf) 16%, transparent);
+  max-width: 760px;
+  padding: 1.25rem;
+  border-radius: 1.15rem;
+  background: color-mix(in srgb, #fff 90%, var(--lv-mist));
+  border: 1px solid color-mix(in srgb, var(--lv-leaf) 12%, transparent);
 }
 
 label {
@@ -37,9 +50,9 @@ select,
 textarea {
   font: inherit;
   font-weight: 400;
-  padding: 0.7rem 0.8rem;
-  border-radius: 0.65rem;
-  border: 1px solid color-mix(in srgb, var(--lv-leaf) 28%, transparent);
+  padding: 0.75rem 0.85rem;
+  border-radius: 0.7rem;
+  border: 1px solid color-mix(in srgb, var(--lv-leaf) 24%, transparent);
   background: #fff;
 }
 

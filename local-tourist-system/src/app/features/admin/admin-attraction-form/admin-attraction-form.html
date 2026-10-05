@@ -1,7 +1,8 @@
 <section class="form-page">
-  <a routerLink="/admin" class="back">← Back to management</a>
-  <h1>{{ isEdit() ? 'Edit attraction' : 'Add attraction' }}</h1>
-  <p class="lede">Mandatory fields: name, category, description.</p>
+  <a routerLink="/admin" class="back">← Back to catalogue</a>
+  <p class="eyebrow">Administrator</p>
+  <h1>{{ isEdit() ? 'Edit place' : 'Add place' }}</h1>
+  <p class="lede">Required: name, category, and description. Everything else helps tourists plan.</p>
 
   <form (ngSubmit)="submit()" novalidate>
     <label>
@@ -67,7 +68,7 @@
     <div class="actions">
       <a class="btn btn-ghost" routerLink="/admin">Cancel</a>
       <button type="submit" class="btn btn-primary">
-        {{ isEdit() ? 'Save changes' : 'Create attraction' }}
+        {{ isEdit() ? 'Save changes' : 'Create place' }}
       </button>
     </div>
   </form>

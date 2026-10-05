@@ -1,10 +1,11 @@
 <section class="admin">
   <header class="head">
     <div>
-      <h1>Manage attractions</h1>
-      <p>{{ attractionService.count() }} records in the sample catalogue.</p>
+      <p class="eyebrow">Administrator</p>
+      <h1>Catalogue management</h1>
+      <p>{{ attractionService.count() }} places in the sample catalogue.</p>
     </div>
-    <a class="btn btn-primary" routerLink="/admin/attractions/new">Add attraction</a>
+    <a class="btn btn-primary" routerLink="/admin/attractions/new">Add place</a>
   </header>
 
   @if (flash()) {
@@ -42,8 +43,8 @@
   @if (pendingDeleteId(); as id) {
     <div class="dialog-backdrop" role="presentation">
       <div class="dialog" role="alertdialog" aria-modal="true" aria-labelledby="delete-title">
-        <h2 id="delete-title">Delete this attraction?</h2>
-        <p>This permanently removes the record from the sample catalogue.</p>
+        <h2 id="delete-title">Delete this place?</h2>
+        <p>This permanently removes it from the sample catalogue.</p>
         <div class="dialog-actions">
           <button type="button" class="btn btn-ghost" (click)="cancelDelete()">Cancel</button>
           <button type="button" class="btn btn-danger" (click)="confirmDelete()">Delete</button>

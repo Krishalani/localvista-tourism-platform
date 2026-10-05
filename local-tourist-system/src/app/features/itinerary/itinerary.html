@@ -1,8 +1,9 @@
 <section class="itinerary">
   <header class="head">
     <div>
-      <h1>My one-day plan</h1>
-      <p>Session-only list — no tourist account. Stored in this browser until you clear it.</p>
+      <p class="eyebrow">Session plan</p>
+      <h1>My one-day route</h1>
+      <p>Saved in this browser only — no tourist account. Clear anytime and start again.</p>
     </div>
     @if (itinerary.count() > 0) {
       <button type="button" class="btn btn-ghost" (click)="clear()">Clear plan</button>
@@ -11,10 +12,12 @@
 
   @if (itinerary.count() === 0) {
     <div class="empty">
-      <p>Your plan is empty. Browse attractions and add places that fit one day.</p>
-      <a class="btn btn-primary" routerLink="/">Explore attractions</a>
+      <h2>No stops yet</h2>
+      <p>Add places from Explore to shape a realistic one-day visit around Kandy.</p>
+      <a class="btn btn-primary" routerLink="/">Browse places</a>
     </div>
   } @else {
+    <p class="count">{{ itinerary.count() }} stop{{ itinerary.count() === 1 ? '' : 's' }} in order</p>
     <ol class="stops">
       @for (item of itinerary.items(); track item.id; let i = $index) {
         <li>
