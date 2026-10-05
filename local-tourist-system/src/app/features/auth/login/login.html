@@ -1,0 +1,45 @@
+<section class="login">
+  <div class="panel">
+    <p class="eyebrow">Welcome back</p>
+    <h1>Sign in</h1>
+    <p class="hint">Use your account to continue. Admin tools appear only if your role allows them.</p>
+
+    <form (ngSubmit)="submit()" novalidate>
+      <label>
+        Username
+        <input name="username" [(ngModel)]="username" autocomplete="username" required />
+      </label>
+      <label>
+        Password
+        <input
+          name="password"
+          type="password"
+          [(ngModel)]="password"
+          autocomplete="current-password"
+          required
+        />
+      </label>
+
+      @if (error()) {
+        <p class="error" role="alert">{{ error() }}</p>
+      }
+
+      <button type="submit" class="btn btn-primary">Sign in</button>
+    </form>
+
+    <p class="switch">
+      New here?
+      <a routerLink="/signup">Create an account</a>
+    </p>
+
+    <details class="demo-help">
+      <summary>Demo accounts</summary>
+      <ul>
+        <li><code>user</code> / <code>User12345</code> — normal user</li>
+        <li><code>manager</code> / <code>Manager123</code> — admin (shows Admin tab)</li>
+      </ul>
+    </details>
+
+    <a routerLink="/" class="back">← Continue as guest</a>
+  </div>
+</section>

@@ -32,15 +32,9 @@
 
 .hint {
   margin: 0 0 1.15rem;
-  font-size: 0.9rem;
+  font-size: 0.92rem;
   color: color-mix(in srgb, var(--lv-ink) 65%, transparent);
-}
-
-code {
-  font-size: 0.85em;
-  background: color-mix(in srgb, var(--lv-gold) 18%, #fff);
-  padding: 0.1rem 0.35rem;
-  border-radius: 0.3rem;
+  line-height: 1.5;
 }
 
 form {
@@ -72,9 +66,47 @@ input {
   font-size: 0.9rem;
 }
 
+.switch {
+  margin: 1rem 0 0;
+  font-size: 0.9rem;
+  color: color-mix(in srgb, var(--lv-ink) 68%, transparent);
+}
+
+.switch a {
+  color: var(--lv-lake);
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.demo-help {
+  margin-top: 1rem;
+  font-size: 0.86rem;
+  color: color-mix(in srgb, var(--lv-ink) 70%, transparent);
+}
+
+.demo-help summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--lv-lake);
+}
+
+.demo-help ul {
+  margin: 0.55rem 0 0;
+  padding-left: 1.1rem;
+  display: grid;
+  gap: 0.35rem;
+}
+
+code {
+  font-size: 0.85em;
+  background: color-mix(in srgb, var(--lv-gold) 18%, #fff);
+  padding: 0.1rem 0.35rem;
+  border-radius: 0.3rem;
+}
+
 .back {
   display: inline-block;
-  margin-top: 1rem;
+  margin-top: 0.85rem;
   color: var(--lv-lake);
   text-decoration: none;
   font-size: 0.9rem;

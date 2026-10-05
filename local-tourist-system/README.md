@@ -10,17 +10,34 @@ npm install
 npm start
 ```
 
-Open `http://localhost:4200/`.
+Open `http://localhost:4200/` (use the port your terminal prints). Hard refresh with **Ctrl+F5** after updates.
 
-## Features covered
+## Navigation behaviour
 
-| Area | Routes | Notes |
-|------|--------|-------|
-| Catalogue + search/filter | `/` | Query params preserve filters (`q`, `categories`) |
-| Attraction detail + map embed | `/attractions/:id` | Google Maps iframe (API key later) |
-| One-day itinerary | `/itinerary` | Session `localStorage`; no tourist accounts |
-| Admin login | `/admin/login` | `admin` / `Admin123` |
-| Admin CRUD | `/admin`, `/admin/attractions/new`, `/admin/attractions/:id/edit` | Guarded; delete confirmation |
+| State | Nav shows |
+|-------|-----------|
+| Guest (not logged in) | Explore · My plan · **Sign in** · **Sign up** |
+| Normal user | Explore · My plan · Hi, Name · Log out |
+| Admin user | Explore · My plan · **Admin** · Hi, Name · Log out |
+
+The **Admin** tab is hidden until an admin-role account signs in.
+
+## Auth routes
+
+| Page | Route |
+|------|--------|
+| Sign in | `/login` |
+| Sign up | `/signup` |
+| Admin manage (guarded) | `/admin` |
+
+Sign-up creates a **Tourist** account (saved in browser localStorage). Admin is not self-registered.
+
+## Demo accounts
+
+| Username | Password | Result |
+|----------|----------|--------|
+| `user` | `User12345` | Normal user |
+| `manager` | `Manager123` | Admin tab appears |
 
 ## Architecture
 
@@ -31,7 +48,6 @@ src/app/
   features/
     attractions/  list + detail
     itinerary/
-    admin/        login, list, form
+    auth/         sign in + sign up
+    admin/        list + form (Admin role only)
 ```
-
-Services (`AttractionService`, `ItineraryService`, `AuthService`) are the seam where HTTP calls will replace hardcoded data later.

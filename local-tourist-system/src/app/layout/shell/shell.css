@@ -97,6 +97,29 @@
   color: var(--lv-gold);
 }
 
+.session {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.28rem 0.65rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--lv-lake) 22%, transparent);
+  color: var(--lv-foam);
+  font-size: 0.84rem;
+  font-weight: 600;
+}
+
+.signup-link {
+  padding: 0.35rem 0.75rem;
+  border-radius: 0.55rem;
+  border: 1px solid color-mix(in srgb, var(--lv-gold) 55%, transparent);
+  color: var(--lv-gold) !important;
+}
+
+.signup-link:hover,
+.signup-link.active {
+  background: color-mix(in srgb, var(--lv-gold) 16%, transparent);
+}
+
 .badge {
   display: inline-grid;
   place-items: center;
