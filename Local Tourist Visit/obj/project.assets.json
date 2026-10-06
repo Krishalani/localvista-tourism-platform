@@ -89,11 +89,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\BIT\\Local Tourist Visit\\Local Tourist Visit.csproj",
+      "projectUniqueName": "C:\\localvista-tourism-platform\\Local Tourist Visit\\Local Tourist Visit.csproj",
       "projectName": "Local Tourist Visit",
-      "projectPath": "C:\\BIT\\Local Tourist Visit\\Local Tourist Visit.csproj",
+      "projectPath": "C:\\localvista-tourism-platform\\Local Tourist Visit\\Local Tourist Visit.csproj",
       "packagesPath": "C:\\Users\\Kishalini\\.nuget\\packages\\",
-      "outputPath": "C:\\BIT\\Local Tourist Visit\\obj\\",
+      "outputPath": "C:\\localvista-tourism-platform\\Local Tourist Visit\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

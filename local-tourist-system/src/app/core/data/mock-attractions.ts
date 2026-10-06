@@ -11,8 +11,7 @@ export const MOCK_ATTRACTIONS: Attraction[] = [
     openingHours: 'Daily 7:30 AM – 5:00 PM',
     travelTips: 'Visit early to avoid midday heat. Allow 2–3 hours for a relaxed walk.',
     distanceKm: 6,
-    imageUrl:
-      'https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&w=1200&q=80',
+    imageUrl: '/images/attractions/royal-botanical-gardens.jpg',
     latitude: 7.2715,
     longitude: 80.5966,
   },
@@ -25,8 +24,7 @@ export const MOCK_ATTRACTIONS: Attraction[] = [
     openingHours: 'Daylight hours recommended (6:00 AM – 5:00 PM)',
     travelTips: 'Wear sturdy shoes and carry water. Trails can be slippery after rain.',
     distanceKm: 8,
-    imageUrl:
-      'https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=1200&q=80',
+    imageUrl: '/images/attractions/hanthana-hike.jpg',
     latitude: 7.2502,
     longitude: 80.6335,
   },
@@ -39,8 +37,7 @@ export const MOCK_ATTRACTIONS: Attraction[] = [
     openingHours: 'Daily 8:00 AM – 5:00 PM',
     travelTips: 'A short, quiet stop near the Temple of the Tooth — ideal between city sights.',
     distanceKm: 1,
-    imageUrl:
-      'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1200&q=80',
+    imageUrl: '/images/attractions/british-garrison-cemetery.jpg',
     latitude: 7.2945,
     longitude: 80.6401,
   },
@@ -53,8 +50,7 @@ export const MOCK_ATTRACTIONS: Attraction[] = [
     openingHours: 'Typically 8:00 AM – 4:30 PM (confirm locally)',
     travelTips: 'Combine with a factory visit if open. Plan extra travel time from central Kandy.',
     distanceKm: 20,
-    imageUrl:
-      'https://images.unsplash.com/photo-1564890369478-c89ca6d9cde9?auto=format&fit=crop&w=1200&q=80',
+    imageUrl: '/images/attractions/loolkandura-tea-estate.jpg',
     latitude: 7.145,
     longitude: 80.652,
   },
@@ -67,8 +63,7 @@ export const MOCK_ATTRACTIONS: Attraction[] = [
     openingHours: 'Daily 8:00 AM – 5:00 PM',
     travelTips: 'Stay on marked paths. Mornings are best for birdwatching.',
     distanceKm: 2,
-    imageUrl:
-      'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1200&q=80',
+    imageUrl: '/images/attractions/udawattakele-forest.jpg',
     latitude: 7.299,
     longitude: 80.643,
   },
@@ -81,8 +76,7 @@ export const MOCK_ATTRACTIONS: Attraction[] = [
     openingHours: 'Tue–Sat 8:30 AM – 3:45 PM; Sun 8:30 AM – 3:00 PM (closed Mon)',
     travelTips: 'Pair with a short tea tasting if available. Allow about 1–1.5 hours.',
     distanceKm: 4,
-    imageUrl:
-      'https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=1200&q=80',
+    imageUrl: '/images/attractions/ceylon-tea-museum.jpg',
     latitude: 7.2705,
     longitude: 80.6205,
   },
@@ -95,8 +89,7 @@ export const MOCK_ATTRACTIONS: Attraction[] = [
     openingHours: 'Daylight hours',
     travelTips: 'Best in clear weather; late afternoon light is often dramatic.',
     distanceKm: 15,
-    imageUrl:
-      'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80',
+    imageUrl: '/images/attractions/bellwood-view-point.jpg',
     latitude: 7.22,
     longitude: 80.7,
   },
@@ -123,8 +116,7 @@ export const MOCK_ATTRACTIONS: Attraction[] = [
     openingHours: 'Daily 5:30 AM – 8:00 PM (puja times vary)',
     travelTips: 'Dress modestly (cover shoulders and knees). Remove shoes before entering.',
     distanceKm: 0.5,
-    imageUrl:
-      'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=1200&q=80',
+    imageUrl: '/images/attractions/temple-of-the-tooth.jpg',
     latitude: 7.2936,
     longitude: 80.6412,
   },
@@ -137,8 +129,7 @@ export const MOCK_ATTRACTIONS: Attraction[] = [
     openingHours: 'Daily ~6:00 AM – 6:00 PM',
     travelTips: 'Often combined with Gadaladeniya and Embekke in one half-day loop.',
     distanceKm: 14,
-    imageUrl:
-      'https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1200&q=80',
+    imageUrl: '/images/attractions/lankatilaka-temple.jpg',
     latitude: 7.2333,
     longitude: 80.5667,
   },
@@ -151,8 +142,7 @@ export const MOCK_ATTRACTIONS: Attraction[] = [
     openingHours: 'Daily ~6:00 AM – 6:00 PM',
     travelTips: 'Wear sun protection; the site is partly exposed. Combine with Lankatilaka.',
     distanceKm: 13,
-    imageUrl:
-      'https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=1200&q=80',
+    imageUrl: '/images/attractions/gadaladeniya-temple.jpg',
     latitude: 7.25,
     longitude: 80.55,
   },
@@ -165,8 +155,7 @@ export const MOCK_ATTRACTIONS: Attraction[] = [
     openingHours: 'Daily 8:30 AM – 5:30 PM (tower access may vary)',
     travelTips: 'The tower climb is steep and open — avoid if uncomfortable with heights.',
     distanceKm: 24,
-    imageUrl:
-      'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=80',
+    imageUrl: '/images/attractions/ambuluwawa-tower.jpg',
     latitude: 7.1415,
     longitude: 80.5385,
   },
@@ -179,8 +168,7 @@ export const MOCK_ATTRACTIONS: Attraction[] = [
     openingHours: 'Tue–Sat 9:00 AM – 5:00 PM (closed Sun–Mon; confirm locally)',
     travelTips: 'Easy to combine with the Temple of the Tooth in the same morning.',
     distanceKm: 0.5,
-    imageUrl:
-      'https://images.unsplash.com/photo-1566127444979-b3d2b654e3d7?auto=format&fit=crop&w=1200&q=80',
+    imageUrl: '/images/attractions/national-museum-kandy.jpg',
     latitude: 7.294,
     longitude: 80.6405,
   },
@@ -193,8 +181,7 @@ export const MOCK_ATTRACTIONS: Attraction[] = [
     openingHours: 'Daily daylight hours',
     travelTips: 'A quiet reflective stop; keep voices low and stay on paths.',
     distanceKm: 5,
-    imageUrl:
-      'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1200&q=80',
+    imageUrl: '/images/attractions/commonwealth-war-cemetery.jpg',
     latitude: 7.28,
     longitude: 80.62,
   },
@@ -207,8 +194,7 @@ export const MOCK_ATTRACTIONS: Attraction[] = [
     openingHours: 'Daylight hours',
     travelTips: 'Sunset is popular — arrive early for parking and clear views.',
     distanceKm: 2,
-    imageUrl:
-      'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1200&q=80',
+    imageUrl: '/images/attractions/kandy-viewpoint.jpg',
     latitude: 7.2905,
     longitude: 80.6355,
   },

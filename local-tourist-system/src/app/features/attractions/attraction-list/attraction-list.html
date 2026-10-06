@@ -11,6 +11,11 @@
         <a class="btn btn-primary" href="#catalogue">Browse places</a>
         <a class="btn btn-ghost" routerLink="/itinerary">View my plan</a>
       </div>
+      <ul class="hero-stats">
+        <li><strong>{{ total() }}</strong> places to visit</li>
+        <li><strong>{{ categories.length }}</strong> categories</li>
+        <li><strong>25 km</strong> max from Kandy</li>
+      </ul>
     </div>
 
     <div class="hero-visual">
@@ -38,6 +43,10 @@
     <div class="filters">
       <label class="search">
         <span class="sr-only">Search by place name</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="11" cy="11" r="7" />
+          <path d="m20 20-3.5-3.5" />
+        </svg>
         <input
           type="search"
           placeholder="Try “tea”, “temple”, or a place name…"
@@ -70,24 +79,39 @@
     } @else {
       <ul class="grid">
         @for (item of results(); track item.id) {
-          <li>
+          <li [style.--i]="$index">
             <a class="card" [routerLink]="['/attractions', item.id]" [queryParamsHandling]="'preserve'">
               <div class="card-media">
                 <img [src]="item.imageUrl" [alt]="item.name" loading="lazy" />
-                <span class="distance">{{ item.distanceKm }} km</span>
+                <span class="tag">{{ item.category }}</span>
+                <span class="distance">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z" />
+                    <circle cx="12" cy="10" r="2.5" />
+                  </svg>
+                  {{ item.distanceKm }} km from Kandy
+                </span>
               </div>
               <div class="card-body">
-                <span class="tag">{{ item.category }}</span>
                 <h3>{{ item.name }}</h3>
+                <p class="blurb">{{ item.description }}</p>
+                <p class="hours">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <circle cx="12" cy="12" r="9" />
+                    <path d="M12 7v5l3 2" />
+                  </svg>
+                  <span>{{ item.openingHours }}</span>
+                </p>
                 <div class="card-actions">
-                  <span class="linkish">Details</span>
+                  <span class="linkish">View details <span aria-hidden="true">→</span></span>
                   <button
                     type="button"
                     class="btn btn-small"
+                    [class.added]="itinerary.has(item.id)"
                     [disabled]="itinerary.has(item.id)"
                     (click)="addToPlan(item.id, $event)"
                   >
-                    {{ itinerary.has(item.id) ? 'In plan' : 'Add' }}
+                    {{ itinerary.has(item.id) ? '✓ In plan' : '+ Add to plan' }}
                   </button>
                 </div>
               </div>

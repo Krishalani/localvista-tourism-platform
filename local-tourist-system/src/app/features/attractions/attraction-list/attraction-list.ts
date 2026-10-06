@@ -21,6 +21,7 @@ export class AttractionList {
   protected readonly itinerary = inject(ItineraryService);
 
   protected readonly categories = ATTRACTION_CATEGORIES;
+  protected readonly total = this.attractionService.count;
   protected readonly search = signal('');
   protected readonly selectedCategories = signal<AttractionCategory[]>([]);
 
