@@ -114,14 +114,15 @@
   font-weight: 600;
 }
 
-.nav .signup-link,
-.nav .signup-link.active {
+.nav .auth-link,
+.nav .auth-link.active {
   margin-left: 0.3rem;
   background: var(--lv-leaf);
   color: #fff;
+  white-space: nowrap;
 }
 
-.nav .signup-link:hover {
+.nav .auth-link:hover {
   background: color-mix(in srgb, var(--lv-leaf) 88%, #000);
   color: #fff;
 }

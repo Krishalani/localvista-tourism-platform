@@ -1,8 +1,11 @@
-<section class="login">
+<section class="auth">
   <div class="panel">
-    <p class="eyebrow">Welcome back</p>
-    <h1>Sign in</h1>
-    <p class="hint">Use your account to continue. Admin tools appear only if your role allows them.</p>
+    <p class="eyebrow">Administrator</p>
+    <h1>Admin sign in</h1>
+    <p class="hint">
+      Visitors can browse places and build a day plan without an account. This page is for catalogue managers only —
+      there is no public admin registration.
+    </p>
 
     <form (ngSubmit)="submit()" novalidate>
       <label>
@@ -27,18 +30,10 @@
       <button type="submit" class="btn btn-primary">Sign in</button>
     </form>
 
-    <p class="switch">
-      New here?
-      <a routerLink="/signup">Create an account</a>
-    </p>
-
-    <details class="demo-help">
-      <summary>Demo accounts</summary>
-      <ul>
-        <li><code>user</code> / <code>User12345</code> — normal user</li>
-        <li><code>manager</code> / <code>Manager123</code> — admin (shows Admin tab)</li>
-      </ul>
-    </details>
+    <aside class="demo-note" aria-label="Demo credentials">
+      <p class="demo-label">Demo admin (UI mock only — not production security)</p>
+      <p><code>manager</code> / <code>Manager123</code></p>
+    </aside>
 
     <a routerLink="/" class="back">← Continue as guest</a>
   </div>

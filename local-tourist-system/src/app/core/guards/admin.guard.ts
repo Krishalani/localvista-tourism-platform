@@ -2,7 +2,7 @@ import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
-/** Admin catalogue management — Admin role only. */
+/** Admin catalogue management — signed-in demo admin only. */
 export const adminGuard: CanActivateFn = () => {
   const auth = inject(AuthService);
   const router = inject(Router);
@@ -11,13 +11,7 @@ export const adminGuard: CanActivateFn = () => {
     return true;
   }
 
-  if (auth.isAuthenticated()) {
-    return router.createUrlTree(['/'], {
-      queryParams: { denied: 'admin' },
-    });
-  }
-
-  return router.createUrlTree(['/login'], {
+  return router.createUrlTree(['/auth'], {
     queryParams: { returnUrl: '/admin' },
   });
 };

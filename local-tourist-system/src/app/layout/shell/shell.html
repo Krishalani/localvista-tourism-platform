@@ -20,14 +20,10 @@
 
         @if (auth.isAdmin()) {
           <a routerLink="/admin" routerLinkActive="active">Admin</a>
-        }
-
-        @if (auth.isAuthenticated()) {
-          <span class="session">Hi, {{ auth.currentUser()?.displayName }}</span>
+          <span class="session">{{ auth.currentUser()?.displayName }}</span>
           <button type="button" class="linkish" (click)="logout()">Log out</button>
         } @else {
-          <a routerLink="/login" routerLinkActive="active">Sign in</a>
-          <a routerLink="/signup" routerLinkActive="active" class="signup-link">Sign up</a>
+          <a routerLink="/auth" routerLinkActive="active" class="auth-link">Admin sign in</a>
         }
       </nav>
     </div>

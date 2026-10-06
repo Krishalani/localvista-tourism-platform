@@ -27,18 +27,23 @@ export const routes: Routes = [
           import('./features/itinerary/itinerary').then((m) => m.ItineraryPage),
       },
       {
-        path: 'login',
+        path: 'auth',
         loadComponent: () =>
-          import('./features/auth/login/login').then((m) => m.LoginPage),
+          import('./features/auth/auth-page/auth-page').then((m) => m.AuthPage),
+      },
+      {
+        path: 'login',
+        redirectTo: 'auth',
+        pathMatch: 'full',
       },
       {
         path: 'signup',
-        loadComponent: () =>
-          import('./features/auth/signup/signup').then((m) => m.SignupPage),
+        redirectTo: '',
+        pathMatch: 'full',
       },
       {
         path: 'admin/login',
-        redirectTo: 'login',
+        redirectTo: 'auth',
         pathMatch: 'full',
       },
       {
