@@ -1,6 +1,0 @@
-@Local_Tourist_Visit_HostAddress = http://localhost:5282
-
-GET {{Local_Tourist_Visit_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
