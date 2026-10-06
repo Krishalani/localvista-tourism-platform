@@ -16,38 +16,37 @@ Open `http://localhost:4200/` (use the port your terminal prints). Hard refresh 
 
 | State | Nav shows |
 |-------|-----------|
-| Guest (not logged in) | Explore · My plan · **Sign in** · **Sign up** |
-| Normal user | Explore · My plan · Hi, Name · Log out |
-| Admin user | Explore · My plan · **Admin** · Hi, Name · Log out |
+| Guest (visitor) | Explore · My plan · **Admin sign in** |
+| Demo admin signed in | Explore · My plan · **Admin** · name · Log out |
 
-The **Admin** tab is hidden until an admin-role account signs in.
+Visitors browse attractions and build a day plan **without** signing in. There is **no tourist sign-up or tourist sign-in**. The **Admin** tab appears only after the demo admin signs in.
 
-## Auth routes
+## Auth
 
 | Page | Route |
 |------|--------|
-| Sign in | `/login` |
-| Sign up | `/signup` |
+| Admin sign in | `/auth` |
 | Admin manage (guarded) | `/admin` |
 
-Sign-up creates a **Tourist** account (saved in browser localStorage). Admin is not self-registered.
+- `/signup` redirects to Explore (`/`).
+- `/login` and `/admin/login` redirect to `/auth`.
+- Demo admin (UI mock only): `manager` / `Manager123` — **not production security**.
 
-## Demo accounts
+## Session itinerary
 
-| Username | Password | Result |
-|----------|----------|--------|
-| `user` | `User12345` | Normal user |
-| `manager` | `Manager123` | Admin tab appears |
+One-day plan is stored in **`sessionStorage`** (cleared when the browser session ends). Guests can add, remove, reorder, and clear stops. No bookings, payments, or cloud-saved itineraries.
 
 ## Architecture
 
 ```text
 src/app/
-  core/           models, mock data, services, admin guard
+  core/           models, mock data, services, admin guard, map preview seam
   layout/shell/   header + outlet
   features/
-    attractions/  list + detail
-    itinerary/
-    auth/         sign in + sign up
-    admin/        list + form (Admin role only)
+    attractions/  list + detail (multi-image gallery)
+    itinerary/    session day plan
+    auth/         admin sign-in only
+    admin/        list + form (multi-image URLs)
 ```
+
+See `ANGULAR_FRONTEND_OVERVIEW.md` for a full page-by-page status document.
