@@ -53,7 +53,7 @@
   min-height: 220px;
   background:
     linear-gradient(160deg, color-mix(in srgb, var(--lv-ink) 35%, transparent), transparent 55%),
-    url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=900&q=80')
+    url('/images/attractions/kandy-viewpoint.jpg')
       center / cover;
 }
 

@@ -1,16 +1,17 @@
 :root {
-  --lv-ink: #122419;
-  --lv-leaf: #1b4a38;
-  --lv-lake: #246978;
-  --lv-gold: #c9a24d;
-  --lv-foam: #f3f7f1;
-  --lv-mist: #e3eee6;
-  --lv-surface: #f7faf7;
+  /* Warm, calm palette: terracotta primary, sage secondary, honey accent on cream. */
+  --lv-ink: #2a2622;
+  --lv-leaf: #b9532f;
+  --lv-lake: #45695a;
+  --lv-gold: #f0b95b;
+  --lv-foam: #fffaf4;
+  --lv-mist: #f1e7da;
+  --lv-surface: #fbf6ef;
   --lv-display: 'Fraunces', Georgia, 'Times New Roman', serif;
-  --lv-sans: 'Outfit', 'Segoe UI', sans-serif;
-  --lv-max: 1280px;
-  --lv-gutter: clamp(1.75rem, 5vw, 3rem);
-  --lv-radius: 1rem;
+  --lv-sans: 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
+  --lv-max: 1200px;
+  --lv-gutter: clamp(1.25rem, 5vw, 3rem);
+  --lv-radius: 1.25rem;
 }
 
 *,
@@ -33,11 +34,11 @@ body {
   font-family: var(--lv-sans);
   color: var(--lv-ink);
   background:
-    radial-gradient(900px 420px at 8% -8%, color-mix(in srgb, var(--lv-gold) 16%, transparent), transparent 55%),
-    radial-gradient(700px 380px at 100% 0%, color-mix(in srgb, var(--lv-lake) 12%, transparent), transparent 50%),
-    linear-gradient(180deg, #f4f8f4 0%, #eaf2ec 100%);
+    radial-gradient(900px 480px at 0% 0%, color-mix(in srgb, var(--lv-gold) 14%, transparent), transparent 60%),
+    radial-gradient(800px 460px at 100% 10%, color-mix(in srgb, var(--lv-leaf) 8%, transparent), transparent 55%),
+    var(--lv-surface);
   background-attachment: fixed;
-  line-height: 1.5;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -64,8 +65,8 @@ img {
   align-items: center;
   justify-content: center;
   gap: 0.4rem;
-  padding: 0.8rem 1.25rem;
-  border-radius: 0.7rem;
+  padding: 0.8rem 1.4rem;
+  border-radius: 999px;
   border: 1px solid transparent;
   font: inherit;
   font-weight: 600;
@@ -91,14 +92,13 @@ img {
 }
 
 .btn-primary {
-  background: var(--lv-gold);
-  color: var(--lv-ink);
-  border-color: color-mix(in srgb, var(--lv-gold) 65%, #7a5a18);
-  box-shadow: 0 10px 24px color-mix(in srgb, var(--lv-gold) 28%, transparent);
+  background: var(--lv-leaf);
+  color: #fff;
+  box-shadow: 0 10px 22px color-mix(in srgb, var(--lv-leaf) 26%, transparent);
 }
 
 .btn-primary:hover {
-  background: color-mix(in srgb, var(--lv-gold) 88%, #fff);
+  background: color-mix(in srgb, var(--lv-leaf) 88%, #000);
 }
 
 .btn-ghost {
@@ -109,4 +109,9 @@ img {
 
 .btn-ghost:hover {
   background: color-mix(in srgb, currentColor 10%, transparent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--lv-leaf);
+  outline-offset: 2px;
 }

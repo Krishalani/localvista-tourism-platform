@@ -32,11 +32,11 @@ export class AttractionList {
     }),
   );
 
-  /** Featured hero image — Temple of the Tooth when present. */
-  protected readonly featured = computed(
-    () =>
-      this.attractionService.getById(9) ??
-      this.attractionService.getAll()[0],
+  /** Photo strip in the hero — a mix of the best-known stops. */
+  protected readonly spotlight = computed(() =>
+    [9, 1, 12, 10, 15]
+      .map((id) => this.attractionService.getById(id))
+      .filter((a) => a !== undefined),
   );
 
   constructor() {
@@ -69,6 +69,10 @@ export class AttractionList {
 
   isSelected(category: AttractionCategory): boolean {
     return this.selectedCategories().includes(category);
+  }
+
+  goToCatalogue(): void {
+    document.getElementById('catalogue')?.scrollIntoView({ behavior: 'smooth' });
   }
 
   clearFilters(): void {

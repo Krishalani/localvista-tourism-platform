@@ -1,124 +1,140 @@
 <section class="hero">
-  <div class="hero-frame">
-    <div class="hero-copy">
-      <p class="eyebrow">Kandy day trips · within 25 km</p>
-      <p class="brand-lockup">LocalVista</p>
-      <h1>Your day in Kandy, clearly planned</h1>
-      <p class="lede">
-        Browse temples, tea country, forests, and viewpoints in one place — then build a one-day itinerary in minutes.
-      </p>
-      <div class="hero-actions">
-        <a class="btn btn-primary" href="#catalogue">Browse places</a>
-        <a class="btn btn-ghost" routerLink="/itinerary">View my plan</a>
-      </div>
-      <ul class="hero-stats">
-        <li><strong>{{ total() }}</strong> places to visit</li>
-        <li><strong>{{ categories.length }}</strong> categories</li>
-        <li><strong>25 km</strong> max from Kandy</li>
-      </ul>
-    </div>
+  <div class="hero-inner">
+    <p class="pill">Kandy day trips · all within 25 km</p>
+    <h1>Plan a slow, lovely day <em>in Kandy</em></h1>
+    <p class="lede">
+      Temples, tea country, forests and viewpoints — pick the places you like and keep them in one simple day plan.
+    </p>
 
-    <div class="hero-visual">
-      @if (featured(); as spot) {
-        <img [src]="spot.imageUrl" [alt]="spot.name" class="hero-visual-img" />
-        <div class="hero-visual-caption">
-          <span>Featured area</span>
-          <strong>{{ spot.name }}</strong>
-        </div>
-      }
-    </div>
+    <form class="hero-search" (ngSubmit)="goToCatalogue()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="11" cy="11" r="7" />
+        <path d="m20 20-3.5-3.5" />
+      </svg>
+      <input
+        type="search"
+        name="q"
+        aria-label="Search by place name"
+        placeholder="Search a place — try “tea” or “temple”"
+        [ngModel]="search()"
+        (ngModelChange)="onSearchInput($event)"
+        autocomplete="off"
+      />
+      <button type="submit" class="btn btn-primary">Explore</button>
+    </form>
+
+    <ul class="hero-stats">
+      <li><strong>{{ total() }}</strong> places</li>
+      <li><strong>{{ categories.length }}</strong> categories</li>
+      <li><strong>1 day</strong> is all you need</li>
+    </ul>
   </div>
+
+  <ul class="spotlight">
+    @for (spot of spotlight(); track spot.id) {
+      <li>
+        <a [routerLink]="['/attractions', spot.id]">
+          <img [src]="spot.imageUrl" [alt]="spot.name" />
+          <span>{{ spot.name }}</span>
+        </a>
+      </li>
+    }
+  </ul>
+</section>
+
+<section class="steps" aria-label="How it works">
+  <ol>
+    <li>
+      <span class="step-no">1</span>
+      <div>
+        <h3>Browse</h3>
+        <p>Look through real places around Kandy, with opening hours and tips.</p>
+      </div>
+    </li>
+    <li>
+      <span class="step-no">2</span>
+      <div>
+        <h3>Add to your plan</h3>
+        <p>Tap “Add” on anything that looks good. No account needed.</p>
+      </div>
+    </li>
+    <li>
+      <span class="step-no">3</span>
+      <div>
+        <h3>Enjoy your day</h3>
+        <p>Open <a routerLink="/itinerary">My plan</a> and follow your stops in order.</p>
+      </div>
+    </li>
+  </ol>
 </section>
 
 <section id="catalogue" class="catalogue">
-  <div class="catalogue-inner">
-    <header class="section-head">
-      <div>
-        <h2>Find your stops</h2>
-        <p>Search by name or filter by category. Your filters stay when you open a place and come back.</p>
-      </div>
-      <p class="result-meta">{{ results().length }} place{{ results().length === 1 ? '' : 's' }}</p>
-    </header>
-
-    <div class="filters">
-      <label class="search">
-        <span class="sr-only">Search by place name</span>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <circle cx="11" cy="11" r="7" />
-          <path d="m20 20-3.5-3.5" />
-        </svg>
-        <input
-          type="search"
-          placeholder="Try “tea”, “temple”, or a place name…"
-          [ngModel]="search()"
-          (ngModelChange)="onSearchInput($event)"
-          autocomplete="off"
-        />
-      </label>
-
-      <div class="category-row" role="group" aria-label="Filter by category">
-        @for (category of categories; track category) {
-          <button
-            type="button"
-            class="chip"
-            [class.on]="isSelected(category)"
-            (click)="toggleCategory(category)"
-          >
-            {{ category }}
-          </button>
-        }
-      </div>
-
-      @if (search() || selectedCategories().length) {
-        <button type="button" class="clear" (click)="clearFilters()">Clear filters</button>
-      }
+  <header class="section-head">
+    <div>
+      <h2>Places to visit</h2>
+      <p>Pick a category, or just scroll and see what catches your eye.</p>
     </div>
+    <p class="result-meta" role="status">
+      {{ results().length }} place{{ results().length === 1 ? '' : 's' }}
+    </p>
+  </header>
 
-    @if (results().length === 0) {
-      <p class="empty" role="status">No places match that search. Try another name or category.</p>
-    } @else {
-      <ul class="grid">
-        @for (item of results(); track item.id) {
-          <li [style.--i]="$index">
-            <a class="card" [routerLink]="['/attractions', item.id]" [queryParamsHandling]="'preserve'">
-              <div class="card-media">
-                <img [src]="item.imageUrl" [alt]="item.name" loading="lazy" />
-                <span class="tag">{{ item.category }}</span>
-                <span class="distance">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                    <path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z" />
-                    <circle cx="12" cy="10" r="2.5" />
-                  </svg>
-                  {{ item.distanceKm }} km from Kandy
-                </span>
-              </div>
-              <div class="card-body">
-                <h3>{{ item.name }}</h3>
-                <p class="blurb">{{ item.description }}</p>
-                <p class="hours">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                    <circle cx="12" cy="12" r="9" />
-                    <path d="M12 7v5l3 2" />
-                  </svg>
-                  <span>{{ item.openingHours }}</span>
-                </p>
-                <div class="card-actions">
-                  <span class="linkish">View details <span aria-hidden="true">→</span></span>
-                  <button
-                    type="button"
-                    class="btn btn-small"
-                    [class.added]="itinerary.has(item.id)"
-                    [disabled]="itinerary.has(item.id)"
-                    (click)="addToPlan(item.id, $event)"
-                  >
-                    {{ itinerary.has(item.id) ? '✓ In plan' : '+ Add to plan' }}
-                  </button>
-                </div>
-              </div>
-            </a>
-          </li>
-        }
-      </ul>
+  <div class="category-row" role="group" aria-label="Filter by category">
+    <button
+      type="button"
+      class="chip"
+      [class.on]="!search() && selectedCategories().length === 0"
+      (click)="clearFilters()"
+    >
+      All
+    </button>
+    @for (category of categories; track category) {
+      <button type="button" class="chip" [class.on]="isSelected(category)" (click)="toggleCategory(category)">
+        {{ category }}
+      </button>
     }
   </div>
+
+  @if (results().length === 0) {
+    <div class="empty">
+      <p>No places match that search.</p>
+      <button type="button" class="btn btn-primary" (click)="clearFilters()">Show all places</button>
+    </div>
+  } @else {
+    <ul class="grid">
+      @for (item of results(); track item.id) {
+        <li [style.--i]="$index">
+          <a class="card" [routerLink]="['/attractions', item.id]" [queryParamsHandling]="'preserve'">
+            <div class="card-media">
+              <img [src]="item.imageUrl" [alt]="item.name" loading="lazy" />
+              <span class="tag">{{ item.category }}</span>
+              <button
+                type="button"
+                class="save"
+                [class.added]="itinerary.has(item.id)"
+                [disabled]="itinerary.has(item.id)"
+                (click)="addToPlan(item.id, $event)"
+              >
+                {{ itinerary.has(item.id) ? '✓ Added' : '+ Add' }}
+              </button>
+            </div>
+            <div class="card-body">
+              <div class="card-top">
+                <h3>{{ item.name }}</h3>
+                <span class="distance">{{ item.distanceKm }} km</span>
+              </div>
+              <p class="blurb">{{ item.description }}</p>
+              <p class="hours">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <circle cx="12" cy="12" r="9" />
+                  <path d="M12 7v5l3 2" />
+                </svg>
+                <span>{{ item.openingHours }}</span>
+              </p>
+            </div>
+          </a>
+        </li>
+      }
+    </ul>
+  }
 </section>
