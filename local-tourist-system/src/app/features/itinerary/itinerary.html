@@ -1,0 +1,97 @@
+<section class="itinerary">
+  <header class="head">
+    <div>
+      <p class="eyebrow">Session plan</p>
+      <h1>My one-day route</h1>
+      <p>Kept in this browser only — no tourist account needed. Adjust stops until the day feels right.</p>
+    </div>
+    @if (itinerary.count() > 0) {
+      <button type="button" class="btn btn-ghost" (click)="clear()">Clear plan</button>
+    }
+  </header>
+
+  @if (itinerary.count() === 0) {
+    <div class="empty">
+      <div class="empty-visual" aria-hidden="true"></div>
+      <div class="empty-copy">
+        <h2>Build your day</h2>
+        <p>Add temples, viewpoints, tea trails, or family stops from Explore. Your plan appears here in visit order.</p>
+        <a class="btn btn-primary" routerLink="/">Browse places</a>
+      </div>
+    </div>
+  } @else {
+    <div class="layout">
+      <div class="timeline-panel">
+        <div class="list-head">
+          <h2>Stops in order</h2>
+          <span>{{ itinerary.count() }} selected</span>
+        </div>
+
+        <ol class="timeline">
+          @for (item of itinerary.items(); track item.id; let i = $index; let last = $last) {
+            <li [class.last]="last">
+              <div class="rail" aria-hidden="true">
+                <span class="step">{{ i + 1 }}</span>
+                @if (!last) {
+                  <span class="line"></span>
+                }
+              </div>
+
+              <article class="stop">
+                <a class="thumb" [routerLink]="['/attractions', item.id]">
+                  <img [src]="item.imageUrl" [alt]="item.name" />
+                </a>
+                <div class="stop-body">
+                  <span class="tag">{{ item.category }}</span>
+                  <h3>
+                    <a [routerLink]="['/attractions', item.id]">{{ item.name }}</a>
+                  </h3>
+                  <p class="meta">{{ item.distanceKm }} km from Kandy · {{ item.openingHours }}</p>
+                  <div class="stop-actions">
+                    <a class="text-link" [routerLink]="['/attractions', item.id]">Open details</a>
+                    <button type="button" class="remove" (click)="remove(item.id)">Remove</button>
+                  </div>
+                </div>
+              </article>
+            </li>
+          }
+        </ol>
+      </div>
+
+      <aside class="summary">
+        <p class="summary-kicker">Day snapshot</p>
+        <h2>Ready when you are</h2>
+        <p class="summary-copy">
+          This is a simple ordered list for one day near Kandy. Distances are from the city centre, not between stops.
+        </p>
+
+        <dl class="stats">
+          <div>
+            <dt>Stops</dt>
+            <dd>{{ itinerary.count() }}</dd>
+          </div>
+          <div>
+            <dt>Combined distance labels</dt>
+            <dd>{{ totalDistanceKm() }} km</dd>
+          </div>
+        </dl>
+
+        @if (categories().length) {
+          <div class="cats">
+            <p class="cats-label">Categories covered</p>
+            <div class="chips">
+              @for (category of categories(); track category) {
+                <span>{{ category }}</span>
+              }
+            </div>
+          </div>
+        }
+
+        <div class="summary-actions">
+          <a class="btn btn-primary" routerLink="/">Add more places</a>
+          <button type="button" class="btn btn-ghost" (click)="clear()">Start over</button>
+        </div>
+      </aside>
+    </div>
+  }
+</section>

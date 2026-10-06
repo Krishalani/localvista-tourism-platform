@@ -1,0 +1,121 @@
+@if (attraction(); as item) {
+  <article class="detail">
+    <nav class="crumb" aria-label="Breadcrumb">
+      <button type="button" class="back" (click)="goBack()">Places</button>
+      <span aria-hidden="true">/</span>
+      <span class="crumb-current">{{ item.name }}</span>
+    </nav>
+
+    <header class="hero">
+      <div class="hero-media">
+        <img [src]="item.imageUrl" [alt]="item.name" />
+      </div>
+      <div class="hero-copy">
+        <span class="pill">{{ item.category }}</span>
+        <h1>{{ item.name }}</h1>
+        <p class="hero-lede">{{ item.description }}</p>
+        <div class="hero-bar">
+          <div class="stat">
+            <span class="stat-label">From Kandy</span>
+            <strong>{{ item.distanceKm }} km</strong>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Hours</span>
+            <strong>{{ item.openingHours }}</strong>
+          </div>
+          <div class="hero-actions">
+            @if (itinerary.has(item.id)) {
+              <button type="button" class="btn btn-ghost" (click)="removeFromPlan()">Remove</button>
+              <a class="btn btn-primary" routerLink="/itinerary">View plan</a>
+            } @else {
+              <button type="button" class="btn btn-primary" (click)="addToPlan()">Add to day plan</button>
+            }
+          </div>
+        </div>
+        @if (message()) {
+          <p class="toast" role="status">{{ message() }}</p>
+        }
+      </div>
+    </header>
+
+    <div class="body">
+      <section class="tips" aria-labelledby="tips-title">
+        <div class="section-label">
+          <h2 id="tips-title">Plan smarter</h2>
+          <p>Practical notes before you go.</p>
+        </div>
+        <ul class="tip-list">
+          <li>
+            <span class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6" />
+                <path d="M12 7v5l3 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+              </svg>
+            </span>
+            <div>
+              <h3>Opening hours</h3>
+              <p>{{ item.openingHours }}</p>
+            </div>
+          </li>
+          <li>
+            <span class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M12 21s7-4.5 7-11a7 7 0 1 0-14 0c0 6.5 7 11 7 11Z"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                />
+                <circle cx="12" cy="10" r="2.2" stroke="currentColor" stroke-width="1.6" />
+              </svg>
+            </span>
+            <div>
+              <h3>Distance</h3>
+              <p>{{ item.distanceKm }} km from central Kandy</p>
+            </div>
+          </li>
+          <li>
+            <span class="icon tip" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M12 3 4.5 19h15L12 3Z"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linejoin="round"
+                />
+                <path d="M12 10v4M12 16.5h.01" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+              </svg>
+            </span>
+            <div>
+              <h3>Travel tips</h3>
+              <p>{{ item.travelTips }}</p>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <section class="map" aria-labelledby="map-title">
+        <div class="section-label">
+          <h2 id="map-title">Location</h2>
+          <p>Map preview — Google Maps API wiring comes later.</p>
+        </div>
+        @if (mapUrl(); as url) {
+          <div class="map-frame">
+            <iframe
+              title="Map location"
+              [src]="url"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
+        }
+        <p class="coords">{{ item.latitude }}° N, {{ item.longitude }}° E</p>
+      </section>
+    </div>
+  </article>
+} @else {
+  <section class="missing">
+    <h1>Place not found</h1>
+    <p>That attraction is not in the sample catalogue.</p>
+    <a class="btn btn-primary" routerLink="/">Back to explore</a>
+  </section>
+}

@@ -1,0 +1,55 @@
+<section class="admin">
+  <header class="head">
+    <div>
+      <p class="eyebrow">Administrator</p>
+      <h1>Catalogue management</h1>
+      <p>{{ attractionService.count() }} places in the sample catalogue.</p>
+    </div>
+    <a class="btn btn-primary" routerLink="/admin/attractions/new">Add place</a>
+  </header>
+
+  @if (flash()) {
+    <p class="flash" role="status">{{ flash() }}</p>
+  }
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Category</th>
+          <th>Distance</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of attractionService.attractions(); track item.id) {
+          <tr>
+            <td>
+              <strong>{{ item.name }}</strong>
+            </td>
+            <td>{{ item.category }}</td>
+            <td>{{ item.distanceKm }} km</td>
+            <td class="actions">
+              <a [routerLink]="['/admin/attractions', item.id, 'edit']">Edit</a>
+              <button type="button" class="danger" (click)="askDelete(item.id)">Delete</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  @if (pendingDeleteId(); as id) {
+    <div class="dialog-backdrop" role="presentation">
+      <div class="dialog" role="alertdialog" aria-modal="true" aria-labelledby="delete-title">
+        <h2 id="delete-title">Delete this place?</h2>
+        <p>This permanently removes it from the sample catalogue.</p>
+        <div class="dialog-actions">
+          <button type="button" class="btn btn-ghost" (click)="cancelDelete()">Cancel</button>
+          <button type="button" class="btn btn-danger" (click)="confirmDelete()">Delete</button>
+        </div>
+      </div>
+    </div>
+  }
+</section>
