@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Local Tourist Visit")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dd7519eeacfca58b7b591906748372974437a733")]
 [assembly: System.Reflection.AssemblyProductAttribute("Local Tourist Visit")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Local Tourist Visit")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
