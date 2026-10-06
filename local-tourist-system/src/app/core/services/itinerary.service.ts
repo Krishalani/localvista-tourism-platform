@@ -3,6 +3,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { Attraction } from '../models/attraction.model';
 import { AttractionService } from './attraction.service';
 
+/** Browser-session only — cleared when the tab/window session ends (not a saved account plan). */
 const STORAGE_KEY = 'localvista.itinerary.ids';
 
 @Injectable({ providedIn: 'root' })
@@ -25,7 +26,7 @@ export class ItineraryService {
     return this.idsSignal().includes(id);
   }
 
-  /** FR-10 / FR-13 — add once only. Returns false if already present. */
+  /** Add once only. Returns false if already present. */
   add(id: number): boolean {
     if (this.has(id)) {
       return false;
@@ -38,10 +39,37 @@ export class ItineraryService {
     return true;
   }
 
-  /** FR-11 */
   remove(id: number): void {
     this.idsSignal.update((ids) => {
       const next = ids.filter((x) => x !== id);
+      this.persist(next);
+      return next;
+    });
+  }
+
+  /** Reorder: move stop toward the start of the day. */
+  moveUp(id: number): void {
+    this.idsSignal.update((ids) => {
+      const index = ids.indexOf(id);
+      if (index <= 0) {
+        return ids;
+      }
+      const next = [...ids];
+      [next[index - 1], next[index]] = [next[index], next[index - 1]];
+      this.persist(next);
+      return next;
+    });
+  }
+
+  /** Reorder: move stop toward the end of the day. */
+  moveDown(id: number): void {
+    this.idsSignal.update((ids) => {
+      const index = ids.indexOf(id);
+      if (index < 0 || index >= ids.length - 1) {
+        return ids;
+      }
+      const next = [...ids];
+      [next[index], next[index + 1]] = [next[index + 1], next[index]];
       this.persist(next);
       return next;
     });
@@ -57,8 +85,10 @@ export class ItineraryService {
       return [];
     }
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
+      const raw = sessionStorage.getItem(STORAGE_KEY);
       if (!raw) {
+        // Migrate away from older localStorage plans so they do not look like saved accounts.
+        localStorage.removeItem(STORAGE_KEY);
         return [];
       }
       const parsed = JSON.parse(raw) as unknown;
@@ -75,6 +105,7 @@ export class ItineraryService {
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(ids));
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(ids));
+    localStorage.removeItem(STORAGE_KEY);
   }
 }

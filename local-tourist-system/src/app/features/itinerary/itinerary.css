@@ -256,7 +256,8 @@
 }
 
 .text-link,
-.remove {
+.remove,
+.order {
   background: none;
   border: 0;
   padding: 0;
@@ -271,12 +272,22 @@
   text-decoration: none;
 }
 
+.order {
+  color: var(--lv-lake);
+}
+
+.order:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
 .remove {
   color: #8b1e1e;
 }
 
 .text-link:hover,
-.remove:hover {
+.remove:hover,
+.order:not(:disabled):hover {
   text-decoration: underline;
   text-underline-offset: 0.18em;
 }

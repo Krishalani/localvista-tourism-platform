@@ -1,5 +1,6 @@
 import { Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { primaryImageUrl } from '../../core/models/attraction.model';
 import { ItineraryService } from '../../core/services/itinerary.service';
 
 @Component({
@@ -10,6 +11,7 @@ import { ItineraryService } from '../../core/services/itinerary.service';
 })
 export class ItineraryPage {
   protected readonly itinerary = inject(ItineraryService);
+  protected readonly primaryImageUrl = primaryImageUrl;
 
   protected readonly totalDistanceKm = computed(() =>
     Number(
@@ -27,6 +29,14 @@ export class ItineraryPage {
 
   remove(id: number): void {
     this.itinerary.remove(id);
+  }
+
+  moveUp(id: number): void {
+    this.itinerary.moveUp(id);
+  }
+
+  moveDown(id: number): void {
+    this.itinerary.moveDown(id);
   }
 
   clear(): void {

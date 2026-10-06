@@ -1,9 +1,12 @@
 <section class="itinerary">
   <header class="head">
     <div>
-      <p class="eyebrow">Session plan</p>
+      <p class="eyebrow">Browser session plan</p>
       <h1>My one-day route</h1>
-      <p>Kept in this browser only — no tourist account needed. Adjust stops until the day feels right.</p>
+      <p>
+        Kept in this browser tab session only (<code>sessionStorage</code>) — no tourist account needed.
+        Add, reorder, remove, or clear stops until the day feels right.
+      </p>
     </div>
     @if (itinerary.count() > 0) {
       <button type="button" class="btn btn-ghost" (click)="clear()">Clear plan</button>
@@ -28,7 +31,7 @@
         </div>
 
         <ol class="timeline">
-          @for (item of itinerary.items(); track item.id; let i = $index; let last = $last) {
+          @for (item of itinerary.items(); track item.id; let i = $index; let first = $first; let last = $last) {
             <li [class.last]="last">
               <div class="rail" aria-hidden="true">
                 <span class="step">{{ i + 1 }}</span>
@@ -39,7 +42,7 @@
 
               <article class="stop">
                 <a class="thumb" [routerLink]="['/attractions', item.id]">
-                  <img [src]="item.imageUrl" [alt]="item.name" />
+                  <img [src]="primaryImageUrl(item)" [alt]="item.name" />
                 </a>
                 <div class="stop-body">
                   <span class="tag">{{ item.category }}</span>
@@ -48,6 +51,12 @@
                   </h3>
                   <p class="meta">{{ item.distanceKm }} km from Kandy · {{ item.openingHours }}</p>
                   <div class="stop-actions">
+                    <button type="button" class="order" [disabled]="first" (click)="moveUp(item.id)">
+                      Move up
+                    </button>
+                    <button type="button" class="order" [disabled]="last" (click)="moveDown(item.id)">
+                      Move down
+                    </button>
                     <a class="text-link" [routerLink]="['/attractions', item.id]">Open details</a>
                     <button type="button" class="remove" (click)="remove(item.id)">Remove</button>
                   </div>
@@ -63,6 +72,7 @@
         <h2>Ready when you are</h2>
         <p class="summary-copy">
           This is a simple ordered list for one day near Kandy. Distances are from the city centre, not between stops.
+          Closing the browser session clears the plan.
         </p>
 
         <dl class="stats">
