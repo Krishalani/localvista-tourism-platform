@@ -25,9 +25,18 @@ export interface Attraction {
   openingHours: string;
   travelTips: string;
   distanceKm: number;
-  imageUrl: string;
+  /** One or more image URLs (mock storage — future API will persist these). */
+  imageUrls: string[];
   latitude: number;
   longitude: number;
 }
 
 export type AttractionFormModel = Omit<Attraction, 'id'> & { id?: number };
+
+/** First image for cards / thumbnails. */
+export function primaryImageUrl(attraction: Pick<Attraction, 'imageUrls'>): string {
+  return (
+    attraction.imageUrls.find((url) => !!url.trim()) ??
+    'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1200&q=80'
+  );
+}

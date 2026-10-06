@@ -2,7 +2,7 @@
   <a routerLink="/admin" class="back">← Back to catalogue</a>
   <p class="eyebrow">Administrator</p>
   <h1>{{ isEdit() ? 'Edit place' : 'Add place' }}</h1>
-  <p class="lede">Required: name, category, and description. Everything else helps tourists plan.</p>
+  <p class="lede">Required: name, category, description, and at least one image URL. Image storage is mock-only for now.</p>
 
   <form (ngSubmit)="submit()" novalidate>
     <label>
@@ -45,10 +45,54 @@
       <textarea name="travelTips" rows="3" [(ngModel)]="model.travelTips"></textarea>
     </label>
 
-    <label>
-      Image URL
-      <input name="imageUrl" [(ngModel)]="model.imageUrl" />
-    </label>
+    <fieldset class="images">
+      <legend>Images *</legend>
+      <p class="images-help">Add one or more image URLs. Previews update as you type. Files are not uploaded yet.</p>
+
+      @if (model.imageUrls.length === 0) {
+        <p class="images-empty">No images yet — add a URL below.</p>
+      }
+
+      <ul class="image-list">
+        @for (url of model.imageUrls; track $index; let i = $index) {
+          <li>
+            <div class="preview">
+              @if (url.trim()) {
+                <img [src]="url" [alt]="'Preview ' + (i + 1)" />
+              } @else {
+                <span class="preview-placeholder">No preview</span>
+              }
+            </div>
+            <div class="image-fields">
+              <label>
+                Image URL {{ i + 1 }}
+                <input
+                  [name]="'imageUrl' + i"
+                  [ngModel]="url"
+                  (ngModelChange)="updateImageUrl(i, $event)"
+                  [ngModelOptions]="{ standalone: true }"
+                />
+              </label>
+              <button type="button" class="btn btn-ghost remove-img" (click)="removeImageUrl(i)">
+                Remove
+              </button>
+            </div>
+          </li>
+        }
+      </ul>
+
+      <div class="add-image">
+        <label>
+          New image URL
+          <input
+            name="draftImageUrl"
+            [(ngModel)]="draftImageUrl"
+            placeholder="https://… or /images/…"
+          />
+        </label>
+        <button type="button" class="btn btn-ghost" (click)="addImageUrl()">Add image</button>
+      </div>
+    </fieldset>
 
     <div class="row">
       <label>

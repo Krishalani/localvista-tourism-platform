@@ -8,7 +8,23 @@
 
     <header class="hero">
       <div class="hero-media">
-        <img [src]="item.imageUrl" [alt]="item.name" />
+        <img [src]="activeImage()" [alt]="item.name" />
+        @if (item.imageUrls.length > 1) {
+          <div class="thumbs" role="tablist" aria-label="Photo gallery">
+            @for (url of item.imageUrls; track $index; let i = $index) {
+              <button
+                type="button"
+                class="thumb"
+                role="tab"
+                [class.active]="activeImageIndex() === i"
+                [attr.aria-selected]="activeImageIndex() === i"
+                (click)="selectImage(i)"
+              >
+                <img [src]="url" [alt]="item.name + ' photo ' + (i + 1)" />
+              </button>
+            }
+          </div>
+        }
       </div>
       <div class="hero-copy">
         <span class="pill">{{ item.category }}</span>
@@ -96,12 +112,15 @@
       <section class="map" aria-labelledby="map-title">
         <div class="section-label">
           <h2 id="map-title">Location</h2>
-          <p>Map preview — Google Maps API wiring comes later.</p>
+          <p>
+            Preview map from latitude/longitude. Embed only for now —
+            <strong>MapPreviewService</strong> is the swap point for the Google Maps API later.
+          </p>
         </div>
         @if (mapUrl(); as url) {
           <div class="map-frame">
             <iframe
-              title="Map location"
+              title="Map location preview"
               [src]="url"
               loading="lazy"
               referrerpolicy="no-referrer-when-downgrade"

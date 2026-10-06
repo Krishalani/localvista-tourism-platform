@@ -34,7 +34,7 @@
     @for (spot of spotlight(); track spot.id) {
       <li>
         <a [routerLink]="['/attractions', spot.id]">
-          <img [src]="spot.imageUrl" [alt]="spot.name" />
+          <img [src]="spot.imageUrls[0]" [alt]="spot.name" />
           <span>{{ spot.name }}</span>
         </a>
       </li>
@@ -55,7 +55,7 @@
       <span class="step-no">2</span>
       <div>
         <h3>Add to your plan</h3>
-        <p>Tap “Add” on anything that looks good. No account needed.</p>
+        <p>Tap “Add” on anything that looks good. No account needed — your plan stays in this browser session.</p>
       </div>
     </li>
     <li>
@@ -106,7 +106,10 @@
         <li [style.--i]="$index">
           <a class="card" [routerLink]="['/attractions', item.id]" [queryParamsHandling]="'preserve'">
             <div class="card-media">
-              <img [src]="item.imageUrl" [alt]="item.name" loading="lazy" />
+              <img [src]="item.imageUrls[0]" [alt]="item.name" loading="lazy" />
+              @if (item.imageUrls.length > 1) {
+                <span class="photo-count">{{ item.imageUrls.length }} photos</span>
+              }
               <span class="tag">{{ item.category }}</span>
               <button
                 type="button"

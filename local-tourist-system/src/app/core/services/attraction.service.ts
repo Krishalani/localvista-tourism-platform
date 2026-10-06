@@ -52,7 +52,7 @@ export class AttractionService {
       openingHours: form.openingHours.trim(),
       travelTips: form.travelTips.trim(),
       distanceKm: Number(form.distanceKm),
-      imageUrl: form.imageUrl.trim(),
+      imageUrls: this.normalizeImageUrls(form.imageUrls),
       latitude: Number(form.latitude),
       longitude: Number(form.longitude),
     };
@@ -75,7 +75,7 @@ export class AttractionService {
           openingHours: form.openingHours.trim(),
           travelTips: form.travelTips.trim(),
           distanceKm: Number(form.distanceKm),
-          imageUrl: form.imageUrl.trim(),
+          imageUrls: this.normalizeImageUrls(form.imageUrls),
           latitude: Number(form.latitude),
           longitude: Number(form.longitude),
         };
@@ -89,5 +89,14 @@ export class AttractionService {
     const before = this.attractionsSignal().length;
     this.attractionsSignal.update((list) => list.filter((a) => a.id !== id));
     return this.attractionsSignal().length < before;
+  }
+
+  private normalizeImageUrls(urls: string[] | undefined): string[] {
+    const cleaned = (urls ?? []).map((url) => url.trim()).filter(Boolean);
+    return cleaned.length > 0
+      ? cleaned
+      : [
+          'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1200&q=80',
+        ];
   }
 }

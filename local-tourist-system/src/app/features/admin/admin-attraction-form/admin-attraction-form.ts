@@ -25,6 +25,7 @@ export class AdminAttractionForm {
   protected readonly editId = signal<number | null>(null);
 
   protected model: AttractionFormModel = this.blank();
+  protected draftImageUrl = '';
 
   constructor() {
     const idParam = this.route.snapshot.paramMap.get('id');
@@ -37,8 +38,30 @@ export class AdminAttractionForm {
       }
       this.isEdit.set(true);
       this.editId.set(id);
-      this.model = { ...existing };
+      this.model = {
+        ...existing,
+        imageUrls: [...existing.imageUrls],
+      };
     }
+  }
+
+  addImageUrl(): void {
+    const url = this.draftImageUrl.trim();
+    if (!url) {
+      return;
+    }
+    this.model.imageUrls = [...this.model.imageUrls, url];
+    this.draftImageUrl = '';
+  }
+
+  removeImageUrl(index: number): void {
+    this.model.imageUrls = this.model.imageUrls.filter((_, i) => i !== index);
+  }
+
+  updateImageUrl(index: number, value: string): void {
+    this.model.imageUrls = this.model.imageUrls.map((url, i) =>
+      i === index ? value : url,
+    );
   }
 
   submit(): void {
@@ -46,6 +69,15 @@ export class AdminAttractionForm {
 
     if (!this.model.name.trim() || !this.model.category || !this.model.description.trim()) {
       this.error.set('Name, category, and description are required.');
+      return;
+    }
+
+    if (this.draftImageUrl.trim()) {
+      this.addImageUrl();
+    }
+
+    if (this.model.imageUrls.every((url) => !url.trim())) {
+      this.error.set('Add at least one image URL.');
       return;
     }
 
@@ -70,8 +102,7 @@ export class AdminAttractionForm {
       openingHours: '',
       travelTips: '',
       distanceKm: 0,
-      imageUrl:
-        'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1200&q=80',
+      imageUrls: [],
       latitude: 7.2905,
       longitude: 80.6337,
     };
