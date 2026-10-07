@@ -11,16 +11,15 @@ export class ItineraryService {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly attractionService = inject(AttractionService);
   private readonly idsSignal = signal<number[]>(this.readIds());
+  private readonly itemsSignal = signal<Attraction[]>([]);
 
   readonly ids = this.idsSignal.asReadonly();
   readonly count = computed(() => this.idsSignal().length);
+  readonly items = this.itemsSignal.asReadonly();
 
-  readonly items = computed(() => {
-    const ids = this.idsSignal();
-    return ids
-      .map((id) => this.attractionService.getById(id))
-      .filter((a): a is Attraction => !!a);
-  });
+  constructor() {
+    void this.refreshItems();
+  }
 
   has(id: number): boolean {
     return this.idsSignal().includes(id);
@@ -36,6 +35,7 @@ export class ItineraryService {
       this.persist(next);
       return next;
     });
+    void this.refreshItems();
     return true;
   }
 
@@ -45,9 +45,9 @@ export class ItineraryService {
       this.persist(next);
       return next;
     });
+    void this.refreshItems();
   }
 
-  /** Reorder: move stop toward the start of the day. */
   moveUp(id: number): void {
     this.idsSignal.update((ids) => {
       const index = ids.indexOf(id);
@@ -59,9 +59,9 @@ export class ItineraryService {
       this.persist(next);
       return next;
     });
+    void this.refreshItems();
   }
 
-  /** Reorder: move stop toward the end of the day. */
   moveDown(id: number): void {
     this.idsSignal.update((ids) => {
       const index = ids.indexOf(id);
@@ -73,11 +73,33 @@ export class ItineraryService {
       this.persist(next);
       return next;
     });
+    void this.refreshItems();
   }
 
   clear(): void {
     this.idsSignal.set([]);
     this.persist([]);
+    this.itemsSignal.set([]);
+  }
+
+  async refreshItems(): Promise<void> {
+    const ids = this.idsSignal();
+    const cached = this.attractionService.attractions();
+    const resolved: Attraction[] = [];
+
+    for (const id of ids) {
+      const fromCache = cached.find((a) => a.id === id);
+      if (fromCache) {
+        resolved.push(fromCache);
+        continue;
+      }
+      const fromApi = await this.attractionService.getById(id);
+      if (fromApi) {
+        resolved.push(fromApi);
+      }
+    }
+
+    this.itemsSignal.set(resolved);
   }
 
   private readIds(): number[] {
@@ -87,7 +109,6 @@ export class ItineraryService {
     try {
       const raw = sessionStorage.getItem(STORAGE_KEY);
       if (!raw) {
-        // Migrate away from older localStorage plans so they do not look like saved accounts.
         localStorage.removeItem(STORAGE_KEY);
         return [];
       }

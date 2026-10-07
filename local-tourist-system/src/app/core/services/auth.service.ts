@@ -1,53 +1,76 @@
 import { Injectable, PLATFORM_ID, computed, inject, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
 import { AuthUser, LoginResult } from '../models/auth.model';
+import { environment } from '../../../environments/environment';
 
 const SESSION_KEY = 'localvista.admin.session';
-
-/**
- * Frontend-only mock admin sign-in.
- * Demo credentials are intentional for UI walkthroughs — replace with ASP.NET Identity later.
- * There is no tourist registration or tourist sign-in.
- */
-const DEMO_ADMIN = {
-  username: 'manager',
-  password: 'Manager123',
-  displayName: 'Nimal (demo admin)',
-} as const;
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly platformId = inject(PLATFORM_ID);
-  private readonly userSignal = signal<AuthUser | null>(this.readSession());
+  private readonly http = inject(HttpClient);
+  private readonly userSignal = signal<AuthUser | null>(null);
 
   readonly currentUser = this.userSignal.asReadonly();
-  /** True when the demo admin session is active. */
   readonly isAdmin = computed(() => this.userSignal()?.role === 'Admin');
-  /** Alias kept for templates that ask “signed in?” — only admins can sign in. */
   readonly isAuthenticated = this.isAdmin;
 
-  login(username: string, password: string): LoginResult {
-    const ok =
-      username.trim().toLowerCase() === DEMO_ADMIN.username &&
-      password === DEMO_ADMIN.password;
+  /** Restore admin session from API cookie (browser only). */
+  async initialize(): Promise<void> {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
 
-    if (!ok) {
+    try {
+      const user = await firstValueFrom(
+        this.http.get<AuthUser | null>(`${environment.apiBaseUrl}/auth/me`),
+      );
+      if (user?.role === 'Admin') {
+        this.userSignal.set(user);
+        this.writeSession(user);
+      } else {
+        this.userSignal.set(null);
+        this.clearSession();
+      }
+    } catch {
+      this.userSignal.set(this.readSession());
+    }
+  }
+
+  async login(username: string, password: string): Promise<LoginResult> {
+    try {
+      const result = await firstValueFrom(
+        this.http.post<{ ok: boolean; user?: AuthUser; error?: string }>(
+          `${environment.apiBaseUrl}/auth/login`,
+          { username, password },
+        ),
+      );
+
+      if (!result.ok || !result.user) {
+        this.userSignal.set(null);
+        this.clearSession();
+        return { ok: false };
+      }
+
+      this.userSignal.set(result.user);
+      this.writeSession(result.user);
+      return { ok: true, user: result.user };
+    } catch {
       this.userSignal.set(null);
       this.clearSession();
       return { ok: false };
     }
-
-    const user: AuthUser = {
-      username: DEMO_ADMIN.username,
-      displayName: DEMO_ADMIN.displayName,
-      role: 'Admin',
-    };
-    this.userSignal.set(user);
-    this.writeSession(user);
-    return { ok: true, user };
   }
 
-  logout(): void {
+  async logout(): Promise<void> {
+    try {
+      await firstValueFrom(this.http.post(`${environment.apiBaseUrl}/auth/logout`, {}));
+    } catch {
+      // Clear local session even if the API call fails.
+    }
+
     this.userSignal.set(null);
     this.clearSession();
   }
