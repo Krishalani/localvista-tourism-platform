@@ -1,8 +1,7 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {
-  ATTRACTION_CATEGORIES,
   AttractionCategory,
   AttractionFormModel,
 } from '../../../core/models/attraction.model';
@@ -14,35 +13,22 @@ import { AttractionService } from '../../../core/services/attraction.service';
   templateUrl: './admin-attraction-form.html',
   styleUrl: './admin-attraction-form.css',
 })
-export class AdminAttractionForm {
+export class AdminAttractionForm implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly attractionService = inject(AttractionService);
 
-  protected readonly categories = ATTRACTION_CATEGORIES;
+  protected readonly categories = this.attractionService.categories;
   protected readonly isEdit = signal(false);
   protected readonly error = signal('');
   protected readonly editId = signal<number | null>(null);
+  protected readonly loading = signal(false);
 
   protected model: AttractionFormModel = this.blank();
   protected draftImageUrl = '';
 
-  constructor() {
-    const idParam = this.route.snapshot.paramMap.get('id');
-    if (idParam) {
-      const id = Number(idParam);
-      const existing = this.attractionService.getById(id);
-      if (!existing) {
-        this.error.set('Attraction not found.');
-        return;
-      }
-      this.isEdit.set(true);
-      this.editId.set(id);
-      this.model = {
-        ...existing,
-        imageUrls: [...existing.imageUrls],
-      };
-    }
+  ngOnInit(): void {
+    void this.bootstrap();
   }
 
   addImageUrl(): void {
@@ -64,7 +50,7 @@ export class AdminAttractionForm {
     );
   }
 
-  submit(): void {
+  async submit(): Promise<void> {
     this.error.set('');
 
     if (!this.model.name.trim() || !this.model.category || !this.model.description.trim()) {
@@ -81,17 +67,54 @@ export class AdminAttractionForm {
       return;
     }
 
-    if (this.isEdit()) {
-      const id = this.editId();
-      if (id == null) {
-        return;
+    this.loading.set(true);
+    try {
+      if (this.isEdit()) {
+        const id = this.editId();
+        if (id == null) {
+          return;
+        }
+        await this.attractionService.update(id, this.model);
+      } else {
+        await this.attractionService.add(this.model);
       }
-      this.attractionService.update(id, this.model);
-    } else {
-      this.attractionService.add(this.model);
+      void this.router.navigateByUrl('/admin');
+    } catch {
+      this.error.set('Save failed. Check validation and admin sign-in, then try again.');
+    } finally {
+      this.loading.set(false);
+    }
+  }
+
+  onCategoryChange(value: string): void {
+    this.model.category = value as AttractionCategory;
+  }
+
+  private async bootstrap(): Promise<void> {
+    await this.attractionService.loadCategories();
+
+    const idParam = this.route.snapshot.paramMap.get('id');
+    if (!idParam) {
+      const cats = this.attractionService.categories();
+      if (cats.length) {
+        this.model.category = cats[0];
+      }
+      return;
     }
 
-    void this.router.navigateByUrl('/admin');
+    const id = Number(idParam);
+    const existing = await this.attractionService.getById(id);
+    if (!existing) {
+      this.error.set('Attraction not found.');
+      return;
+    }
+
+    this.isEdit.set(true);
+    this.editId.set(id);
+    this.model = {
+      ...existing,
+      imageUrls: [...existing.imageUrls],
+    };
   }
 
   private blank(): AttractionFormModel {
@@ -106,9 +129,5 @@ export class AdminAttractionForm {
       latitude: 7.2905,
       longitude: 80.6337,
     };
-  }
-
-  onCategoryChange(value: string): void {
-    this.model.category = value as AttractionCategory;
   }
 }

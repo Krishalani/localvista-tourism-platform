@@ -3,13 +3,19 @@
     <div>
       <p class="eyebrow">Administrator</p>
       <h1>Catalogue management</h1>
-      <p>{{ attractionService.count() }} places in the sample catalogue.</p>
+      <p>{{ attractions().length }} places in the catalogue.</p>
     </div>
     <a class="btn btn-primary" routerLink="/admin/attractions/new">Add place</a>
   </header>
 
   @if (flash()) {
     <p class="flash" role="status">{{ flash() }}</p>
+  }
+  @if (error()) {
+    <p class="flash" role="alert">{{ error() }}</p>
+  }
+  @if (loading()) {
+    <p>Loading catalogue…</p>
   }
 
   <div class="table-wrap">
@@ -23,7 +29,7 @@
         </tr>
       </thead>
       <tbody>
-        @for (item of attractionService.attractions(); track item.id) {
+        @for (item of attractions(); track item.id) {
           <tr>
             <td>
               <strong>{{ item.name }}</strong>
@@ -44,7 +50,7 @@
     <div class="dialog-backdrop" role="presentation">
       <div class="dialog" role="alertdialog" aria-modal="true" aria-labelledby="delete-title">
         <h2 id="delete-title">Delete this place?</h2>
-        <p>This permanently removes it from the sample catalogue.</p>
+        <p>This permanently removes it from the catalogue.</p>
         <div class="dialog-actions">
           <button type="button" class="btn btn-ghost" (click)="cancelDelete()">Cancel</button>
           <button type="button" class="btn btn-danger" (click)="confirmDelete()">Delete</button>

@@ -1,8 +1,8 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { map } from 'rxjs';
-import { primaryImageUrl } from '../../../core/models/attraction.model';
+import { Attraction, primaryImageUrl } from '../../../core/models/attraction.model';
 import { AttractionService } from '../../../core/services/attraction.service';
 import { ItineraryService } from '../../../core/services/itinerary.service';
 import { MapPreviewService } from '../../../core/services/map-preview.service';
@@ -27,14 +27,7 @@ export class AttractionDetail {
 
   protected readonly message = signal('');
   protected readonly activeImageIndex = signal(0);
-
-  protected readonly attraction = computed(() => {
-    const id = this.id();
-    if (!Number.isFinite(id)) {
-      return undefined;
-    }
-    return this.attractionService.getById(id);
-  });
+  protected readonly attraction = signal<Attraction | undefined>(undefined);
 
   protected readonly activeImage = computed(() => {
     const a = this.attraction();
@@ -49,7 +42,6 @@ export class AttractionDetail {
     return urls[index];
   });
 
-  /** Iframe preview via MapPreviewService — swap that service for Google Maps JS later. */
   protected readonly mapUrl = computed(() => {
     const a = this.attraction();
     if (!a) {
@@ -57,6 +49,20 @@ export class AttractionDetail {
     }
     return this.mapPreview.embedUrl(a.latitude, a.longitude);
   });
+
+  constructor() {
+    effect(() => {
+      const id = this.id();
+      if (!Number.isFinite(id)) {
+        this.attraction.set(undefined);
+        return;
+      }
+      void this.attractionService.getById(id).then((item) => {
+        this.attraction.set(item);
+        this.activeImageIndex.set(0);
+      });
+    });
+  }
 
   selectImage(index: number): void {
     this.activeImageIndex.set(index);

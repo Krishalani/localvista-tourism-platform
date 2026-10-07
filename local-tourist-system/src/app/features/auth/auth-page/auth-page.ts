@@ -17,6 +17,7 @@ export class AuthPage {
   protected username = '';
   protected password = '';
   protected readonly error = signal('');
+  protected readonly loading = signal(false);
 
   constructor() {
     if (this.auth.isAdmin()) {
@@ -24,20 +25,25 @@ export class AuthPage {
     }
   }
 
-  submit(): void {
+  async submit(): Promise<void> {
     this.error.set('');
-    const result = this.auth.login(this.username, this.password);
-    if (!result.ok || !result.user) {
-      this.error.set('Invalid admin username or password. Please try again.');
-      return;
-    }
+    this.loading.set(true);
+    try {
+      const result = await this.auth.login(this.username, this.password);
+      if (!result.ok || !result.user) {
+        this.error.set('Invalid admin username or password. Please try again.');
+        return;
+      }
 
-    const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
-    if (returnUrl?.startsWith('/admin')) {
-      void this.router.navigateByUrl(returnUrl);
-      return;
-    }
+      const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+      if (returnUrl?.startsWith('/admin')) {
+        void this.router.navigateByUrl(returnUrl);
+        return;
+      }
 
-    void this.router.navigateByUrl('/admin');
+      void this.router.navigateByUrl('/admin');
+    } finally {
+      this.loading.set(false);
+    }
   }
 }

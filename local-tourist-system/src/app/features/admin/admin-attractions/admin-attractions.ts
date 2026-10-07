@@ -1,5 +1,6 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { Attraction } from '../../../core/models/attraction.model';
 import { AttractionService } from '../../../core/services/attraction.service';
 
 @Component({
@@ -8,10 +9,18 @@ import { AttractionService } from '../../../core/services/attraction.service';
   templateUrl: './admin-attractions.html',
   styleUrl: './admin-attractions.css',
 })
-export class AdminAttractions {
-  protected readonly attractionService = inject(AttractionService);
+export class AdminAttractions implements OnInit {
+  private readonly attractionService = inject(AttractionService);
+
+  protected readonly attractions = signal<Attraction[]>([]);
   protected readonly pendingDeleteId = signal<number | null>(null);
   protected readonly flash = signal('');
+  protected readonly error = signal('');
+  protected readonly loading = signal(false);
+
+  ngOnInit(): void {
+    void this.reload();
+  }
 
   askDelete(id: number): void {
     this.pendingDeleteId.set(id);
@@ -21,13 +30,32 @@ export class AdminAttractions {
     this.pendingDeleteId.set(null);
   }
 
-  confirmDelete(): void {
+  async confirmDelete(): Promise<void> {
     const id = this.pendingDeleteId();
     if (id == null) {
       return;
     }
-    this.attractionService.delete(id);
-    this.pendingDeleteId.set(null);
-    this.flash.set('Attraction deleted.');
+
+    try {
+      await this.attractionService.delete(id);
+      this.pendingDeleteId.set(null);
+      this.flash.set('Attraction deleted.');
+      await this.reload();
+    } catch {
+      this.error.set('Delete failed. Sign in as admin and try again.');
+      this.pendingDeleteId.set(null);
+    }
+  }
+
+  private async reload(): Promise<void> {
+    this.loading.set(true);
+    this.error.set('');
+    try {
+      this.attractions.set(await this.attractionService.load({}));
+    } catch {
+      this.error.set('Unable to load catalogue.');
+    } finally {
+      this.loading.set(false);
+    }
   }
 }

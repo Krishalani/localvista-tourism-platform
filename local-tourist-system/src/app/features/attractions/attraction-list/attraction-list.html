@@ -25,16 +25,23 @@
 
     <ul class="hero-stats">
       <li><strong>{{ total() }}</strong> places</li>
-      <li><strong>{{ categories.length }}</strong> categories</li>
+      <li><strong>{{ categories().length }}</strong> categories</li>
       <li><strong>1 day</strong> is all you need</li>
     </ul>
+
+    @if (error()) {
+      <p class="api-error" role="alert">{{ error() }}</p>
+    }
+    @if (loading()) {
+      <p class="api-status">Loading places from the API…</p>
+    }
   </div>
 
   <ul class="spotlight">
     @for (spot of spotlight(); track spot.id) {
       <li>
         <a [routerLink]="['/attractions', spot.id]">
-          <img [src]="spot.imageUrls[0]" [alt]="spot.name" />
+          <img [src]="primaryImageUrl(spot)" [alt]="spot.name" />
           <span>{{ spot.name }}</span>
         </a>
       </li>
@@ -88,14 +95,18 @@
     >
       All
     </button>
-    @for (category of categories; track category) {
+    @for (category of categories(); track category) {
       <button type="button" class="chip" [class.on]="isSelected(category)" (click)="toggleCategory(category)">
         {{ category }}
       </button>
     }
   </div>
 
-  @if (results().length === 0) {
+  @if (error()) {
+    <div class="empty">
+      <p>{{ error() }}</p>
+    </div>
+  } @else if (!loading() && results().length === 0) {
     <div class="empty">
       <p>No places match that search.</p>
       <button type="button" class="btn btn-primary" (click)="clearFilters()">Show all places</button>
@@ -106,7 +117,7 @@
         <li [style.--i]="$index">
           <a class="card" [routerLink]="['/attractions', item.id]" [queryParamsHandling]="'preserve'">
             <div class="card-media">
-              <img [src]="item.imageUrls[0]" [alt]="item.name" loading="lazy" />
+              <img [src]="primaryImageUrl(item)" [alt]="item.name" loading="lazy" />
               @if (item.imageUrls.length > 1) {
                 <span class="photo-count">{{ item.imageUrls.length }} photos</span>
               }

@@ -2,7 +2,7 @@
   <a routerLink="/admin" class="back">← Back to catalogue</a>
   <p class="eyebrow">Administrator</p>
   <h1>{{ isEdit() ? 'Edit place' : 'Add place' }}</h1>
-  <p class="lede">Required: name, category, description, and at least one image URL. Image storage is mock-only for now.</p>
+  <p class="lede">Required: name, category, description, and at least one image URL. Images are stored as URLs in SQL Server.</p>
 
   <form (ngSubmit)="submit()" novalidate>
     <label>
@@ -18,7 +18,7 @@
         (ngModelChange)="onCategoryChange($event)"
         required
       >
-        @for (category of categories; track category) {
+        @for (category of categories(); track category) {
           <option [value]="category">{{ category }}</option>
         }
       </select>
