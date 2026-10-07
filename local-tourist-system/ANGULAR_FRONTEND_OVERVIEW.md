@@ -3,7 +3,7 @@
 **Project:** Local Tourist Day-Visit Planner (Kandy)  
 **App folder:** `local-tourist-system`  
 **Stack:** Angular (standalone components, client render)  
-**Data mode:** Hardcoded / in-browser mock (no live ASP.NET API, SQL Server, or Identity yet)
+**Data mode:** Live ASP.NET Core API + SQL Server `LocalVista` database (Identity for admin). Guest itinerary remains in browser `sessionStorage`.
 
 This document describes what the UI contains today: pages, what each page does, and features that are complete in the frontend.
 
