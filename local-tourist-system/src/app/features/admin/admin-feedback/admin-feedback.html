@@ -1,0 +1,70 @@
+<section class="admin-feedback">
+  <a class="back-link" routerLink="/admin">← Dashboard</a>
+  <header class="page-head">
+    <div>
+      <p class="eyebrow">Administrator</p>
+      <h1>Visitor feedback</h1>
+      <p>Ratings and comments are grouped by attraction.</p>
+    </div>
+  </header>
+
+  <section class="feedback-stats" aria-label="Feedback overview">
+    <article><span>Total ratings</span><strong>{{ reviewCount() }}</strong></article>
+    <article><span>Average rating</span><strong>{{ averageRating().toFixed(1) }} <small>/ 5</small></strong></article>
+    <article><span>Places reviewed</span><strong>{{ groups().length }}</strong></article>
+  </section>
+
+  @if (loading()) {
+    <p class="feedback-message">Loading visitor feedback…</p>
+  } @else if (error()) {
+    <p class="feedback-error" role="alert">{{ error() }}</p>
+  } @else if (groups().length === 0) {
+    <div class="empty-state">
+      <h2>No feedback yet</h2>
+      <p>Visitor ratings and comments will appear here after someone reviews an attraction.</p>
+    </div>
+  } @else {
+    <div class="attraction-feedback-list">
+      @for (group of groups(); track group.attractionId) {
+        <section class="attraction-feedback-card">
+          <header class="attraction-head">
+            <div>
+              <span class="category">{{ group.category }}</span>
+              <h2><a [routerLink]="['/attractions', group.attractionId]">{{ group.attractionName }}</a></h2>
+              <span class="count">{{ group.reviewCount }} rating{{ group.reviewCount === 1 ? '' : 's' }}</span>
+            </div>
+            <div class="attraction-rating">
+              <strong>{{ group.averageRating.toFixed(1) }}</strong>
+              <span aria-label="Average rating">
+                @for (star of ratingOptions; track star) {
+                  <i [class.filled]="star <= group.averageRating">★</i>
+                }
+              </span>
+            </div>
+          </header>
+
+          <ul class="review-list">
+            @for (review of group.reviews; track review.id) {
+              <li>
+                <div class="review-author">
+                  <strong>{{ review.displayName }}</strong>
+                  <time [attr.datetime]="review.createdAtUtc">{{ formatDate(review.createdAtUtc) }}</time>
+                </div>
+                <span class="review-stars" [attr.aria-label]="review.rating + ' out of 5 stars'">
+                  @for (star of ratingOptions; track star) {
+                    <i [class.filled]="star <= review.rating">★</i>
+                  }
+                </span>
+                @if (review.comment) {
+                  <p>{{ review.comment }}</p>
+                } @else {
+                  <p class="rating-only">Rating only; no written comment.</p>
+                }
+              </li>
+            }
+          </ul>
+        </section>
+      }
+    </div>
+  }
+</section>

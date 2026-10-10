@@ -629,6 +629,221 @@ iframe {
   line-height: 1.5;
 }
 
+.feedback-section {
+  margin-top: 2rem;
+  padding: clamp(1rem, 2.5vw, 1.6rem);
+  border: 1px solid rgb(23 107 120 / 12%);
+  border-radius: 1rem;
+  background: #fff;
+  box-shadow: 0 8px 28px rgb(16 42 67 / 5%);
+}
+
+.feedback-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+}
+
+.feedback-kicker {
+  margin: 0 0 0.35rem;
+  color: var(--lv-lake);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.feedback-heading h2 {
+  margin: 0;
+  font-size: clamp(1.35rem, 2.5vw, 1.8rem);
+  letter-spacing: -0.025em;
+}
+
+.feedback-heading > div:first-child > p:last-child {
+  margin: 0.45rem 0 0;
+  color: color-mix(in srgb, var(--lv-ink) 65%, transparent);
+}
+
+.rating-summary {
+  display: grid;
+  justify-items: center;
+  gap: 0.15rem;
+  min-width: 7rem;
+}
+
+.rating-summary > strong {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.rating-stars,
+.review-stars {
+  color: #d5dce0;
+  letter-spacing: 0.08em;
+}
+
+.rating-stars .filled,
+.review-stars .filled {
+  color: #d99a24;
+}
+
+.rating-summary small {
+  color: color-mix(in srgb, var(--lv-ink) 60%, transparent);
+}
+
+.feedback-form {
+  display: grid;
+  gap: 0.9rem;
+  padding: 1rem;
+  border: 1px solid #e2ecea;
+  border-radius: 0.85rem;
+  background: #f8fbfa;
+}
+
+.rating-picker {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.rating-picker legend,
+.feedback-fields label {
+  color: var(--lv-ink);
+  font-size: 0.9rem;
+  font-weight: 650;
+}
+
+.rating-buttons {
+  display: flex;
+  gap: 0.15rem;
+  margin-top: 0.25rem;
+}
+
+.rating-buttons button {
+  padding: 0 0.1rem;
+  border: 0;
+  background: transparent;
+  color: #cbd5d9;
+  font-size: 1.8rem;
+  cursor: pointer;
+}
+
+.rating-buttons button.selected,
+.rating-buttons button:hover {
+  color: #d99a24;
+}
+
+.rating-buttons button:focus-visible {
+  outline: 2px solid var(--lv-lake);
+  outline-offset: 2px;
+  border-radius: 0.25rem;
+}
+
+.feedback-fields {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.65fr) minmax(0, 1.5fr);
+  gap: 0.85rem;
+}
+
+.feedback-fields label {
+  display: grid;
+  align-content: start;
+  gap: 0.35rem;
+}
+
+.feedback-fields label span {
+  color: color-mix(in srgb, var(--lv-ink) 55%, transparent);
+  font-weight: 400;
+}
+
+.feedback-fields input,
+.feedback-fields textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.7rem 0.75rem;
+  border: 1px solid #d6e2e4;
+  border-radius: 0.6rem;
+  background: #fff;
+  color: var(--lv-ink);
+  font: inherit;
+  font-size: 0.9rem;
+}
+
+.feedback-fields textarea {
+  resize: vertical;
+}
+
+.feedback-fields input:focus,
+.feedback-fields textarea:focus {
+  outline: 2px solid color-mix(in srgb, var(--lv-lake) 35%, transparent);
+  border-color: var(--lv-lake);
+}
+
+.feedback-submit {
+  justify-self: start;
+}
+
+.feedback-submit:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+.feedback-error,
+.feedback-notice,
+.feedback-status,
+.no-reviews {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.feedback-error {
+  color: #a12323;
+}
+
+.feedback-notice {
+  color: #087b57;
+}
+
+.feedback-status,
+.no-reviews {
+  color: color-mix(in srgb, var(--lv-ink) 62%, transparent);
+}
+
+.review-list {
+  display: grid;
+  gap: 0.65rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.review-card {
+  padding: 0.9rem 1rem;
+  border: 1px solid #e6eeee;
+  border-radius: 0.75rem;
+  background: #fff;
+}
+
+.review-topline {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.review-topline time {
+  color: color-mix(in srgb, var(--lv-ink) 55%, transparent);
+  font-size: 0.82rem;
+}
+
+.review-card p {
+  margin: 0.35rem 0 0;
+  color: color-mix(in srgb, var(--lv-ink) 75%, transparent);
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
 .hero-actions {
   grid-column: 1 / -1;
   justify-content: flex-start;
@@ -643,5 +858,24 @@ iframe {
   .hours-stat,
   .hero-actions {
     grid-column: 1;
+  }
+
+  .feedback-heading {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .rating-summary {
+    justify-items: start;
+  }
+
+  .feedback-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .review-topline {
+    align-items: start;
+    flex-direction: column;
+    gap: 0.15rem;
   }
 }

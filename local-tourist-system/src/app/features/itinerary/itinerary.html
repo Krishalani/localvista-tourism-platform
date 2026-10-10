@@ -67,6 +67,7 @@
                       Move down
                     </button>
                     <a class="text-link" [routerLink]="['/attractions', item.id]">Open details</a>
+                    <a class="text-link" [routerLink]="['/attractions', item.id]" fragment="feedback">Rate this place</a>
                   </div>
                 </div>
                 <button
@@ -118,7 +119,6 @@
 
         <div class="summary-actions">
           <a class="btn btn-primary" routerLink="/">Add more places</a>
-          <button type="button" class="btn btn-ghost" (click)="clear()">Start over</button>
         </div>
       </aside>
     </div>

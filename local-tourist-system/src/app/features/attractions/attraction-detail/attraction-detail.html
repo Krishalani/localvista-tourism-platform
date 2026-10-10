@@ -137,6 +137,92 @@
       </section>
     </div>
 
+    <section id="feedback" class="feedback-section" aria-labelledby="feedback-title">
+      <header class="feedback-heading">
+        <div>
+          <p class="feedback-kicker">VISITOR FEEDBACK</p>
+          <h2 id="feedback-title">Ratings and reviews</h2>
+          <p>Share how your visit went. A star rating is required; a comment is optional.</p>
+        </div>
+        @if (feedback(); as summary) {
+          <div class="rating-summary" aria-label="Average visitor rating">
+            <strong>{{ summary.averageRating.toFixed(1) }}</strong>
+            <span class="rating-stars" aria-hidden="true">
+              @for (star of ratingOptions; track star) {
+                <span [class.filled]="star <= summary.averageRating">★</span>
+              }
+            </span>
+            <small>{{ summary.reviewCount }} rating{{ summary.reviewCount === 1 ? '' : 's' }}</small>
+          </div>
+        }
+      </header>
+
+      @if (feedbackLoading()) {
+        <p class="feedback-status">Loading visitor feedback…</p>
+      }
+
+      <form class="feedback-form" (ngSubmit)="submitFeedback()">
+        <fieldset class="rating-picker">
+          <legend>Your rating *</legend>
+          <div class="rating-buttons">
+            @for (star of ratingOptions; track star) {
+              <button
+                type="button"
+                [class.selected]="star <= feedbackDraft.rating"
+                [attr.aria-label]="'Rate ' + star + ' out of 5 stars'"
+                [attr.aria-pressed]="feedbackDraft.rating === star"
+                (click)="setFeedbackRating(star)"
+              >★</button>
+            }
+          </div>
+        </fieldset>
+        <div class="feedback-fields">
+          <label>
+            Name <span>(optional)</span>
+            <input name="feedbackName" [(ngModel)]="feedbackDraft.displayName" maxlength="80" placeholder="Local visitor" />
+          </label>
+          <label>
+            Your feedback <span>(optional)</span>
+            <textarea name="feedbackComment" [(ngModel)]="feedbackDraft.comment" maxlength="1000" rows="3" placeholder="Tell others what you thought of this place"></textarea>
+          </label>
+        </div>
+        @if (feedbackError()) {
+          <p class="feedback-error" role="alert">{{ feedbackError() }}</p>
+        }
+        @if (feedbackNotice()) {
+          <p class="feedback-notice" role="status">{{ feedbackNotice() }}</p>
+        }
+        <button type="submit" class="btn btn-primary feedback-submit" [disabled]="feedbackSaving()">
+          {{ feedbackSaving() ? 'Submitting…' : 'Submit feedback' }}
+        </button>
+      </form>
+
+      @if (feedback(); as summary) {
+        @if (summary.reviews.length) {
+          <ul class="review-list">
+            @for (review of summary.reviews; track review.id) {
+              <li class="review-card">
+                <div class="review-topline">
+                  <strong>{{ review.displayName }}</strong>
+                  <time [attr.datetime]="review.createdAtUtc">{{ formatReviewDate(review.createdAtUtc) }}</time>
+                </div>
+                <span class="review-stars" [attr.aria-label]="review.rating + ' out of 5 stars'">
+                  @for (star of ratingOptions; track star) {
+                    <span [class.filled]="star <= review.rating">★</span>
+                  }
+                </span>
+                @if (review.comment) {
+                  <p>{{ review.comment }}</p>
+                }
+              </li>
+            }
+          </ul>
+        } @else if (!feedbackLoading()) {
+          <p class="no-reviews">No visitor ratings yet. Be the first to share your experience.</p>
+        }
+      }
+    </section>
+
     @if (nearbyPlaces().length > 0) {
       <section class="nearby" aria-labelledby="nearby-title">
         <header class="nearby-head">

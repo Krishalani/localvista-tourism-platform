@@ -62,6 +62,14 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'admin/feedback',
+        canActivate: [adminGuard],
+        loadComponent: () =>
+          import('./features/admin/admin-feedback/admin-feedback').then(
+            (m) => m.AdminFeedback,
+          ),
+      },
+      {
         path: 'admin/attractions/new',
         canActivate: [adminGuard],
         loadComponent: () =>

@@ -20,6 +20,7 @@
 
         @if (auth.isAdmin()) {
           <a routerLink="/admin" routerLinkActive="active">Admin</a>
+          <a routerLink="/admin/feedback" routerLinkActive="active">Feedback</a>
           <button type="button" class="linkish" (click)="logout()">Log out</button>
         } @else {
           <a routerLink="/auth" routerLinkActive="active" class="auth-link">Admin sign in</a>

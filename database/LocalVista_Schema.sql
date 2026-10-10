@@ -10,7 +10,8 @@
   ----------------------
   Categories.Name          ← ATTRACTION_CATEGORIES (7 names)
   Attractions.*             ← Attraction (name, description, openingHours,
-                             travelTips, distanceKm, latitude, longitude)
+                             travelTips, bestVisitMonths, distanceKm,
+                             latitude, longitude)
   Attractions.CategoryId     ← Attraction.category (via Categories.Name)
   AttractionImages.ImageUrl + SortOrder
                            ← Attraction.imageUrls[] (SortOrder 0 = primary /
@@ -20,6 +21,7 @@
   ----------------------------------
   • One-day itinerary     → browser sessionStorage only (guest plan)
   • Tourist accounts      → out of project scope
+  • Attraction feedback   → anonymous ratings and comments per attraction
   • AdminAccounts table   → NOT created (see Admin authentication below)
 
   Admin authentication (ASP.NET Core Identity)
@@ -27,7 +29,7 @@
   The API creates and manages its own Identity tables (for example AspNetUsers,
   AspNetRoles, AspNetUserRoles, AspNetUserClaims) through EF Core migrations.
   The API seeds the development admin account and Admin role at startup; this
-  script only creates catalogue tables and seed rows.
+  script creates catalogue and feedback tables plus catalogue seed rows.
 
   Do NOT add a separate dbo.AdminAccounts (or similar) table unless the team
   explicitly decides not to use Identity.
@@ -49,12 +51,15 @@
 -- =============================================================================
 -- WARNING: The statements below DROP existing LocalVista catalogue tables and
 -- DELETE all of their data. Re-running this block destroys Categories,
--- Attractions, and AttractionImages. Use only for first-time setup or a
+-- Attractions, AttractionImages, and AttractionFeedback. Use only for first-time setup or a
 -- deliberate local reset. Do not run against a shared/production database.
 -- =============================================================================
 
 IF OBJECT_ID(N'dbo.AttractionImages', N'U') IS NOT NULL
     DROP TABLE dbo.AttractionImages;
+
+IF OBJECT_ID(N'dbo.AttractionFeedback', N'U') IS NOT NULL
+    DROP TABLE dbo.AttractionFeedback;
 
 IF OBJECT_ID(N'dbo.Attractions', N'U') IS NOT NULL
     DROP TABLE dbo.Attractions;
@@ -83,6 +88,8 @@ CREATE TABLE dbo.Attractions (
     Description    NVARCHAR(MAX)   NOT NULL,
     OpeningHours   NVARCHAR(200)   NULL,
     TravelTips     NVARCHAR(MAX)   NULL,
+    BestVisitMonths NVARCHAR(40)   NOT NULL
+        CONSTRAINT DF_Attractions_BestVisitMonths DEFAULT (N''),
     DistanceKm     DECIMAL(6,2)    NOT NULL
         CONSTRAINT CK_Attractions_DistanceKm CHECK (DistanceKm >= 0 AND DistanceKm <= 25),
     Latitude       DECIMAL(9,6)    NOT NULL,
@@ -120,6 +127,26 @@ CREATE TABLE dbo.AttractionImages (
 GO
 
 CREATE INDEX IX_AttractionImages_AttractionId ON dbo.AttractionImages (AttractionId);
+GO
+
+-- Anonymous tourist ratings and optional comments; feedback is scoped to a place.
+CREATE TABLE dbo.AttractionFeedback (
+    AttractionFeedbackId INT            NOT NULL IDENTITY(1,1)
+        CONSTRAINT PK_AttractionFeedback PRIMARY KEY,
+    AttractionId         INT            NOT NULL,
+    DisplayName          NVARCHAR(80)   NULL,
+    Rating               INT            NOT NULL,
+    Comment              NVARCHAR(1000) NULL,
+    CreatedAtUtc         DATETIME2(0)   NOT NULL
+        CONSTRAINT DF_AttractionFeedback_CreatedAtUtc DEFAULT (SYSUTCDATETIME()),
+    CONSTRAINT FK_AttractionFeedback_Attractions
+        FOREIGN KEY (AttractionId) REFERENCES dbo.Attractions (AttractionId)
+        ON DELETE CASCADE
+);
+GO
+
+CREATE INDEX IX_AttractionFeedback_AttractionId_CreatedAtUtc
+    ON dbo.AttractionFeedback (AttractionId, CreatedAtUtc DESC);
 GO
 
 -- =============================================================================

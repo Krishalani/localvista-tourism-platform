@@ -19,6 +19,12 @@
   margin-bottom: 1.25rem;
 }
 
+.header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
 .head h1 {
   margin: 0 0 0.35rem;
   font-family: var(--lv-sans);
@@ -226,6 +232,10 @@ tr:last-child td {
 @media (max-width: 640px) {
   .head {
     flex-direction: column;
+  }
+
+  .header-actions {
+    width: 100%;
   }
 
   .overview {
