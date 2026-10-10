@@ -1,3 +1,4 @@
+@if (!isCataloguePage()) {
 <section class="hero">
   <div class="hero-inner">
     <p class="pill">Kandy day trips · all within 25 km</p>
@@ -75,22 +76,107 @@
   </ol>
 </section>
 
+<section class="hero-cover">
+  <div class="hero-cover-content">
+    <p class="hero-kicker"><span></span> KANDY · SRI LANKA</p>
+    <h1>Your journey<br />starts <em>here.</em></h1>
+    <p class="hero-copy">Find quiet gardens, sacred places, tea country and mountain views—all close enough for one memorable day.</p>
+    <form class="hero-search" (ngSubmit)="goToCatalogue()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
+      <input type="search" name="q" aria-label="Search by place name" placeholder="Where would you like to go?" [ngModel]="search()" (ngModelChange)="onSearchInput($event)" autocomplete="off" />
+      <button type="submit" class="btn btn-primary">Find places <span aria-hidden="true">→</span></button>
+    </form>
+    <a class="hero-cta btn btn-primary" routerLink="/attractions">Explore attractions</a>
+    <div class="hero-meta"><span><strong>{{ total() }}</strong> places to discover</span><i></i><span><strong>{{ categories().length }}</strong> categories</span><i></i><span>All within 25 km of Kandy</span></div>
+    @if (error()) { <p class="api-error" role="alert">{{ error() }}</p> }
+    @if (loading()) { <p class="api-status">Finding places around Kandy…</p> }
+  </div>
+  <a class="hero-scroll" href="#our-service"><span></span> SCROLL TO DISCOVER</a>
+</section>
+
+<section class="search-dock" aria-label="Search attractions">
+  <div class="search-tabs"><span class="search-tab active">Attractions</span><a class="search-tab" routerLink="/itinerary">One-day plan</a></div>
+  <form class="dock-form" (ngSubmit)="goToCatalogue()">
+    <label><span>Find a place</span><input type="search" name="q" aria-label="Search by place name" placeholder="Try gardens, temples or tea trails" [ngModel]="search()" (ngModelChange)="onSearchInput($event)" autocomplete="off" /></label>
+    <div class="dock-divider"></div><div class="dock-hint"><span>Explore around</span><strong>Kandy · up to 25 km</strong></div>
+    <button type="submit" class="btn btn-primary">Search places <span aria-hidden="true">→</span></button>
+  </form>
+</section>
+
+<section class="promo-strip" aria-label="Featured local attractions">
+  @for (promo of spotlight().slice(0, 3); track promo.id) {
+    <a class="promo-card" [routerLink]="['/attractions', promo.id]"><img [src]="primaryImageUrl(promo)" [alt]="promo.name" loading="lazy" /><span class="promo-shade"></span><span class="promo-label">{{ promo.category }}</span><strong>{{ promo.name }}</strong><span class="promo-cta">Discover place →</span></a>
+  }
+</section>
+
+@if (featuredPlace(); as featured) {
+  <section class="feature-section">
+    <div class="feature-image"><img [src]="primaryImageUrl(featured)" [alt]="featured.name" loading="lazy" /></div>
+    <div class="feature-copy"><p class="section-kicker">{{ isSeasonalFeature() ? 'RECOMMENDED NOW · ' + currentMonthName : 'LOCALVISTA PICK' }}</p><h2>{{ featured.name }}</h2><p>{{ featured.description }}</p><div class="feature-meta"><span>{{ featured.category }}</span><span>{{ featured.distanceKm }} km from Kandy</span>@if (featured.bestVisitMonths.length) { <span>Best months: {{ formatBestMonths(featured.bestVisitMonths) }}</span> }</div><a class="btn btn-primary" [routerLink]="['/attractions', featured.id]">View attraction</a></div>
+  </section>
+}
+
+<section class="popular-section">
+  <header class="landing-section-head split-head"><div><p class="section-kicker">ONE DAY TRIP IDEAS</p><h2>Make a day of it</h2><p>Choose a place to start exploring around Kandy.</p></div><a class="text-action" routerLink="/attractions">Browse all attractions</a></header>
+  <div class="popular-grid">
+    @for (spot of spotlight(); track spot.id) {
+      <a class="popular-card" [routerLink]="['/attractions', spot.id]"><img [src]="primaryImageUrl(spot)" [alt]="spot.name" loading="lazy" /><span class="popular-overlay"></span><span class="popular-category">{{ spot.category }}</span><span class="popular-copy"><strong>{{ spot.name }}</strong><small>{{ spot.distanceKm }} km from Kandy</small></span><span class="popular-arrow" aria-hidden="true">↗</span></a>
+    }
+  </div>
+</section>
+
+<section id="our-service" class="service-section">
+  <header class="landing-section-head centered"><p class="section-kicker">THE LOCALVISTA DIFFERENCE</p><h2>Why choose us?</h2><p>A simpler, more thoughtful way to explore the places around Kandy.</p></header>
+  <div class="service-grid">
+    <a class="service-tile" routerLink="/attractions"><span class="service-icon">01</span><h3>Local place details</h3><p>See opening hours, travel tips, distances and photos before you go.</p><span class="tile-arrow">Explore places</span></a>
+    <a class="service-tile" routerLink="/itinerary"><span class="service-icon">02</span><h3>Your day, your order</h3><p>Build a one-day plan and move stops around to suit your trip.</p><span class="tile-arrow">Plan your day →</span></a>
+    <a class="service-tile" routerLink="/attractions"><span class="service-icon">03</span><h3>Find nearby places</h3><p>Discover more attractions close to every place you open.</p><span class="tile-arrow">See attractions</span></a>
+    <a class="service-tile" routerLink="/attractions"><span class="service-icon">04</span><h3>Browse freely</h3><p>No tourist account is needed to explore and make a day plan.</p><span class="tile-arrow">Start exploring</span></a>
+  </div>
+</section>
+
+}
+
+@if (isCataloguePage()) {
 <section id="catalogue" class="catalogue">
-  <header class="section-head">
+      <header class="section-head">
     <div>
-      <h2>Places to visit</h2>
-      <p>Pick a category, or just scroll and see what catches your eye.</p>
+      <h2>{{ isCataloguePage() ? 'Explore all attractions' : 'All tourist attractions' }}</h2>
+      <p>{{ isCataloguePage() ? 'Search by place, category, opening hours, or travel tips. Narrow results by distance from Kandy.' : 'Search and filter places to find the right stops for your Kandy day trip.' }}</p>
     </div>
     <p class="result-meta" role="status">
       {{ results().length }} place{{ results().length === 1 ? '' : 's' }}
     </p>
   </header>
 
+  @if (isCataloguePage()) {
+    <form class="catalogue-search" (ngSubmit)="goToCatalogue()">
+      <label class="catalogue-query">
+        <span>Search attractions</span>
+        <input type="search" name="catalogueSearch" placeholder="Name, category, description, opening hours, or travel tips" [ngModel]="search()" (ngModelChange)="onSearchInput($event)" autocomplete="off" />
+      </label>
+      <label class="distance-filter">
+        <span>Distance from Kandy</span>
+        <select name="maxDistanceKm" [ngModel]="maxDistanceKm() === null ? '' : '' + maxDistanceKm()" (ngModelChange)="onDistanceChange($event)">
+          <option value="">Any distance</option>
+          <option value="5">Within 5 km</option>
+          <option value="10">Within 10 km</option>
+          <option value="15">Within 15 km</option>
+          <option value="25">Within 25 km</option>
+        </select>
+      </label>
+      <div class="catalogue-actions">
+        <button type="submit" class="btn btn-primary">Search</button>
+        <button type="button" class="btn btn-clear" (click)="clearFilters()">Clear filters</button>
+      </div>
+    </form>
+  }
+
   <div class="category-row" role="group" aria-label="Filter by category">
     <button
       type="button"
       class="chip"
-      [class.on]="!search() && selectedCategories().length === 0"
+      [class.on]="!search().trim() && selectedCategories().length === 0 && maxDistanceKm() === null"
       (click)="clearFilters()"
     >
       All
@@ -113,7 +199,7 @@
     </div>
   } @else {
     <ul class="grid">
-      @for (item of results(); track item.id) {
+      @for (item of visibleResults(); track item.id) {
         <li [style.--i]="$index">
           <a class="card" [routerLink]="['/attractions', item.id]" [queryParamsHandling]="'preserve'">
             <div class="card-media">
@@ -150,5 +236,17 @@
         </li>
       }
     </ul>
+
+    @if (visibleCount() < results().length) {
+      <div class="show-more-wrap">
+        <p>Showing {{ visibleResults().length }} of {{ results().length }} places</p>
+        <button type="button" class="btn btn-ghost show-more" (click)="showMore()">Show more places</button>
+      </div>
+    } @else if (results().length > 9) {
+      <div class="show-more-wrap">
+        <p>All {{ results().length }} places are on the page.</p>
+      </div>
+    }
   }
 </section>
+}

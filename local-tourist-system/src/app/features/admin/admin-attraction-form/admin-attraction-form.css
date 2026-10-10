@@ -56,6 +56,70 @@ textarea {
   background: #fff;
 }
 
+.seasonality {
+  margin: 0;
+  padding: 1rem;
+  border: 1px solid rgb(23 107 120 / 18%);
+  border-radius: 0.85rem;
+  background: #f5f9fa;
+}
+
+.seasonality legend {
+  padding: 0 0.35rem;
+  font-weight: 700;
+}
+
+.seasonality-help {
+  margin: 0 0 0.8rem;
+  color: #617581;
+  font-size: 0.88rem;
+  font-weight: 400;
+}
+
+.month-options {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.month-option {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid #d9e5e8;
+  border-radius: 0.65rem;
+  background: #fff;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.month-option input {
+  width: 1rem;
+  height: 1rem;
+  margin: 0;
+  padding: 0;
+}
+
+@media (max-width: 640px) {
+  .month-options {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+input[aria-invalid='true'],
+select[aria-invalid='true'],
+textarea[aria-invalid='true'] {
+  border-color: #b42318;
+  outline-color: #b42318;
+}
+
+.field-error {
+  color: #8b1e1e;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
 .row {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -160,4 +224,38 @@ textarea {
   .add-image {
     grid-template-columns: 1fr;
   }
+}
+
+/* Atlas admin form */
+.form-page {
+  max-width: 1080px;
+  margin-inline: auto;
+}
+
+.form-page h1 {
+  font-size: clamp(2.3rem, 4vw, 3.3rem);
+  letter-spacing: -0.045em;
+}
+
+form {
+  max-width: none;
+  padding: clamp(1.1rem, 3vw, 2rem);
+  border-radius: 1rem;
+  background: #fff;
+  border-color: rgb(23 107 120 / 12%);
+  box-shadow: 0 10px 35px rgb(16 42 67 / 6%);
+}
+
+input,
+select,
+textarea {
+  border-radius: 0.65rem;
+  border-color: #cbdedb;
+  background: #fbfdfc;
+}
+
+.images {
+  border-radius: 0.85rem;
+  border-color: #d1e2df;
+  background: #f7faf9;
 }

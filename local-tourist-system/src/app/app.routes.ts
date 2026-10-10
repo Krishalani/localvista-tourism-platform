@@ -15,6 +15,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'attractions',
+        loadComponent: () =>
+          import('./features/attractions/attraction-list/attraction-list').then(
+            (m) => m.AttractionList,
+          ),
+      },
+      {
         path: 'attractions/:id',
         loadComponent: () =>
           import('./features/attractions/attraction-detail/attraction-detail').then(

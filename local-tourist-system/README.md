@@ -1,52 +1,25 @@
-# LocalVista — Angular UI (hardcoded data)
+# LocalVista - Angular frontend
 
-Sample frontend for the **Local Tourist Day-Visit Planner** (Kandy).  
-APIs and SQL Server come later; this app uses in-memory mock data.
+Angular frontend for the Local Tourist Day-Visit Planner. The catalogue and administrator features use the ASP.NET Core API and SQL Server database. Guest itineraries are stored in the current browser session.
 
 ## Run
 
-```bash
-npm install
-npm start
-```
+1. Set up SQL Server using `../database/LocalVista_Schema.sql` (first setup only; the script resets catalogue tables).
+2. Start the API from the workspace root: `dotnet run --project localvista-backend/LocalVista/LocalVista.csproj`.
+3. In another terminal, run `npm install` and `npm start` from this directory.
+4. Open `http://localhost:4200`.
 
-Open `http://localhost:4200/` (use the port your terminal prints). Hard refresh with **Ctrl+F5** after updates.
+The API seeds the development admin account (`manager` / `Manager123`). Change the seed credentials before using a shared or deployed environment.
 
-## Navigation behaviour
+## Google Maps Embed API
 
-| State | Nav shows |
-|-------|-----------|
-| Guest (visitor) | Explore · My plan · **Admin sign in** |
-| Demo admin signed in | Explore · My plan · **Admin** · name · Log out |
+The attraction detail page uses Google's interactive Maps Embed API when a key is configured. Copy `public/localvista-config.example.js` to `public/localvista-config.js`, add a key with Maps Embed API enabled, and restrict the key to the app's HTTP referrers. The local config file is ignored by Git. Without a key, the page falls back to the coordinate-based Google Maps preview.
 
-Visitors browse attractions and build a day plan **without** signing in. There is **no tourist sign-up or tourist sign-in**. The **Admin** tab appears only after the demo admin signs in.
+## Scope and routes
 
-## Auth
+- Guests can search/filter attractions, view details, and build a one-day plan without registration.
+- The plan supports add, remove, reorder, and clear; it is kept in `sessionStorage`.
+- Admins sign in at `/auth` and manage attractions at `/admin` (create, edit, delete).
+- Tourist accounts, bookings, ticketing, and payments are out of scope.
 
-| Page | Route |
-|------|--------|
-| Admin sign in | `/auth` |
-| Admin manage (guarded) | `/admin` |
-
-- `/signup` redirects to Explore (`/`).
-- `/login` and `/admin/login` redirect to `/auth`.
-- Demo admin (UI mock only): `manager` / `Manager123` — **not production security**.
-
-## Session itinerary
-
-One-day plan is stored in **`sessionStorage`** (cleared when the browser session ends). Guests can add, remove, reorder, and clear stops. No bookings, payments, or cloud-saved itineraries.
-
-## Architecture
-
-```text
-src/app/
-  core/           models, mock data, services, admin guard, map preview seam
-  layout/shell/   header + outlet
-  features/
-    attractions/  list + detail (multi-image gallery)
-    itinerary/    session day plan
-    auth/         admin sign-in only
-    admin/        list + form (multi-image URLs)
-```
-
-See `ANGULAR_FRONTEND_OVERVIEW.md` for a full page-by-page status document.
+See `ANGULAR_FRONTEND_OVERVIEW.md` for the page map, architecture, and requirement status.

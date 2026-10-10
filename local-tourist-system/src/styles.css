@@ -1,17 +1,17 @@
 :root {
   /* Warm, calm palette: terracotta primary, sage secondary, honey accent on cream. */
-  --lv-ink: #2a2622;
-  --lv-leaf: #b9532f;
-  --lv-lake: #45695a;
-  --lv-gold: #f0b95b;
-  --lv-foam: #fffaf4;
-  --lv-mist: #f1e7da;
-  --lv-surface: #fbf6ef;
+  --lv-ink: #102a43;
+  --lv-leaf: #087f5b;
+  --lv-lake: #176b78;
+  --lv-gold: #f2a900;
+  --lv-foam: #f2fbf8;
+  --lv-mist: #e3f0ed;
+  --lv-surface: #f7faf9;
   --lv-display: 'Fraunces', Georgia, 'Times New Roman', serif;
   --lv-sans: 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
-  --lv-max: 1200px;
-  --lv-gutter: clamp(1.25rem, 5vw, 3rem);
-  --lv-radius: 1.25rem;
+  --lv-max: 1520px;
+  --lv-gutter: clamp(1rem, 4vw, 3.5rem);
+  --lv-radius: 1.1rem;
 }
 
 *,
@@ -33,11 +33,7 @@ body {
 body {
   font-family: var(--lv-sans);
   color: var(--lv-ink);
-  background:
-    radial-gradient(900px 480px at 0% 0%, color-mix(in srgb, var(--lv-gold) 14%, transparent), transparent 60%),
-    radial-gradient(800px 460px at 100% 10%, color-mix(in srgb, var(--lv-leaf) 8%, transparent), transparent 55%),
-    var(--lv-surface);
-  background-attachment: fixed;
+  background: var(--lv-surface);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -66,7 +62,7 @@ img {
   justify-content: center;
   gap: 0.4rem;
   padding: 0.8rem 1.4rem;
-  border-radius: 999px;
+  border-radius: 0.8rem;
   border: 1px solid transparent;
   font: inherit;
   font-weight: 600;
@@ -111,7 +107,1282 @@ img {
   background: color-mix(in srgb, currentColor 10%, transparent);
 }
 
+/* Give the place catalogue a wider canvas for its responsive destination grid. */
+body:has(app-attraction-list) .page-inner {
+  width: 100%;
+  max-width: none;
+  padding: 0;
+}
+
 :focus-visible {
   outline: 2px solid var(--lv-leaf);
   outline-offset: 2px;
 }
+
+/* Global bright atlas theme */
+::selection {
+  color: #fff;
+  background: var(--lv-lake);
+}
+
+button,
+input,
+select,
+textarea {
+  accent-color: var(--lv-leaf);
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline-color: var(--lv-lake);
+}
+
+
+/* Photo-led travel landing page */
+body:has(app-attraction-list) app-attraction-list .hero,
+body:has(app-attraction-list) app-attraction-list .steps {
+  display: none;
+}
+
+body:has(app-attraction-list) app-attraction-list .hero-cover {
+  position: relative;
+  display: flex;
+  min-height: min(680px, calc(100svh - 4.5rem));
+  align-items: center;
+  overflow: hidden;
+  isolation: isolate;
+  padding: clamp(3.5rem, 8vw, 7rem) clamp(1.25rem, 7vw, 7rem);
+  background: #064e55 url('/images/attractions/hanthana-hike.jpg') center 48% / cover no-repeat;
+  color: #fff;
+}
+
+body:has(app-attraction-list) app-attraction-list .hero-cover::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  content: '';
+  background: linear-gradient(90deg, rgb(4 34 42 / 82%) 0%, rgb(4 49 57 / 64%) 42%, rgb(4 49 57 / 8%) 100%), linear-gradient(0deg, rgb(5 37 41 / 28%), transparent 55%);
+}
+
+body:has(app-attraction-list) app-attraction-list .hero-cover-content {
+  width: min(100%, 1400px);
+  margin-inline: auto;
+  animation: float-in 0.6s ease both;
+}
+
+body:has(app-attraction-list) app-attraction-list .hero-kicker {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin: 0 0 1.25rem;
+  color: #d9f4ed;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+}
+
+body:has(app-attraction-list) app-attraction-list .hero-kicker span {
+  width: 1.8rem;
+  height: 2px;
+  background: #f4b942;
+}
+
+body:has(app-attraction-list) app-attraction-list .hero-cover h1 {
+  max-width: 780px;
+  margin: 0;
+  color: #fff;
+  font-family: var(--lv-display);
+  font-size: clamp(3.5rem, 8vw, 7.6rem);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  line-height: 0.98;
+  text-wrap: balance;
+}
+
+body:has(app-attraction-list) app-attraction-list .hero-cover h1 em {
+  color: #f4c95d;
+  font-weight: 500;
+}
+
+body:has(app-attraction-list) app-attraction-list .hero-copy {
+  max-width: 560px;
+  margin: 1.3rem 0 1.7rem;
+  color: rgb(255 255 255 / 88%);
+  font-size: clamp(1rem, 1.3vw, 1.16rem);
+  line-height: 1.65;
+}
+
+body:has(app-attraction-list) app-attraction-list .hero-cover .hero-search {
+  width: min(100%, 650px);
+  max-width: none;
+  min-height: 4.1rem;
+  margin: 0;
+  padding: 0.45rem 0.5rem 0.45rem 1.15rem;
+  border: 0;
+  border-radius: 0.85rem;
+  background: #fff;
+  box-shadow: 0 16px 42px rgb(0 0 0 / 23%);
+}
+
+body:has(app-attraction-list) app-attraction-list .hero-cover .hero-search input {
+  color: #102a43;
+}
+
+body:has(app-attraction-list) app-attraction-list .hero-cover .hero-search .btn {
+  min-height: 3.1rem;
+  border-radius: 0.65rem;
+  background: #12a88a;
+  color: #fff;
+}
+
+body:has(app-attraction-list) app-attraction-list .hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.8rem;
+  margin-top: 1.3rem;
+  color: rgb(255 255 255 / 82%);
+  font-size: 0.84rem;
+}
+
+body:has(app-attraction-list) app-attraction-list .hero-meta strong {
+  color: #fff;
+}
+
+body:has(app-attraction-list) app-attraction-list .hero-meta i {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #f4c95d;
+}
+
+body:has(app-attraction-list) app-attraction-list .hero-scroll {
+  position: absolute;
+  right: clamp(1.25rem, 4vw, 4rem);
+  bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: rgb(255 255 255 / 82%);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-decoration: none;
+}
+
+body:has(app-attraction-list) app-attraction-list .hero-scroll span {
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 1px solid rgb(255 255 255 / 60%);
+  border-radius: 50%;
+}
+
+body:has(app-attraction-list) app-attraction-list .service-section,
+body:has(app-attraction-list) app-attraction-list .popular-section,
+body:has(app-attraction-list) app-attraction-list .feature-section,
+body:has(app-attraction-list) app-attraction-list .catalogue {
+  width: min(100%, 1440px);
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 5vw, 4.5rem);
+}
+
+body:has(app-attraction-list) app-attraction-list .service-section {
+  padding-block: clamp(4rem, 8vw, 7rem) clamp(3rem, 6vw, 5.5rem);
+}
+
+body:has(app-attraction-list) app-attraction-list .landing-section-head h2,
+body:has(app-attraction-list) app-attraction-list .feature-copy h2 {
+  margin: 0;
+  color: #102a43;
+  font-family: var(--lv-display);
+  font-size: clamp(2.15rem, 4vw, 3.6rem);
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 1.08;
+}
+
+body:has(app-attraction-list) app-attraction-list .landing-section-head > p:last-child,
+body:has(app-attraction-list) app-attraction-list .split-head > div > p:last-child {
+  margin: 0.65rem 0 0;
+  color: #687b89;
+}
+
+body:has(app-attraction-list) app-attraction-list .section-kicker {
+  margin: 0 0 0.55rem;
+  color: #0b9177;
+  font-size: 0.7rem;
+  font-weight: 750;
+  letter-spacing: 0.16em;
+}
+
+body:has(app-attraction-list) app-attraction-list .centered {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+body:has(app-attraction-list) app-attraction-list .service-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+body:has(app-attraction-list) app-attraction-list .service-tile {
+  display: flex;
+  min-height: 230px;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 1.4rem;
+  border: 1px solid #e2ecea;
+  border-radius: 0.9rem;
+  background: #f7fbfa;
+  color: #102a43;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+body:has(app-attraction-list) app-attraction-list .service-tile:hover {
+  transform: translateY(-4px);
+  background: #fff;
+  box-shadow: 0 15px 36px rgb(16 42 67 / 9%);
+}
+
+body:has(app-attraction-list) app-attraction-list .service-icon {
+  display: grid;
+  width: 2.8rem;
+  height: 2.8rem;
+  place-items: center;
+  border-radius: 0.8rem;
+  background: #dff4ed;
+  color: #087f68;
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+body:has(app-attraction-list) app-attraction-list .service-tile h3 {
+  margin: 1rem 0 0.2rem;
+  font-size: 1.05rem;
+}
+
+body:has(app-attraction-list) app-attraction-list .service-tile p {
+  margin: 0 0 1rem;
+  color: #687b89;
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+body:has(app-attraction-list) app-attraction-list .tile-arrow,
+body:has(app-attraction-list) app-attraction-list .text-action {
+  margin-top: auto;
+  color: #087f68;
+  font-size: 0.84rem;
+  font-weight: 750;
+}
+
+body:has(app-attraction-list) app-attraction-list .popular-section {
+  padding-block: clamp(3rem, 6vw, 5.5rem);
+  background: #f2f8f6;
+}
+
+body:has(app-attraction-list) app-attraction-list .split-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+body:has(app-attraction-list) app-attraction-list .text-action {
+  flex: none;
+  text-decoration: none;
+}
+
+body:has(app-attraction-list) app-attraction-list .popular-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+body:has(app-attraction-list) app-attraction-list .popular-card {
+  position: relative;
+  display: block;
+  min-height: 260px;
+  overflow: hidden;
+  border-radius: 0.85rem;
+  background: #b7d1ca;
+  color: #fff;
+  text-decoration: none;
+  isolation: isolate;
+}
+
+body:has(app-attraction-list) app-attraction-list .popular-card img,
+body:has(app-attraction-list) app-attraction-list .feature-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.45s ease;
+}
+
+body:has(app-attraction-list) app-attraction-list .popular-card img {
+  position: absolute;
+  z-index: -2;
+  inset: 0;
+}
+
+body:has(app-attraction-list) app-attraction-list .popular-card:hover img {
+  transform: scale(1.05);
+}
+
+body:has(app-attraction-list) app-attraction-list .popular-overlay {
+  position: absolute;
+  z-index: -1;
+  inset: 25% 0 0;
+  background: linear-gradient(transparent, rgb(5 30 36 / 78%));
+}
+
+body:has(app-attraction-list) app-attraction-list .popular-category {
+  position: absolute;
+  top: 0.8rem;
+  left: 0.8rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.45rem;
+  background: rgb(255 255 255 / 92%);
+  color: #176b78;
+  font-size: 0.67rem;
+  font-weight: 750;
+  text-transform: uppercase;
+}
+
+body:has(app-attraction-list) app-attraction-list .popular-copy {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  left: 1rem;
+  display: grid;
+  gap: 0.15rem;
+}
+
+body:has(app-attraction-list) app-attraction-list .popular-copy strong {
+  font-size: 1rem;
+  line-height: 1.35;
+}
+
+body:has(app-attraction-list) app-attraction-list .popular-copy small {
+  color: rgb(255 255 255 / 78%);
+}
+
+body:has(app-attraction-list) app-attraction-list .popular-arrow {
+  position: absolute;
+  right: 0.9rem;
+  bottom: 1rem;
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  border: 1px solid rgb(255 255 255 / 55%);
+  border-radius: 50%;
+  font-size: 1rem;
+}
+
+body:has(app-attraction-list) app-attraction-list .popular-copy {
+  padding-right: 2.4rem;
+}
+
+body:has(app-attraction-list) app-attraction-list .feature-section {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: clamp(2rem, 6vw, 6rem);
+  align-items: center;
+  padding-block: clamp(4rem, 8vw, 7rem);
+}
+
+body:has(app-attraction-list) app-attraction-list .feature-image {
+  height: clamp(300px, 40vw, 500px);
+  overflow: hidden;
+  border-radius: 1rem;
+  background: #d8e8e4;
+}
+
+body:has(app-attraction-list) app-attraction-list .feature-copy h2 {
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+}
+
+body:has(app-attraction-list) app-attraction-list .feature-copy > p:not(.section-kicker) {
+  max-width: 45ch;
+  margin: 1rem 0;
+  color: #687b89;
+  line-height: 1.7;
+}
+
+body:has(app-attraction-list) app-attraction-list .feature-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 1.2rem 0 1.5rem;
+}
+
+body:has(app-attraction-list) app-attraction-list .feature-meta span {
+  padding: 0.35rem 0.65rem;
+  border-radius: 0.45rem;
+  background: #e8f4f1;
+  color: #176b78;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+@media (max-width: 900px) {
+  body:has(app-attraction-list) app-attraction-list .service-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  body:has(app-attraction-list) app-attraction-list .promo-card {
+    min-height: 190px;
+  }
+
+  body:has(app-attraction-list) app-attraction-list .popular-card {
+    min-height: 250px;
+  }
+}
+
+@media (max-width: 640px) {
+  body:has(app-attraction-list) app-attraction-list .search-dock {
+    width: calc(100% - 2rem);
+    margin-top: -1.25rem;
+    padding-inline: 1rem;
+  }
+
+  body:has(app-attraction-list) app-attraction-list .dock-form {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  body:has(app-attraction-list) app-attraction-list .dock-divider {
+    display: none;
+  }
+
+  body:has(app-attraction-list) app-attraction-list .promo-strip,
+  body:has(app-attraction-list) app-attraction-list .popular-grid {
+    grid-template-columns: 1fr;
+  }
+
+  body:has(app-attraction-list) app-attraction-list .promo-card {
+    min-height: 230px;
+  }
+
+  body:has(app-attraction-list) app-attraction-list .service-grid {
+    grid-template-columns: 1fr;
+  }
+
+  body:has(app-attraction-list) app-attraction-list .split-head {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  body:has(app-attraction-list) app-attraction-list .feature-section {
+    grid-template-columns: 1fr;
+  }
+
+  body:has(app-attraction-list) app-attraction-list .feature-image img {
+    aspect-ratio: 1.35;
+  }
+}
+
+body:has(app-attraction-list) app-attraction-list .catalogue {
+  padding-block: clamp(3rem, 6vw, 5rem);
+}
+
+@media (max-width: 900px) {
+  body:has(app-attraction-list) app-attraction-list .service-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  body:has(app-attraction-list) app-attraction-list .feature-section { grid-template-columns: 1fr; }
+  body:has(app-attraction-list) app-attraction-list .feature-image { height: 360px; }
+}
+
+@media (max-width: 620px) {
+  body:has(app-attraction-list) app-attraction-list .hero-cover { min-height: 620px; padding: 3rem 1.2rem; background-position: 58% center; }
+  body:has(app-attraction-list) app-attraction-list .hero-cover h1 { font-size: clamp(3.3rem, 14vw, 5rem); }
+  body:has(app-attraction-list) app-attraction-list .hero-cover .hero-search { align-items: stretch; flex-wrap: wrap; padding: 0.65rem; border-radius: 0.75rem; }
+  body:has(app-attraction-list) app-attraction-list .hero-cover .hero-search svg { display: none; }
+  body:has(app-attraction-list) app-attraction-list .hero-cover .hero-search input { flex-basis: 100%; padding: 0.65rem; }
+  body:has(app-attraction-list) app-attraction-list .hero-cover .hero-search .btn { width: 100%; }
+  body:has(app-attraction-list) app-attraction-list .hero-scroll { display: none; }
+  body:has(app-attraction-list) app-attraction-list .service-grid,
+body:has(app-attraction-list) app-attraction-list .popular-grid { grid-template-columns: 1fr; }
+  body:has(app-attraction-list) app-attraction-list .service-tile { min-height: 195px; }
+  body:has(app-attraction-list) app-attraction-list .popular-card { min-height: 270px; }
+  body:has(app-attraction-list) app-attraction-list .split-head { align-items: flex-start; flex-direction: column; }
+  body:has(app-attraction-list) app-attraction-list .feature-image { height: 280px; }
+}
+
+/* Full-width editorial catalogue treatment */
+body:has(app-attraction-list) app-attraction-list .hero {
+  position: relative;
+  padding: clamp(2rem, 5vw, 4rem) clamp(1rem, 3vw, 2.5rem) 1.25rem;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--lv-gold) 20%, transparent);
+  border-radius: clamp(1.25rem, 3vw, 2rem);
+  background:
+    radial-gradient(ellipse at 10% 15%, color-mix(in srgb, var(--lv-gold) 23%, transparent), transparent 45%),
+    radial-gradient(ellipse at 95% 5%, color-mix(in srgb, var(--lv-lake) 11%, transparent), transparent 38%),
+    linear-gradient(135deg, color-mix(in srgb, #fff 72%, var(--lv-mist)), color-mix(in srgb, var(--lv-surface) 94%, #fff));
+}
+
+body:has(app-attraction-list) app-attraction-list .hero-inner {
+  max-width: 52rem;
+}
+
+body:has(app-attraction-list) app-attraction-list .pill {
+  margin-bottom: 1rem;
+  background: color-mix(in srgb, var(--lv-leaf) 10%, #fff);
+  border: 1px solid color-mix(in srgb, var(--lv-leaf) 15%, transparent);
+}
+
+body:has(app-attraction-list) app-attraction-list .hero h1 {
+  font-size: clamp(2.5rem, 5vw, 4.6rem);
+  text-wrap: balance;
+}
+
+body:has(app-attraction-list) app-attraction-list .lede {
+  max-width: 42rem;
+}
+
+body:has(app-attraction-list) app-attraction-list .hero-search {
+  max-width: 42rem;
+  min-height: 3.7rem;
+}
+
+body:has(app-attraction-list) app-attraction-list .hero-stats {
+  gap: 0.65rem;
+  margin-top: 1.55rem;
+}
+
+body:has(app-attraction-list) app-attraction-list .hero-stats li {
+  padding: 0.4rem 0.8rem;
+  border: 1px solid color-mix(in srgb, var(--lv-ink) 8%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, #fff 65%, transparent);
+}
+
+body:has(app-attraction-list) app-attraction-list .spotlight {
+  gap: clamp(0.65rem, 1.35vw, 1.15rem);
+  margin-top: 1.8rem;
+  padding-bottom: 0.75rem;
+}
+
+body:has(app-attraction-list) app-attraction-list .spotlight li:nth-child(even) {
+  margin-top: 1rem;
+  margin-bottom: -1rem;
+}
+
+body:has(app-attraction-list) app-attraction-list .spotlight a {
+  aspect-ratio: 4 / 3;
+  border-radius: 1.15rem;
+}
+
+body:has(app-attraction-list) app-attraction-list .spotlight span {
+  font-size: 0.82rem;
+}
+
+body:has(app-attraction-list) app-attraction-list .steps ol {
+  border: 1px solid color-mix(in srgb, var(--lv-leaf) 10%, transparent);
+  background: color-mix(in srgb, #fff 68%, var(--lv-mist));
+}
+
+body:has(app-attraction-list) app-attraction-list .catalogue {
+  padding-top: clamp(2.5rem, 5vw, 4rem);
+}
+
+body:has(app-attraction-list) app-attraction-list .section-head {
+  align-items: center;
+  margin-bottom: 1.3rem;
+}
+
+body:has(app-attraction-list) app-attraction-list .section-head h2 {
+  font-size: clamp(2rem, 3.4vw, 2.8rem);
+}
+
+body:has(app-attraction-list) app-attraction-list .result-meta {
+  padding: 0.45rem 0.8rem !important;
+  border: 1px solid color-mix(in srgb, var(--lv-leaf) 15%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, #fff 78%, var(--lv-mist));
+}
+
+body:has(app-attraction-list) app-attraction-list .category-row {
+  gap: 0.6rem;
+  margin-bottom: 1.5rem;
+}
+
+body:has(app-attraction-list) app-attraction-list .chip {
+  padding: 0.58rem 1rem;
+  border-color: color-mix(in srgb, var(--lv-ink) 10%, transparent);
+  box-shadow: 0 2px 6px color-mix(in srgb, var(--lv-ink) 4%, transparent);
+}
+
+body:has(app-attraction-list) app-attraction-list .chip.on {
+  background: var(--lv-lake);
+  border-color: var(--lv-lake);
+}
+
+body:has(app-attraction-list) app-attraction-list .grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  gap: clamp(1.1rem, 2vw, 1.75rem);
+}
+
+body:has(app-attraction-list) app-attraction-list .grid li {
+  min-width: 0;
+  display: flex;
+  animation-delay: calc(min(var(--i, 0), 8) * 35ms);
+}
+
+body:has(app-attraction-list) app-attraction-list .card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--lv-leaf) 12%, transparent);
+  border-radius: 1.2rem;
+  background: color-mix(in srgb, #fff 80%, var(--lv-surface));
+  box-shadow: 0 9px 26px color-mix(in srgb, var(--lv-ink) 7%, transparent);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+body:has(app-attraction-list) app-attraction-list .card:hover {
+  border-color: color-mix(in srgb, var(--lv-leaf) 35%, transparent);
+  transform: translateY(-4px);
+  box-shadow: 0 18px 38px color-mix(in srgb, var(--lv-ink) 13%, transparent);
+}
+
+body:has(app-attraction-list) app-attraction-list .card-media {
+  aspect-ratio: 16 / 10;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+body:has(app-attraction-list) app-attraction-list .card-media::after {
+  position: absolute;
+  inset: 45% 0 0;
+  content: '';
+  background: linear-gradient(transparent, color-mix(in srgb, #17130f 25%, transparent));
+  pointer-events: none;
+}
+
+body:has(app-attraction-list) app-attraction-list .tag,
+body:has(app-attraction-list) app-attraction-list .save,
+body:has(app-attraction-list) app-attraction-list .photo-count {
+  z-index: 1;
+}
+
+body:has(app-attraction-list) app-attraction-list .tag {
+  top: 0.75rem;
+  left: 0.75rem;
+  padding: 0.32rem 0.7rem;
+  box-shadow: 0 3px 12px color-mix(in srgb, #000 12%, transparent);
+}
+
+body:has(app-attraction-list) app-attraction-list .save {
+  top: 0.65rem;
+  right: 0.65rem;
+  padding: 0.42rem 0.75rem;
+}
+
+body:has(app-attraction-list) app-attraction-list .card-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 0.95rem 1rem 1.05rem;
+}
+
+body:has(app-attraction-list) app-attraction-list .card-top {
+  min-height: 2.8em;
+  align-items: flex-start;
+  gap: 0.55rem;
+}
+
+body:has(app-attraction-list) app-attraction-list .card h3 {
+  flex: 1;
+  min-width: 0;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+body:has(app-attraction-list) app-attraction-list .distance {
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--lv-mist) 65%, #fff);
+  font-size: 0.78rem;
+}
+
+body:has(app-attraction-list) app-attraction-list .blurb {
+  min-height: 3em;
+  margin-block: 0.45rem 0.7rem;
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+body:has(app-attraction-list) app-attraction-list .hours {
+  margin-top: auto;
+  font-size: 0.8rem;
+}
+
+body:has(app-attraction-list) app-attraction-list .hours svg {
+  color: var(--lv-lake);
+}
+
+body:has(app-attraction-list) app-attraction-list .catalogue-search {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(190px, 0.32fr) auto;
+  align-items: end;
+  gap: 1rem;
+  margin: 1.5rem 0 1.25rem;
+  padding: 1.25rem;
+  border: 1px solid var(--lv-line);
+  border-radius: 1rem;
+  background: #fff;
+  box-shadow: 0 10px 30px rgb(13 37 47 / 5%);
+}
+
+body:has(app-attraction-list) app-attraction-list .catalogue-search label {
+  display: grid;
+  gap: 0.45rem;
+  color: var(--lv-ink);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+body:has(app-attraction-list) app-attraction-list .catalogue-search input,
+body:has(app-attraction-list) app-attraction-list .catalogue-search select {
+  width: 100%;
+  min-height: 3rem;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid #cfdee1;
+  border-radius: 0.7rem;
+  background: #fff;
+  color: var(--lv-ink);
+  font: inherit;
+}
+
+body:has(app-attraction-list) app-attraction-list .catalogue-search .btn {
+  min-height: 3rem;
+}
+
+body:has(app-attraction-list) app-attraction-list .catalogue-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+body:has(app-attraction-list) app-attraction-list .catalogue-actions .btn {
+  padding-inline: 1rem;
+  white-space: nowrap;
+}
+
+body:has(app-attraction-list) app-attraction-list .catalogue-actions .btn-clear {
+  border: 1px solid #cfdee1;
+  background: #fff;
+  color: var(--lv-ink);
+  box-shadow: none;
+}
+
+body:has(app-attraction-list) app-attraction-list .catalogue-actions .btn-clear:hover {
+  background: #f0f7f8;
+  border-color: #91b8be;
+}
+
+body:has(app-attraction-list) app-attraction-list .category-row {
+  flex-wrap: wrap;
+}
+
+body:has(app-attraction-list) app-attraction-list .catalogue {
+  width: min(1480px, calc(100% - 2 * var(--lv-gutter)));
+  margin-inline: auto;
+  padding-bottom: 3rem;
+}
+
+@media (max-width: 760px) {
+  body:has(app-attraction-list) app-attraction-list .catalogue-search {
+    grid-template-columns: 1fr;
+  }
+
+  body:has(app-attraction-list) app-attraction-list .section-head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  body:has(app-attraction-list) app-attraction-list .catalogue-actions {
+    width: 100%;
+  }
+
+  body:has(app-attraction-list) app-attraction-list .catalogue-actions .btn {
+    flex: 1;
+  }
+}
+
+body:has(app-attraction-list) app-attraction-list .grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.15rem;
+}
+
+body:has(app-attraction-list) app-attraction-list .card-media {
+  aspect-ratio: 1.5;
+}
+
+body:has(app-attraction-list) app-attraction-list .card-body {
+  padding: 0.9rem 0.95rem 1rem;
+}
+
+body:has(app-attraction-list) app-attraction-list .card h3 {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+body:has(app-attraction-list) app-attraction-list .blurb {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+body:has(app-attraction-list) app-attraction-list .hours span {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+@media (max-width: 1100px) {
+  body:has(app-attraction-list) app-attraction-list .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 780px) {
+  body:has(app-attraction-list) app-attraction-list .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  body:has(app-attraction-list) app-attraction-list .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Travel landing page sections */
+body:has(app-attraction-list) app-attraction-list .hero-cover-content .hero-search {
+  display: none;
+}
+
+body:has(app-attraction-list) app-attraction-list .hero-cta {
+  display: inline-flex;
+  margin-top: 1.35rem;
+  text-decoration: none;
+}
+
+body:has(app-attraction-list) app-attraction-list .hero-meta {
+  margin-top: 2rem;
+}
+
+body:has(app-attraction-list) app-attraction-list .search-dock {
+  position: relative;
+  z-index: 3;
+  width: min(1120px, calc(100% - 2 * var(--lv-gutter)));
+  margin: -2rem auto 4rem;
+  padding: 0 1.5rem 1.25rem;
+  border: 1px solid var(--lv-line);
+  border-radius: 1rem;
+  background: #fff;
+  box-shadow: 0 18px 50px rgb(13 37 47 / 12%);
+}
+
+body:has(app-attraction-list) app-attraction-list .search-tabs {
+  display: flex;
+  gap: 1.4rem;
+  border-bottom: 1px solid var(--lv-line);
+}
+
+body:has(app-attraction-list) app-attraction-list .search-tab {
+  padding: 1rem 0 0.8rem;
+  color: var(--lv-muted);
+  text-decoration: none;
+  font-weight: 700;
+}
+
+body:has(app-attraction-list) app-attraction-list .search-tab.active {
+  color: var(--lv-lake);
+  border-bottom: 3px solid var(--lv-lake);
+}
+
+body:has(app-attraction-list) app-attraction-list .dock-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 1px minmax(200px, 0.6fr) auto;
+  align-items: center;
+  gap: 1.4rem;
+  padding-top: 1rem;
+}
+
+body:has(app-attraction-list) app-attraction-list .dock-form label,
+body:has(app-attraction-list) app-attraction-list .dock-hint {
+  display: grid;
+  gap: 0.35rem;
+}
+
+body:has(app-attraction-list) app-attraction-list .dock-form label > span,
+body:has(app-attraction-list) app-attraction-list .dock-hint > span {
+  color: var(--lv-muted);
+  font-size: 0.78rem;
+}
+
+body:has(app-attraction-list) app-attraction-list .dock-form input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  color: var(--lv-ink);
+  font: inherit;
+}
+
+body:has(app-attraction-list) app-attraction-list .dock-divider {
+  height: 2.5rem;
+  background: var(--lv-line);
+}
+
+body:has(app-attraction-list) app-attraction-list .promo-strip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.2rem;
+  width: min(1240px, calc(100% - 2 * var(--lv-gutter)));
+  margin: 0 auto 6rem;
+}
+
+body:has(app-attraction-list) app-attraction-list .promo-card {
+  position: relative;
+  display: flex;
+  min-height: 230px;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  color: #fff;
+  text-decoration: none;
+  isolation: isolate;
+}
+
+body:has(app-attraction-list) app-attraction-list .promo-card img,
+body:has(app-attraction-list) app-attraction-list .promo-shade {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+body:has(app-attraction-list) app-attraction-list .promo-card img {
+  object-fit: cover;
+  transition: transform 350ms ease;
+}
+
+body:has(app-attraction-list) app-attraction-list .promo-card:hover img {
+  transform: scale(1.05);
+}
+
+body:has(app-attraction-list) app-attraction-list .promo-shade {
+  background: linear-gradient(180deg, transparent 20%, rgb(4 26 35 / 80%) 100%);
+}
+
+body:has(app-attraction-list) app-attraction-list .promo-label {
+  align-self: flex-start;
+  margin-bottom: auto;
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 92%);
+  color: var(--lv-ink);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+body:has(app-attraction-list) app-attraction-list .promo-card strong {
+  max-width: 24ch;
+  font-size: 1.25rem;
+  line-height: 1.25;
+}
+
+body:has(app-attraction-list) app-attraction-list .promo-cta {
+  margin-top: 0.5rem;
+  color: #d3f6f1;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+body:has(app-attraction-list) app-attraction-list .service-section {
+  width: 100vw;
+  margin: 0 calc(50% - 50vw) 6rem;
+  padding: clamp(3.5rem, 7vw, 6rem) max(var(--lv-gutter), calc((100vw - 1240px) / 2));
+  background: #eef6f8;
+}
+
+body:has(app-attraction-list) app-attraction-list .landing-section-head {
+  margin-bottom: 2.25rem;
+}
+
+body:has(app-attraction-list) app-attraction-list .landing-section-head.centered {
+  text-align: center;
+}
+
+body:has(app-attraction-list) app-attraction-list .section-kicker {
+  color: var(--lv-lake);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+}
+
+body:has(app-attraction-list) app-attraction-list .landing-section-head h2,
+body:has(app-attraction-list) app-attraction-list .feature-copy h2 {
+  margin: 0.4rem 0;
+  color: var(--lv-ink);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+}
+
+body:has(app-attraction-list) app-attraction-list .service-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+body:has(app-attraction-list) app-attraction-list .service-tile {
+  padding: 1.5rem;
+  border: 1px solid #dce9ed;
+  border-radius: 1rem;
+  background: #fff;
+  color: inherit;
+  text-decoration: none;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+body:has(app-attraction-list) app-attraction-list .service-tile:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 35px rgb(13 37 47 / 9%);
+}
+
+body:has(app-attraction-list) app-attraction-list .service-icon {
+  display: grid;
+  width: 2.6rem;
+  height: 2.6rem;
+  place-items: center;
+  border-radius: 50%;
+  background: #e1f5f2;
+  color: var(--lv-lake);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+body:has(app-attraction-list) app-attraction-list .service-tile h3 {
+  margin: 1rem 0 0.45rem;
+}
+
+body:has(app-attraction-list) app-attraction-list .service-tile p {
+  min-height: 3.5em;
+  color: var(--lv-muted);
+  line-height: 1.55;
+}
+
+body:has(app-attraction-list) app-attraction-list .tile-arrow,
+body:has(app-attraction-list) app-attraction-list .text-action {
+  color: var(--lv-lake);
+  font-weight: 700;
+}
+
+body:has(app-attraction-list) app-attraction-list .popular-section .text-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0.65rem 1rem;
+  border: 1px solid #a8d3d7;
+  border-radius: 999px;
+  background: #fff;
+  color: #125967;
+  font-family: var(--lv-sans);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.25;
+  white-space: nowrap;
+  transition: background 160ms ease, border-color 160ms ease;
+}
+
+body:has(app-attraction-list) app-attraction-list .popular-section .text-action:hover {
+  border-color: #6ab3bc;
+  background: #eff9f9;
+}
+
+body:has(app-attraction-list) app-attraction-list .popular-section,
+body:has(app-attraction-list) app-attraction-list .feature-section {
+  width: min(1240px, calc(100% - 2 * var(--lv-gutter)));
+  margin: 0 auto 6rem;
+}
+
+body:has(app-attraction-list) app-attraction-list .split-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+body:has(app-attraction-list) app-attraction-list .popular-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.2rem;
+}
+
+body:has(app-attraction-list) app-attraction-list .popular-card {
+  position: relative;
+  display: flex;
+  min-height: 300px;
+  align-items: end;
+  overflow: hidden;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  color: #fff;
+  text-decoration: none;
+  isolation: isolate;
+}
+
+body:has(app-attraction-list) app-attraction-list .popular-card > img,
+body:has(app-attraction-list) app-attraction-list .popular-overlay {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+body:has(app-attraction-list) app-attraction-list .popular-card > img {
+  object-fit: cover;
+  transition: transform 350ms ease;
+}
+
+body:has(app-attraction-list) app-attraction-list .popular-card:hover > img {
+  transform: scale(1.05);
+}
+
+body:has(app-attraction-list) app-attraction-list .popular-overlay {
+  background: linear-gradient(180deg, transparent 25%, rgb(4 26 35 / 82%) 100%);
+}
+
+body:has(app-attraction-list) app-attraction-list .popular-category {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  padding: 0.4rem 0.7rem;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--lv-ink);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+body:has(app-attraction-list) app-attraction-list .popular-copy {
+  display: grid;
+  gap: 0.35rem;
+  max-width: 85%;
+}
+
+body:has(app-attraction-list) app-attraction-list .popular-copy strong {
+  font-size: 1.25rem;
+}
+
+body:has(app-attraction-list) app-attraction-list .popular-copy small {
+  color: rgb(255 255 255 / 82%);
+}
+
+body:has(app-attraction-list) app-attraction-list .popular-arrow {
+  position: absolute;
+  right: 1.2rem;
+  bottom: 1.2rem;
+  font-size: 1.4rem;
+}
+
+body:has(app-attraction-list) app-attraction-list .feature-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: clamp(2rem, 6vw, 5rem);
+  padding: 2rem 0;
+}
+
+body:has(app-attraction-list) app-attraction-list .feature-image img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1.2;
+  border-radius: 1.2rem;
+  object-fit: cover;
+}
+
+body:has(app-attraction-list) app-attraction-list .feature-copy > p:not(.section-kicker) {
+  color: var(--lv-muted);
+  line-height: 1.7;
+}
+
+body:has(app-attraction-list) app-attraction-list .feature-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 1.25rem 0 1.5rem;
+}
+
+body:has(app-attraction-list) app-attraction-list .feature-meta span {
+  padding: 0.5rem 0.75rem;
+  border-radius: 999px;
+  background: #eef6f8;
+  color: var(--lv-lake);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+@media (max-width: 900px) {
+  body:has(app-attraction-list) app-attraction-list .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  body:has(app-attraction-list) app-attraction-list .spotlight li:nth-child(even) {
+    margin-block: 0;
+  }
+}
+
+@media (max-width: 560px) {
+  body:has(app-attraction-list) app-attraction-list .hero {
+    margin-inline: calc(var(--lv-gutter) * -0.45);
+    border-radius: 1.2rem;
+    padding: 2rem 1rem 1rem;
+  }
+
+  body:has(app-attraction-list) app-attraction-list .hero h1 {
+    font-size: clamp(2.3rem, 11vw, 3.4rem);
+  }
+
+  body:has(app-attraction-list) app-attraction-list .hero-stats {
+    gap: 0.4rem;
+  }
+
+  body:has(app-attraction-list) app-attraction-list .hero-stats li {
+    font-size: 0.78rem;
+    padding: 0.32rem 0.6rem;
+  }
+
+  body:has(app-attraction-list) app-attraction-list .grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  body:has(app-attraction-list) app-attraction-list .card-media {
+    aspect-ratio: 16 / 9;
+  }
+}
+

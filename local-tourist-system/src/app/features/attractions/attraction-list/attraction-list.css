@@ -513,3 +513,135 @@
     padding-inline: 1rem;
   }
 }
+
+/* New full-width atlas catalogue */
+.hero {
+  border: 0;
+  border-radius: 1.5rem;
+  background:
+    radial-gradient(ellipse at 90% 0%, rgb(59 190 151 / 24%), transparent 38%),
+    linear-gradient(125deg, #103d4b 0%, #0d6158 58%, #087f5b 100%);
+  color: #fff;
+  box-shadow: 0 22px 55px rgb(16 42 67 / 16%);
+}
+
+.hero .pill {
+  color: #d8fff0;
+  background: rgb(255 255 255 / 12%);
+  border-color: rgb(255 255 255 / 18%);
+}
+
+.hero h1,
+.hero h1 em,
+.hero .lede,
+.hero .hero-stats,
+.hero .hero-stats strong {
+  color: #fff;
+}
+
+.hero h1 em {
+  color: #ffd166;
+}
+
+.hero-search {
+  border: 1px solid rgb(255 255 255 / 35%);
+  box-shadow: 0 12px 32px rgb(4 25 29 / 22%);
+}
+
+.hero-search .btn,
+.save {
+  border-radius: 0.65rem;
+  background: #ffb703;
+  color: #17324a;
+  box-shadow: none;
+}
+
+.hero-stats li {
+  border-color: rgb(255 255 255 / 20%);
+  background: rgb(255 255 255 / 10%);
+  color: rgb(255 255 255 / 86%);
+}
+
+.spotlight a {
+  border-radius: 1rem;
+}
+
+.steps ol {
+  border-radius: 1rem;
+  background: #fff;
+  border-color: rgb(23 107 120 / 12%);
+  box-shadow: 0 9px 26px rgb(16 42 67 / 4%);
+}
+
+.step-no {
+  border-radius: 0.7rem;
+  background: var(--lv-lake);
+  color: #fff;
+}
+
+.catalogue {
+  padding-top: clamp(2rem, 4vw, 3.25rem);
+}
+
+.chip {
+  border-radius: 0.7rem;
+}
+
+.chip.on {
+  background: var(--lv-lake);
+  border-color: var(--lv-lake);
+}
+
+.card {
+  border-color: rgb(23 107 120 / 11%);
+  border-radius: 1rem;
+  background: #fff;
+  box-shadow: 0 8px 28px rgb(16 42 67 / 7%);
+}
+
+.card-media {
+  aspect-ratio: 16 / 9;
+}
+
+.tag {
+  border-radius: 0.55rem;
+  background: #fff;
+  color: var(--lv-ink);
+}
+
+.card h3 {
+  color: var(--lv-ink);
+}
+
+.distance {
+  background: #eaf4f2;
+  color: var(--lv-lake);
+}
+
+.show-more-wrap {
+  display: grid;
+  justify-items: center;
+  gap: 0.55rem;
+  padding: 2rem 0 0.75rem;
+}
+
+.show-more-wrap p {
+  margin: 0;
+  color: color-mix(in srgb, var(--lv-ink) 58%, transparent);
+  font-size: 0.86rem;
+}
+
+.show-more {
+  min-width: 14rem;
+  border-color: rgb(23 107 120 / 24%);
+  border-radius: 0.75rem;
+  background: #fff;
+  color: var(--lv-lake);
+}
+
+@media (max-width: 720px) {
+  .hero {
+    border-radius: 1rem;
+  }
+}
+

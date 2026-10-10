@@ -26,8 +26,11 @@ export class AttractionDetail {
   );
 
   protected readonly message = signal('');
+  protected readonly mapsApiConfigured = this.mapPreview.isConfigured;
   protected readonly activeImageIndex = signal(0);
   protected readonly attraction = signal<Attraction | undefined>(undefined);
+  protected readonly nearbyPlaces = signal<{ place: Attraction; distanceKm: number }[]>([]);
+  protected readonly primaryImageUrl = primaryImageUrl;
 
   protected readonly activeImage = computed(() => {
     const a = this.attraction();
@@ -55,13 +58,56 @@ export class AttractionDetail {
       const id = this.id();
       if (!Number.isFinite(id)) {
         this.attraction.set(undefined);
+        this.nearbyPlaces.set([]);
         return;
       }
       void this.attractionService.getById(id).then((item) => {
+        if (this.id() !== id) {
+          return;
+        }
         this.attraction.set(item);
         this.activeImageIndex.set(0);
+        this.nearbyPlaces.set([]);
+        if (item) {
+          void this.loadNearbyPlaces(item, id);
+        }
       });
     });
+  }
+
+  private async loadNearbyPlaces(current: Attraction, routeId: number): Promise<void> {
+    try {
+      const places = await this.attractionService.query();
+      if (this.id() !== routeId) {
+        return;
+      }
+      const nearest = places
+        .filter((place) => place.id !== current.id)
+        .map((place) => ({
+          place,
+          distanceKm: this.distanceBetween(current, place),
+        }))
+        .sort((a, b) => a.distanceKm - b.distanceKm)
+        .slice(0, 3);
+      this.nearbyPlaces.set(nearest);
+    } catch {
+      if (this.id() === routeId) {
+        this.nearbyPlaces.set([]);
+      }
+    }
+  }
+
+  private distanceBetween(a: Attraction, b: Attraction): number {
+    const radians = (degrees: number) => (degrees * Math.PI) / 180;
+    const latitudeDelta = radians(b.latitude - a.latitude);
+    const longitudeDelta = radians(b.longitude - a.longitude);
+    const startLatitude = radians(a.latitude);
+    const endLatitude = radians(b.latitude);
+    const haversine =
+      Math.sin(latitudeDelta / 2) ** 2 +
+      Math.cos(startLatitude) * Math.cos(endLatitude) *
+      Math.sin(longitudeDelta / 2) ** 2;
+    return 6371 * 2 * Math.atan2(Math.sqrt(haversine), Math.sqrt(1 - haversine));
   }
 
   selectImage(index: number): void {

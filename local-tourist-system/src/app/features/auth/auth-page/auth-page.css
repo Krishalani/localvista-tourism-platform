@@ -101,3 +101,34 @@ code {
   font-size: 0.9rem;
   font-weight: 600;
 }
+
+/* Atlas sign-in card */
+.auth {
+  min-height: min(72vh, 760px);
+  padding: 1.5rem 0;
+}
+
+.panel {
+  width: min(520px, 100%);
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  border-radius: 1rem;
+  background: #fff;
+  border-color: rgb(23 107 120 / 14%);
+  box-shadow: 0 24px 64px rgb(16 42 67 / 10%);
+}
+
+.panel h1 {
+  font-size: 2.25rem;
+  letter-spacing: -0.045em;
+}
+
+input {
+  border-radius: 0.65rem;
+  border-color: #cbdedb;
+  background: #fbfdfc;
+}
+
+.panel form .btn {
+  width: 100%;
+  margin-top: 0.2rem;
+}

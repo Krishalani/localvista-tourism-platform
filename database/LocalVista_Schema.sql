@@ -2,7 +2,7 @@
 ================================================================================
   LocalVista — Schema + Seed (SQL Server)
 ================================================================================
-  Aligns with the Angular mock frontend (local-tourist-system):
+  Catalogue schema used by the LocalVista Angular frontend and ASP.NET Core API:
 
     Categories (1) ──< Attractions (1) ──< AttractionImages
 
@@ -22,13 +22,12 @@
   • Tourist accounts      → out of project scope
   • AdminAccounts table   → NOT created (see Admin authentication below)
 
-  Admin authentication (ASP.NET Core Identity — API phase)
+  Admin authentication (ASP.NET Core Identity)
   -------------------------------------------------------
-  Admin sign-in will use ASP.NET Core Identity when the API is implemented.
-  Identity will create and manage its own tables (for example AspNetUsers,
-  AspNetRoles, AspNetUserRoles, AspNetUserClaims, …) and the seeded admin
-  account / Admin role will be configured in the API project (Identity seed /
-  migration), not in this script.
+  The API creates and manages its own Identity tables (for example AspNetUsers,
+  AspNetRoles, AspNetUserRoles, AspNetUserClaims) through EF Core migrations.
+  The API seeds the development admin account and Admin role at startup; this
+  script only creates catalogue tables and seed rows.
 
   Do NOT add a separate dbo.AdminAccounts (or similar) table unless the team
   explicitly decides not to use Identity.
@@ -142,7 +141,7 @@ SET IDENTITY_INSERT dbo.Categories OFF;
 GO
 
 -- =============================================================================
--- SEED — 15 attractions within ~25 km of Kandy (matches mock-attractions.ts)
+-- SEED — 15 attractions within ~25 km of Kandy for the live API catalogue
 -- CategoryId: 1 Religious & Heritage | 2 Nature | 3 Adventure | 4 Museum
 --             5 Viewpoint | 6 Recreation | 7 Eco Tourism
 -- =============================================================================

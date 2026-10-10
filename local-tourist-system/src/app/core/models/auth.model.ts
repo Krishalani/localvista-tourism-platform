@@ -1,4 +1,4 @@
-/** Mock auth is guest vs admin only — not production security. */
+/** The public app supports guest access and the Admin role only. */
 export type UserRole = 'Admin';
 
 export interface AuthUser {

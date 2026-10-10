@@ -1,12 +1,42 @@
 <section class="admin">
   <header class="head">
     <div>
-      <p class="eyebrow">Administrator</p>
-      <h1>Catalogue management</h1>
-      <p>{{ attractions().length }} places in the catalogue.</p>
+      <p class="eyebrow">Administrator overview</p>
+      <h1>Dashboard</h1>
+      <p>Manage LocalVista destinations and review your catalogue at a glance.</p>
     </div>
     <a class="btn btn-primary" routerLink="/admin/attractions/new">Add place</a>
   </header>
+
+  <section class="overview" aria-label="Catalogue overview">
+    <article class="overview-card">
+      <span class="overview-label">Destinations</span>
+      <strong>{{ attractions().length }}</strong>
+      <span class="overview-note">Places in the catalogue</span>
+    </article>
+    <article class="overview-card">
+      <span class="overview-label">Categories</span>
+      <strong>{{ categoryCount() }}</strong>
+      <span class="overview-note">Types of places available</span>
+    </article>
+    <article class="overview-card category-card">
+      <span class="overview-label">Category breakdown</span>
+      @if (categorySummary().length) {
+        <ul class="category-list">
+          @for (category of categorySummary(); track category[0]) {
+            <li><span>{{ category[0] }}</span><strong>{{ category[1] }}</strong></li>
+          }
+        </ul>
+      } @else {
+        <span class="overview-note">No destinations available yet.</span>
+      }
+    </article>
+  </section>
+
+  <div class="section-title">
+    <h2>Manage destinations</h2>
+    <span>{{ attractions().length }} total</span>
+  </div>
 
   @if (flash()) {
     <p class="flash" role="status">{{ flash() }}</p>

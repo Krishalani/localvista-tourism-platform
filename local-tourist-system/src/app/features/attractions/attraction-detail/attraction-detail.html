@@ -35,8 +35,8 @@
             <span class="stat-label">From Kandy</span>
             <strong>{{ item.distanceKm }} km</strong>
           </div>
-          <div class="stat">
-            <span class="stat-label">Hours</span>
+          <div class="stat hours-stat">
+            <span class="stat-label">Opening hours</span>
             <strong>{{ item.openingHours }}</strong>
           </div>
           <div class="hero-actions">
@@ -89,23 +89,25 @@
               <p>{{ item.distanceKm }} km from central Kandy</p>
             </div>
           </li>
-          <li>
-            <span class="icon tip" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none">
-                <path
-                  d="M12 3 4.5 19h15L12 3Z"
-                  stroke="currentColor"
-                  stroke-width="1.6"
-                  stroke-linejoin="round"
-                />
-                <path d="M12 10v4M12 16.5h.01" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
-              </svg>
-            </span>
-            <div>
-              <h3>Travel tips</h3>
-              <p>{{ item.travelTips }}</p>
-            </div>
-          </li>
+          @if (item.travelTips?.trim()) {
+            <li>
+              <span class="icon tip" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M12 3 4.5 19h15L12 3Z"
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                    stroke-linejoin="round"
+                  />
+                  <path d="M12 10v4M12 16.5h.01" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                </svg>
+              </span>
+              <div>
+                <h3>Travel tips</h3>
+                <p>{{ item.travelTips }}</p>
+              </div>
+            </li>
+          }
         </ul>
       </section>
 
@@ -113,23 +115,61 @@
         <div class="section-label">
           <h2 id="map-title">Location</h2>
           <p>
-            Preview map from latitude/longitude. Embed only for now —
-            <strong>MapPreviewService</strong> is the swap point for the Google Maps API later.
+            @if (mapsApiConfigured) {
+              Interactive Google Maps location from the attraction coordinates.
+            } @else {
+              Google Maps preview from the attraction coordinates. Configure a Maps Embed API key for
+              the API-key-enabled interactive map view.
+            }
           </p>
         </div>
         @if (mapUrl(); as url) {
           <div class="map-frame">
             <iframe
               title="Map location preview"
+              allowfullscreen
               [src]="url"
               loading="lazy"
-              referrerpolicy="no-referrer-when-downgrade"
+              referrerpolicy="strict-origin-when-cross-origin"
             ></iframe>
           </div>
         }
-        <p class="coords">{{ item.latitude }}° N, {{ item.longitude }}° E</p>
       </section>
     </div>
+
+    @if (nearbyPlaces().length > 0) {
+      <section class="nearby" aria-labelledby="nearby-title">
+        <header class="nearby-head">
+          <div>
+            <p class="nearby-kicker">Keep exploring</p>
+            <h2 id="nearby-title">Nearby places</h2>
+            <p>Places close to {{ item.name }} that you can add to your day.</p>
+          </div>
+          <a routerLink="/" class="nearby-all">Browse all places</a>
+        </header>
+        <ul class="nearby-grid">
+          @for (suggestion of nearbyPlaces(); track suggestion.place.id) {
+            <li>
+              <a
+                class="nearby-card"
+                [routerLink]="['/attractions', suggestion.place.id]"
+              >
+                <div class="nearby-image">
+                  <img [src]="primaryImageUrl(suggestion.place)" [alt]="suggestion.place.name" loading="lazy" />
+                  <span>{{ suggestion.distanceKm.toFixed(1) }} km away</span>
+                </div>
+                <div class="nearby-copy">
+                  <span class="nearby-category">{{ suggestion.place.category }}</span>
+                  <h3>{{ suggestion.place.name }}</h3>
+                  <p>{{ suggestion.place.description }}</p>
+                  <span class="nearby-link">View place</span>
+                </div>
+              </a>
+            </li>
+          }
+        </ul>
+      </section>
+    }
   </article>
 } @else {
   <section class="missing">

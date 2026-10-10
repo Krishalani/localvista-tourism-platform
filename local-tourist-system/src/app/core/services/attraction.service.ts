@@ -12,6 +12,7 @@ import { environment } from '../../../environments/environment';
 export interface AttractionQuery {
   search?: string;
   categories?: AttractionCategory[];
+  maxDistanceKm?: number | null;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -62,6 +63,9 @@ export class AttractionService {
     }
     for (const category of query.categories ?? []) {
       params = params.append('categories', category);
+    }
+    if (query.maxDistanceKm !== undefined && query.maxDistanceKm !== null) {
+      params = params.set('maxDistanceKm', query.maxDistanceKm);
     }
 
     return firstValueFrom(
@@ -139,6 +143,7 @@ export class AttractionService {
       description: form.description.trim(),
       openingHours: form.openingHours?.trim() ?? '',
       travelTips: form.travelTips?.trim() ?? '',
+      bestVisitMonths: [...(form.bestVisitMonths ?? [])].sort((a, b) => a - b),
       distanceKm: Number(form.distanceKm),
       imageUrls: (form.imageUrls ?? []).map((u) => u.trim()).filter(Boolean),
       latitude: Number(form.latitude),

@@ -7,6 +7,7 @@ export interface Attraction {
   description: string;
   openingHours: string;
   travelTips: string;
+  bestVisitMonths: number[];
   distanceKm: number;
   /** Ordered image URLs from the API (SortOrder ascending). */
   imageUrls: string[];

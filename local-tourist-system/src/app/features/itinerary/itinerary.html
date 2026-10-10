@@ -41,9 +41,18 @@
               </div>
 
               <article class="stop">
-                <a class="thumb" [routerLink]="['/attractions', item.id]">
-                  <img [src]="primaryImageUrl(item)" [alt]="item.name" />
-                </a>
+                <div class="stop-gallery">
+                  <a class="thumb" [routerLink]="['/attractions', item.id]">
+                    <img [src]="primaryImageUrl(item)" [alt]="item.name" />
+                  </a>
+                  @if (item.imageUrls.length > 1) {
+                    <div class="thumb-strip" [attr.aria-label]="item.imageUrls.length + ' photos of ' + item.name">
+                      @for (image of item.imageUrls.slice(1, 4); track image) {
+                        <img [src]="image" [alt]="item.name + ' photo'" loading="lazy" />
+                      }
+                    </div>
+                  }
+                </div>
                 <div class="stop-body">
                   <span class="tag">{{ item.category }}</span>
                   <h3>
@@ -58,9 +67,19 @@
                       Move down
                     </button>
                     <a class="text-link" [routerLink]="['/attractions', item.id]">Open details</a>
-                    <button type="button" class="remove" (click)="remove(item.id)">Remove</button>
                   </div>
                 </div>
+                <button
+                  type="button"
+                  class="remove-icon"
+                  [attr.aria-label]="'Remove ' + item.name + ' from plan'"
+                  title="Remove from plan"
+                  (click)="remove(item.id)"
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M3 6h18M8 6V4h8v2m3 0-1 14H6L5 6m4 4v6m6-6v6" />
+                  </svg>
+                </button>
               </article>
             </li>
           }
@@ -103,5 +122,39 @@
         </div>
       </aside>
     </div>
+
+    <section class="nearby-section" aria-labelledby="nearby-title">
+      <header class="nearby-head">
+        <div>
+          <p class="summary-kicker">CLOSE TO YOUR ROUTE</p>
+          <h2 id="nearby-title">Nearby places to add</h2>
+          <p>Suggestions are ranked by straight-line distance from your planned stops.</p>
+        </div>
+        <a class="nearby-browse" routerLink="/attractions">Browse all places</a>
+      </header>
+
+      @if (nearbyPlaces().length) {
+        <div class="nearby-grid">
+          @for (place of nearbyPlaces(); track place.id) {
+            <article class="nearby-card">
+              <a class="nearby-image" [routerLink]="['/attractions', place.id]">
+                <img [src]="primaryImageUrl(place)" [alt]="place.name" loading="lazy" />
+                <span>{{ place.category }}</span>
+              </a>
+              <div class="nearby-body">
+                <div class="nearby-title-row">
+                  <h3><a [routerLink]="['/attractions', place.id]">{{ place.name }}</a></h3>
+                  <span>{{ place.nearbyDistanceKm.toFixed(1) }} km</span>
+                </div>
+                <p>{{ place.description }}</p>
+                <button type="button" class="nearby-add" (click)="addNearby(place.id, $event)">Add to my plan</button>
+              </div>
+            </article>
+          }
+        </div>
+      } @else {
+        <p class="nearby-empty">Nearby suggestions are unavailable right now. <a routerLink="/attractions">Browse the full catalogue</a>.</p>
+      }
+    </section>
   }
 </section>

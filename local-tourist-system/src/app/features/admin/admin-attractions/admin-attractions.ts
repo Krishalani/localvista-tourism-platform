@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Attraction } from '../../../core/models/attraction.model';
 import { AttractionService } from '../../../core/services/attraction.service';
@@ -13,6 +13,16 @@ export class AdminAttractions implements OnInit {
   private readonly attractionService = inject(AttractionService);
 
   protected readonly attractions = signal<Attraction[]>([]);
+  protected readonly categoryCount = computed(
+    () => new Set(this.attractions().map((item) => item.category)).size,
+  );
+  protected readonly categorySummary = computed(() => {
+    const counts = new Map<string, number>();
+    for (const item of this.attractions()) {
+      counts.set(item.category, (counts.get(item.category) ?? 0) + 1);
+    }
+    return [...counts.entries()].sort(([a], [b]) => a.localeCompare(b));
+  });
   protected readonly pendingDeleteId = signal<number | null>(null);
   protected readonly flash = signal('');
   protected readonly error = signal('');

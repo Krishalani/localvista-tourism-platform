@@ -32,6 +32,92 @@
   color: color-mix(in srgb, var(--lv-ink) 65%, transparent);
 }
 
+.overview {
+  display: grid;
+  grid-template-columns: minmax(150px, 0.8fr) minmax(150px, 0.8fr) minmax(240px, 1.4fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.overview-card {
+  display: flex;
+  min-height: 145px;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 1.2rem 1.3rem;
+  border: 1px solid color-mix(in srgb, var(--lv-leaf) 13%, transparent);
+  border-radius: 1.1rem;
+  background: color-mix(in srgb, #fff 90%, var(--lv-mist));
+}
+
+.overview-label {
+  color: var(--lv-lake);
+  font-size: 0.74rem;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.overview-card > strong {
+  font-family: var(--lv-sans);
+  font-size: 2.2rem;
+  font-weight: 650;
+  line-height: 1;
+}
+
+.overview-note {
+  color: color-mix(in srgb, var(--lv-ink) 65%, transparent);
+  font-size: 0.88rem;
+}
+
+.category-card {
+  justify-content: flex-start;
+}
+
+.category-list {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.35rem 1rem;
+  margin: 0.1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.category-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  color: color-mix(in srgb, var(--lv-ink) 75%, transparent);
+  font-size: 0.86rem;
+}
+
+.category-list li strong {
+  color: var(--lv-ink);
+}
+
+.section-title {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.85rem;
+}
+
+.section-title h2 {
+  margin: 0;
+  font-family: var(--lv-sans);
+  font-size: 1.25rem;
+  font-weight: 650;
+}
+
+.section-title span {
+  color: color-mix(in srgb, var(--lv-ink) 65%, transparent);
+  font-size: 0.88rem;
+}
+
 .flash {
   padding: 0.7rem 0.85rem;
   border-radius: 0.65rem;
@@ -141,4 +227,94 @@ tr:last-child td {
   .head {
     flex-direction: column;
   }
+
+  .overview {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .category-card {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 420px) {
+  .overview {
+    grid-template-columns: 1fr;
+  }
+
+  .category-card {
+    grid-column: auto;
+  }
+}
+
+/* Atlas administration dashboard */
+.head h1 {
+  font-size: clamp(2.35rem, 4vw, 3.4rem);
+  letter-spacing: -0.045em;
+}
+
+.overview-card,
+.table-wrap {
+  border-color: rgb(23 107 120 / 12%);
+  border-radius: 0.95rem;
+  background: #fff;
+  box-shadow: 0 8px 26px rgb(16 42 67 / 5%);
+}
+
+.overview-card > strong {
+  color: var(--lv-lake);
+  font-size: 2.6rem;
+}
+
+.table-wrap {
+  overflow: auto;
+}
+
+th {
+  background: #eef7f5;
+  color: var(--lv-lake);
+}
+
+tr:hover td {
+  background: #f7faf9;
+}
+
+.danger {
+  color: #bd3124;
+}
+
+/* Atlas administration dashboard */
+.head h1 {
+  font-size: clamp(2.35rem, 4vw, 3.4rem);
+  letter-spacing: -0.045em;
+}
+
+.overview-card,
+.table-wrap {
+  border-color: rgb(23 107 120 / 12%);
+  border-radius: 0.95rem;
+  background: #fff;
+  box-shadow: 0 8px 26px rgb(16 42 67 / 5%);
+}
+
+.overview-card > strong {
+  color: var(--lv-lake);
+  font-size: 2.6rem;
+}
+
+.table-wrap {
+  overflow: auto;
+}
+
+th {
+  background: #eef7f5;
+  color: var(--lv-lake);
+}
+
+tr:hover td {
+  background: #f7faf9;
+}
+
+.danger {
+  color: #bd3124;
 }

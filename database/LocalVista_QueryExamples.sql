@@ -8,7 +8,7 @@
 
   Schema + seed (15 attractions): LocalVista_Schema.sql
 
-  Admin authentication: ASP.NET Core Identity (API phase) — not these tables.
+  Admin authentication: ASP.NET Core Identity — not these catalogue tables.
 ================================================================================
 */
 

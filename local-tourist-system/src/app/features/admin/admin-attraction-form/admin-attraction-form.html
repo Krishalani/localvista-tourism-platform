@@ -2,12 +2,13 @@
   <a routerLink="/admin" class="back">← Back to catalogue</a>
   <p class="eyebrow">Administrator</p>
   <h1>{{ isEdit() ? 'Edit place' : 'Add place' }}</h1>
-  <p class="lede">Required: name, category, description, and at least one image URL. Images are stored as URLs in SQL Server.</p>
+  <p class="lede">All fields are required. Add at least one valid image URL.</p>
 
   <form (ngSubmit)="submit()" novalidate>
     <label>
       Name *
-      <input name="name" [(ngModel)]="model.name" required />
+      <input name="name" [(ngModel)]="model.name" required maxlength="200" [attr.aria-invalid]="isInvalid('name')" />
+      @if (fieldError('name'); as message) { <span class="field-error">{{ message }}</span> }
     </label>
 
     <label>
@@ -17,33 +18,56 @@
         [ngModel]="model.category"
         (ngModelChange)="onCategoryChange($event)"
         required
+        [attr.aria-invalid]="isInvalid('category')"
       >
         @for (category of categories(); track category) {
           <option [value]="category">{{ category }}</option>
         }
       </select>
+      @if (fieldError('category'); as message) { <span class="field-error">{{ message }}</span> }
     </label>
 
     <label>
       Description *
-      <textarea name="description" rows="4" [(ngModel)]="model.description" required></textarea>
+      <textarea name="description" rows="4" [(ngModel)]="model.description" required [attr.aria-invalid]="isInvalid('description')"></textarea>
+      @if (fieldError('description'); as message) { <span class="field-error">{{ message }}</span> }
     </label>
 
     <div class="row">
       <label>
-        Opening hours
-        <input name="openingHours" [(ngModel)]="model.openingHours" />
+        Opening hours *
+        <input name="openingHours" [(ngModel)]="model.openingHours" required maxlength="200" [attr.aria-invalid]="isInvalid('openingHours')" />
+        @if (fieldError('openingHours'); as message) { <span class="field-error">{{ message }}</span> }
       </label>
       <label>
-        Distance from Kandy (km)
-        <input name="distanceKm" type="number" min="0" step="0.1" [(ngModel)]="model.distanceKm" />
+        Distance from Kandy (km) *
+        <input name="distanceKm" type="number" min="0" max="25" step="0.1" [(ngModel)]="model.distanceKm" required [attr.aria-invalid]="isInvalid('distanceKm')" />
+        @if (fieldError('distanceKm'); as message) { <span class="field-error">{{ message }}</span> }
       </label>
     </div>
 
     <label>
-      Travel tips
-      <textarea name="travelTips" rows="3" [(ngModel)]="model.travelTips"></textarea>
+      Travel tips *
+      <textarea name="travelTips" rows="3" [(ngModel)]="model.travelTips" required [attr.aria-invalid]="isInvalid('travelTips')"></textarea>
+      @if (fieldError('travelTips'); as message) { <span class="field-error">{{ message }}</span> }
     </label>
+
+    <fieldset class="seasonality">
+      <legend>Best visiting months</legend>
+      <p class="seasonality-help">Select the months when this place is especially suitable to visit. It can then appear as the seasonal recommendation.</p>
+      <div class="month-options">
+        @for (month of visitMonths; track month.value) {
+          <label class="month-option">
+            <input
+              type="checkbox"
+              [checked]="model.bestVisitMonths.includes(month.value)"
+              (change)="toggleBestVisitMonth(month.value, $any($event.target).checked)"
+            />
+            <span>{{ month.label }}</span>
+          </label>
+        }
+      </div>
+    </fieldset>
 
     <fieldset class="images">
       <legend>Images *</legend>
@@ -71,7 +95,9 @@
                   [ngModel]="url"
                   (ngModelChange)="updateImageUrl(i, $event)"
                   [ngModelOptions]="{ standalone: true }"
+                  [attr.aria-invalid]="isImageInvalid(i)"
                 />
+                @if (imageError(i); as message) { <span class="field-error">{{ message }}</span> }
               </label>
               <button type="button" class="btn btn-ghost remove-img" (click)="removeImageUrl(i)">
                 Remove
@@ -88,7 +114,9 @@
             name="draftImageUrl"
             [(ngModel)]="draftImageUrl"
             placeholder="https://… or /images/…"
+            [attr.aria-invalid]="showValidation() && model.imageUrls.length === 0"
           />
+          @if (fieldError('images'); as message) { <span class="field-error">{{ message }}</span> }
         </label>
         <button type="button" class="btn btn-ghost" (click)="addImageUrl()">Add image</button>
       </div>
@@ -96,12 +124,14 @@
 
     <div class="row">
       <label>
-        Latitude
-        <input name="latitude" type="number" step="0.0001" [(ngModel)]="model.latitude" />
+        Latitude *
+        <input name="latitude" type="number" min="-90" max="90" step="0.0001" [(ngModel)]="model.latitude" required [attr.aria-invalid]="isInvalid('latitude')" />
+        @if (fieldError('latitude'); as message) { <span class="field-error">{{ message }}</span> }
       </label>
       <label>
-        Longitude
-        <input name="longitude" type="number" step="0.0001" [(ngModel)]="model.longitude" />
+        Longitude *
+        <input name="longitude" type="number" min="-180" max="180" step="0.0001" [(ngModel)]="model.longitude" required [attr.aria-invalid]="isInvalid('longitude')" />
+        @if (fieldError('longitude'); as message) { <span class="field-error">{{ message }}</span> }
       </label>
     </div>
 

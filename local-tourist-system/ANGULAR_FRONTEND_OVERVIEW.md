@@ -1,178 +1,87 @@
-# LocalVista Angular Frontend — Current Status
+# LocalVista frontend and requirement status
 
-**Project:** Local Tourist Day-Visit Planner (Kandy)  
-**App folder:** `local-tourist-system`  
-**Stack:** Angular (standalone components, client render)  
-**Data mode:** Live ASP.NET Core API + SQL Server `LocalVista` database (Identity for admin). Guest itinerary remains in browser `sessionStorage`.
+**Product:** Local Tourist Day-Visit Planner and Information System (Kandy)  
+**Frontend:** Angular standalone components  
+**Backend:** ASP.NET Core Web API, C#, Entity Framework Core  
+**Data:** SQL Server catalogue; ASP.NET Core Identity tables  
+**Guest itinerary:** Browser `sessionStorage`; tourist registration is out of scope.
 
-This document describes what the UI contains today: pages, what each page does, and features that are complete in the frontend.
+## Run the system
 
----
+From the workspace root:
 
-## 1. How to run
+```powershell
+dotnet run --project localvista-backend/LocalVista/LocalVista.csproj
+```
 
-```bash
-cd local-tourist-system
+Then, from `localvista-tourism-platform/local-tourist-system`:
+
+```powershell
 npm install
 npm start
 ```
 
-Open the URL printed in the terminal (usually `http://localhost:4200/`). Use **Ctrl+F5** after UI updates if the browser looks stale.
+Open `http://localhost:4200`. Before the first API start, run `localvista-tourism-platform/database/LocalVista_Schema.sql` against SQL Server. That script drops and recreates the catalogue tables; do not rerun it where catalogue data must be preserved. The API applies Identity migrations and seeds a development admin. Configure credentials outside committed files for shared environments.
 
----
+## Google Maps Embed API setup
 
-## 2. Site map (pages & routes)
+The attraction detail page uses the Google Maps Embed API `place` mode when a key is present. Copy `public/localvista-config.example.js` to `public/localvista-config.js` and set `googleMapsEmbedApiKey`. Enable Maps Embed API and restrict the browser key to the application's HTTP referrers. The actual config is Git-ignored. With no key, the page keeps a coordinate-based Google Maps preview and shows a setup hint.
 
-| Page | Route | Who can use it | Purpose |
-|------|--------|----------------|---------|
-| Explore (landing + catalogue) | `/` | Everyone (guests) | Browse/search/filter places; add to day plan |
-| Attraction detail | `/attractions/:id` | Everyone | Place details, multi-image gallery, tips, map preview, add/remove from plan |
-| My plan (itinerary) | `/itinerary` | Everyone | View/reorder/remove/clear the one-day **session** plan |
-| Admin sign in | `/auth` | Guests (admin demo only) | Sign in as mock admin — no tourist accounts |
-| Admin catalogue | `/admin` | **Admin only** | List places; delete with confirmation |
-| Add place | `/admin/attractions/new` | **Admin only** | Create a catalogue entry (multi-image URLs) |
-| Edit place | `/admin/attractions/:id/edit` | **Admin only** | Update a catalogue entry |
+The browser key is visible to users by design; protect it with HTTP-referrer restrictions. Google Maps Platform requires an API key for Embed API requests. See Google's [Maps Embed API setup](https://developers.google.com/maps/documentation/embed/get-api-key) and [map embedding guide](https://developers.google.com/maps/documentation/embed/embedding-map).
 
-### Redirects
+## Pages and behavior
 
-| Old / alias route | Goes to |
-|-------------------|---------|
-| `/login` | `/auth` |
-| `/signup` | `/` (Explore) |
-| `/admin/login` | `/auth` |
-| Unknown paths (`**`) | `/` |
+| Route | Access | Behavior |
+|---|---|---|
+| `/` | Guest/admin | Live catalogue, name search, multi-category filtering, URL-preserved filters, empty/error states, add-to-plan |
+| `/attractions/:id` | Guest/admin | Detail, ordered image gallery, coordinates, map, add/remove from plan; preserves query parameters when returning |
+| `/itinerary` | Guest/admin | Session plan; add/remove/reorder/clear; no bookings or account persistence |
+| `/auth` | Guest | Admin login using API Identity cookie; no public admin registration |
+| `/admin` | Admin | Catalogue management and delete confirmation |
+| `/admin/attractions/new` | Admin | Validated attraction creation |
+| `/admin/attractions/:id/edit` | Admin | Validated attraction editing |
 
-### Shared shell (all pages)
+The API enforces admin access independently of the client route guard. The browser's stored admin display state does not grant API access.
 
-- Brand header (LocalVista · Kandy day visits)
-- Role-aware nav (guest vs admin)
-- Main content outlet
-- Simple footer
+## Proposal/SRS coverage snapshot
 
----
+| Requirement group | Implementation status |
+|---|---|
+| FR-01 to FR-07: catalogue, search/filter, details, images | Implemented; catalogue is API-backed and seeded with 15 attractions |
+| FR-08: Google Maps API map | Implemented through Maps Embed API when a valid runtime key is configured; no-key preview fallback is available |
+| FR-09: preserve search/filter on return | Implemented through Angular query parameter preservation |
+| FR-10 to FR-13: one-day plan | Implemented in session storage, including duplicate prevention and reorder controls |
+| FR-14 to FR-21: admin authentication and CRUD | Implemented with Identity, role authorization, validation, and delete confirmation |
+| NFR-01, NFR-03: response time and reliability thresholds | Not claimed as verified; require repeatable measurements under the SRS conditions |
+| NFR-02: three-interaction usability target | The flow is designed for this target; user evaluation evidence is still needed |
+| NFR-04: admin security | Identity and server-side role authorization are implemented; production transport/security configuration must be reviewed at deployment |
+| NFR-05: 99% availability | Deployment and uptime monitoring are outside the local development project; not verified |
+| NFR-06 and NFR-07: maintainability and adding attraction records | Supported by admin CRUD and the relational data model |
+| NFR-08: browser and responsive compatibility | Responsive layouts are implemented; Chrome/Edge/Firefox and 360-1920 px verification should be recorded before claiming conformance |
 
-## 3. Navigation by login state
-
-| State | Navbar shows |
-|-------|----------------|
-| **Guest** | Explore · My plan · **Admin sign in** |
-| **Admin** (demo session) | Explore · My plan · **Admin** · display name · Log out |
-
-Rules:
-
-- Visitors **do not** register or sign in as tourists.
-- The **Admin** tab is hidden until the demo admin signs in.
-- Guests can explore, open details, and build a day plan without an account.
-
----
-
-## 4. What’s implemented on each page
-
-### 4.1 Explore — `/`
-
-- Hero with search, stats, and spotlight photos
-- How-it-works steps (browse → add → enjoy; no account needed)
-- Catalogue grid with name search + multi-select category filters
-- Filter state in URL query params (`q`, `categories`)
-- Cards show primary image, optional “N photos” badge, category, distance, hours
-- **+ Add** to session itinerary from the card
-
-### 4.2 Attraction detail — `/attractions/:id`
-
-- Multi-image gallery (main image + thumbnail strip when more than one URL)
-- Category, description, distance, opening hours, travel tips
-- Add / remove from day plan
-- Location: latitude/longitude + **iframe map preview** via `MapPreviewService` (replaceable seam for Google Maps API later)
-- Not-found state for unknown ids
-
-### 4.3 My plan — `/itinerary`
-
-- Session plan in **`sessionStorage`** (not `localStorage`; not a saved account itinerary)
-- Empty state with browse CTA
-- Ordered timeline with **Move up / Move down**, remove, clear
-- Day snapshot (stop count, combined distance labels, categories)
-- No bookings, payments, multi-day, or cloud save
-
-### 4.4 Admin sign in — `/auth`
-
-- Admin-only form
-- Clearly labelled **demo** credentials (mock auth — not production security)
-- No sign-up / no public admin registration
-- Redirects to `/admin` (or `returnUrl` under `/admin`)
-
-**Demo admin:** `manager` / `Manager123`
-
-### 4.5 Admin catalogue & form
-
-- Guarded list with edit / delete (+ confirmation dialog)
-- Add/edit form with required name, category, description
-- **Multiple image URLs**: add, edit, remove, live preview
-- Lat/lng fields retained for map preview
-
----
-
-## 5. Features completed overall (frontend)
-
-| Feature | Status |
-|---------|--------|
-| Browse catalogue (15+ places ≈ within 25 km of Kandy) | Done |
-| Name search + category filter + URL preserve | Done |
-| Attraction detail + tips + distance | Done |
-| Multiple images per attraction (mock URLs) | Done |
-| Gallery on detail; primary image on cards | Done |
-| Map preview from lat/lng (replaceable service) | Done |
-| Guest day plan: add / remove / reorder / clear | Done |
-| Plan in `sessionStorage` | Done |
-| Admin sign-in only (guest vs admin) | Done |
-| Admin CRUD + delete confirm + validation | Done |
-| No tourist registration / tourist sign-in | Done |
-
----
-
-## 6. Architecture (frontend seams)
+## Architecture
 
 ```text
-src/app/
-  core/
-    models/          Attraction (imageUrls[]), Auth (Admin only)
-    data/            MOCK_ATTRACTIONS
-    services/        AttractionService, ItineraryService, AuthService, MapPreviewService
-    guards/          adminGuard
-  layout/shell/
-  features/
-    attractions/     list + detail
-    itinerary/
-    auth/            admin sign-in
-    admin/           list + multi-image form
+Angular routes and standalone feature components
+  -> core services (HTTP API, auth, session itinerary, map URL)
+  -> ASP.NET controllers
+  -> application services and repositories
+  -> EF Core LocalVistaDbContext
+  -> SQL Server catalogue + Identity tables
 ```
 
-Services are the intended swap point for future HTTP → ASP.NET Core + SQL Server + Identity.
+Feature code is under `src/app/features`; shared models, API services, auth guard, and map config are under `src/app/core`. The frontend dev server proxies `/api` to the API. SQL catalogue schema and sample data are in `../database/LocalVista_Schema.sql`.
 
----
+## Demonstration checklist
 
-## 7. Intentionally not done yet
+1. Start SQL Server, the API, then Angular; show the 15-place catalogue.
+2. Search by name, apply multiple categories, and show the empty-results message.
+3. Open a detail page, inspect images/location, and return with filters preserved.
+4. Add attractions, reorder/remove them, refresh within the session, then clear the plan.
+5. Sign in as admin; add, edit, and delete a sample attraction; verify delete confirmation.
+6. Sign out and show that the API rejects an admin write without an authenticated Admin session.
+7. If the Maps Embed key is configured, demonstrate the interactive map. Otherwise explain the preview fallback and configure the key before claiming FR-08 complete.
 
-| Area | Notes |
-|------|--------|
-| ASP.NET Core REST API | Not integrated |
-| SQL Server + EF Core | Not connected |
-| Real authentication / Identity | Demo admin mock only |
-| Google Maps JavaScript API | Iframe preview via `MapPreviewService` only |
-| Image file upload / blob storage | URL strings in mock data only |
-| Tourist accounts, bookings, payments | Out of scope for this UI phase |
+## Verification still required
 
----
-
-## 8. Quick walkthrough checklist
-
-1. Open `/` as a guest — browse, search, filter, add places.  
-2. Open a detail page — switch gallery images; see map preview.  
-3. Open **My plan** — reorder, remove, clear; refresh tab keeps plan; new session clears it.  
-4. Open **Admin sign in** — use demo credentials; **Admin** tab appears.  
-5. CRUD a place with multiple image URLs.  
-6. Log out — Admin tab disappears; guest flow still works.  
-7. Visit `/signup` — lands on Explore.
-
----
-
-*Updated for admin-only auth, session itinerary, and multi-image mock support.*
+The rubric/SRS quality thresholds that need measurement cannot be established by source inspection alone. Record response-time samples, request-error counts, a first-time usability walkthrough, and browser/viewport checks. A 99% uptime claim requires a deployed environment and a monitoring period; it cannot be demonstrated by a local run.
