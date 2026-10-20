@@ -5,24 +5,29 @@
   Catalogue schema used by the LocalVista Angular frontend and ASP.NET Core API:
 
     Categories (1) ──< Attractions (1) ──< AttractionImages
+                              │
+                              └──< AttractionFeedback
 
-  Frontend field mapping
-  ----------------------
-  Categories.Name          ← ATTRACTION_CATEGORIES (7 names)
-  Attractions.*             ← Attraction (name, shortDescription, description,
-                             openingHours, travelTips, bestVisitMonths,
-                             contactPhone/email/website/address, distanceKm,
-                             latitude, longitude)
+  API field mapping
+  -----------------
+  GET /api/attractions (summary / Explore + plan cards)
+    ShortDescription, OpeningHours, DistanceKm, images, BestVisitMonths, coords
+  GET /api/attractions/{id} (detail)
+    + Description, TravelTips, ContactPhone/Email, WebsiteUrl, Address
+  Plan-stop UI (/itinerary/stops/:id) shows contact + full description;
+  Explore place page keeps the shorter card-style summary.
+
+  Categories.Name          ← category filter chips (7 seeded names)
   Attractions.CategoryId     ← Attraction.category (via Categories.Name)
   AttractionImages.ImageUrl + SortOrder
                            ← Attraction.imageUrls[] (SortOrder 0 = primary /
                              card thumbnail)
+  AttractionFeedback       ← anonymous ratings/comments (detail + admin)
 
   Intentionally NOT in this database
   ----------------------------------
   • One-day itinerary     → browser localStorage only (guest plan)
   • Tourist accounts      → out of project scope
-  • Attraction feedback   → anonymous ratings and comments per attraction
   • AdminAccounts table   → NOT created (see Admin authentication below)
 
   Admin authentication (ASP.NET Core Identity)
