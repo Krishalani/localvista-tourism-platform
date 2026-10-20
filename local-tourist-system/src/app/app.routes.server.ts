@@ -1,6 +1,6 @@
 import { RenderMode, ServerRoute } from '@angular/ssr';
 
-/** Client render avoids prerender issues with dynamic ids and session storage. */
+/** Client render avoids prerender issues with dynamic ids and local storage. */
 export const serverRoutes: ServerRoute[] = [
   {
     path: '**',

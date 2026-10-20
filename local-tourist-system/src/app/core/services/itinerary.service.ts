@@ -3,7 +3,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { Attraction } from '../models/attraction.model';
 import { AttractionService } from './attraction.service';
 
-/** Browser-session only — cleared when the tab/window session ends (not a saved account plan). */
+/** Persists in the browser across tabs and restarts (not a server-side account plan). */
 const STORAGE_KEY = 'localvista.itinerary.ids';
 
 @Injectable({ providedIn: 'root' })
@@ -107,16 +107,22 @@ export class ItineraryService {
       return [];
     }
     try {
-      const raw = sessionStorage.getItem(STORAGE_KEY);
+      const raw =
+        localStorage.getItem(STORAGE_KEY) ?? sessionStorage.getItem(STORAGE_KEY);
       if (!raw) {
-        localStorage.removeItem(STORAGE_KEY);
         return [];
       }
       const parsed = JSON.parse(raw) as unknown;
       if (!Array.isArray(parsed)) {
         return [];
       }
-      return parsed.filter((v): v is number => typeof v === 'number');
+      const ids = parsed.filter((v): v is number => typeof v === 'number');
+      // One-time migrate from sessionStorage → localStorage.
+      if (!localStorage.getItem(STORAGE_KEY) && sessionStorage.getItem(STORAGE_KEY)) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(ids));
+        sessionStorage.removeItem(STORAGE_KEY);
+      }
+      return ids;
     } catch {
       return [];
     }
@@ -126,7 +132,7 @@ export class ItineraryService {
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
-    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(ids));
-    localStorage.removeItem(STORAGE_KEY);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(ids));
+    sessionStorage.removeItem(STORAGE_KEY);
   }
 }

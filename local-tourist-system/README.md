@@ -18,7 +18,7 @@ The attraction detail page uses Google's interactive Maps Embed API when a key i
 ## Scope and routes
 
 - Guests can search/filter attractions, view details, and build a one-day plan without registration.
-- The plan supports add, remove, reorder, and clear; it is kept in `sessionStorage`.
+- The plan supports add, remove, reorder, and clear; it is kept in `localStorage`.
 - Admins sign in at `/auth` and manage attractions at `/admin` (create, edit, delete).
 - Tourist accounts, bookings, ticketing, and payments are out of scope.
 

@@ -4,7 +4,7 @@
 **Frontend:** Angular standalone components  
 **Backend:** ASP.NET Core Web API, C#, Entity Framework Core  
 **Data:** SQL Server catalogue; ASP.NET Core Identity tables  
-**Guest itinerary:** Browser `sessionStorage`; tourist registration is out of scope.
+**Guest itinerary:** Browser `localStorage`; tourist registration is out of scope.
 
 ## Run the system
 
@@ -50,7 +50,7 @@ The API enforces admin access independently of the client route guard. The brows
 | FR-01 to FR-07: catalogue, search/filter, details, images | Implemented; catalogue is API-backed and seeded with 15 attractions |
 | FR-08: Google Maps API map | Implemented through Maps Embed API when a valid runtime key is configured; no-key preview fallback is available |
 | FR-09: preserve search/filter on return | Implemented through Angular query parameter preservation |
-| FR-10 to FR-13: one-day plan | Implemented in session storage, including duplicate prevention and reorder controls |
+| FR-10 to FR-13: one-day plan | Implemented in local storage, including duplicate prevention and reorder controls |
 | FR-14 to FR-21: admin authentication and CRUD | Implemented with Identity, role authorization, validation, and delete confirmation |
 | NFR-01, NFR-03: response time and reliability thresholds | Not claimed as verified; require repeatable measurements under the SRS conditions |
 | NFR-02: three-interaction usability target | The flow is designed for this target; user evaluation evidence is still needed |

@@ -80,13 +80,19 @@ export class AuthService {
       return null;
     }
     try {
-      const raw = sessionStorage.getItem(SESSION_KEY);
+      const raw =
+        localStorage.getItem(SESSION_KEY) ?? sessionStorage.getItem(SESSION_KEY);
       if (!raw) {
         return null;
       }
       const parsed = JSON.parse(raw) as AuthUser;
       if (!parsed?.username || parsed.role !== 'Admin') {
         return null;
+      }
+      // One-time migrate from sessionStorage → localStorage.
+      if (!localStorage.getItem(SESSION_KEY) && sessionStorage.getItem(SESSION_KEY)) {
+        localStorage.setItem(SESSION_KEY, JSON.stringify(parsed));
+        sessionStorage.removeItem(SESSION_KEY);
       }
       return parsed;
     } catch {
@@ -98,13 +104,15 @@ export class AuthService {
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
-    sessionStorage.setItem(SESSION_KEY, JSON.stringify(user));
+    localStorage.setItem(SESSION_KEY, JSON.stringify(user));
+    sessionStorage.removeItem(SESSION_KEY);
   }
 
   private clearSession(): void {
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
+    localStorage.removeItem(SESSION_KEY);
     sessionStorage.removeItem(SESSION_KEY);
   }
 }

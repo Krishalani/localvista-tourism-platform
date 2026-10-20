@@ -19,7 +19,7 @@
 
   Intentionally NOT in this database
   ----------------------------------
-  • One-day itinerary     → browser sessionStorage only (guest plan)
+  • One-day itinerary     → browser localStorage only (guest plan)
   • Tourist accounts      → out of project scope
   • Attraction feedback   → anonymous ratings and comments per attraction
   • AdminAccounts table   → NOT created (see Admin authentication below)
