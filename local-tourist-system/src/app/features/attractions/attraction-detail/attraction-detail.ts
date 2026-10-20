@@ -60,8 +60,18 @@ export class AttractionDetail {
     { initialValue: this.route.snapshot.queryParamMap.get('from') },
   );
 
+  private readonly planView = toSignal(
+    this.route.data.pipe(map((data) => !!data['planView'])),
+    { initialValue: !!this.route.snapshot.data['planView'] },
+  );
+
+  /** Contact + full narrative only when opened from the day plan. */
+  protected readonly showPlanExtras = computed(
+    () => this.planView() || this.from() === 'itinerary',
+  );
+
   protected readonly backLabel = computed(() =>
-    this.from() === 'itinerary' ? 'My plan' : 'Places',
+    this.showPlanExtras() ? 'My plan' : 'Places',
   );
 
   protected readonly activeImage = computed(() => {
@@ -215,7 +225,7 @@ export class AttractionDetail {
   }
 
   goBack(): void {
-    if (this.from() === 'itinerary') {
+    if (this.showPlanExtras()) {
       void this.router.navigateByUrl('/itinerary');
       return;
     }

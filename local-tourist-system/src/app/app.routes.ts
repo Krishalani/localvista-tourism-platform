@@ -29,6 +29,14 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'itinerary/stops/:id',
+        loadComponent: () =>
+          import('./features/attractions/attraction-detail/attraction-detail').then(
+            (m) => m.AttractionDetail,
+          ),
+        data: { planView: true },
+      },
+      {
         path: 'itinerary',
         loadComponent: () =>
           import('./features/itinerary/itinerary').then((m) => m.ItineraryPage),
