@@ -206,12 +206,67 @@
   align-items: start;
 }
 
+.about,
+.contact,
 .tips,
 .map {
   background: color-mix(in srgb, #fff 92%, var(--lv-mist));
   border: 1px solid color-mix(in srgb, var(--lv-leaf) 11%, transparent);
   border-radius: 1.25rem;
   padding: 1.2rem 1.25rem 1.3rem;
+}
+
+.about {
+  grid-column: 1 / -1;
+}
+
+.about-copy {
+  margin: 0;
+  font-size: 1.02rem;
+  line-height: 1.65;
+  color: color-mix(in srgb, var(--lv-ink) 88%, transparent);
+}
+
+.best-months {
+  margin: 0.85rem 0 0;
+  font-size: 0.95rem;
+  color: color-mix(in srgb, var(--lv-ink) 72%, transparent);
+}
+
+.contact-list {
+  margin: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.contact-list div {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.contact-list dt {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--lv-ink) 55%, transparent);
+}
+
+.contact-list dd {
+  margin: 0;
+  font-size: 0.98rem;
+  line-height: 1.45;
+}
+
+.contact-list a {
+  color: var(--lv-lake);
+  text-decoration: none;
+  word-break: break-word;
+}
+
+.contact-list a:hover {
+  color: var(--lv-leaf);
+  text-decoration: underline;
 }
 
 .section-label {

@@ -63,7 +63,7 @@
       <span class="step-no">2</span>
       <div>
         <h3>Add to your plan</h3>
-        <p>Tap “Add” on anything that looks good. No account needed — your plan stays in this browser session.</p>
+        <p>Tap “Add” on anything that looks good. No account needed — your plan stays in this browser.</p>
       </div>
     </li>
     <li>
@@ -114,7 +114,7 @@
 @if (featuredPlace(); as featured) {
   <section class="feature-section">
     <div class="feature-image"><img [src]="primaryImageUrl(featured)" [alt]="featured.name" loading="lazy" /></div>
-    <div class="feature-copy"><p class="section-kicker">{{ isSeasonalFeature() ? 'RECOMMENDED NOW · ' + currentMonthName : 'LOCALVISTA PICK' }}</p><h2>{{ featured.name }}</h2><p>{{ featured.description }}</p><div class="feature-meta"><span>{{ featured.category }}</span><span>{{ featured.distanceKm }} km from Kandy</span>@if (featured.bestVisitMonths.length) { <span>Best months: {{ formatBestMonths(featured.bestVisitMonths) }}</span> }</div><a class="btn btn-primary" [routerLink]="['/attractions', featured.id]">View attraction</a></div>
+    <div class="feature-copy"><p class="section-kicker">{{ isSeasonalFeature() ? 'RECOMMENDED NOW · ' + currentMonthName : 'LOCALVISTA PICK' }}</p><h2>{{ featured.name }}</h2><p>{{ featured.shortDescription }}</p><div class="feature-meta"><span>{{ featured.category }}</span><span>{{ featured.distanceKm }} km from Kandy</span>@if (featured.bestVisitMonths.length) { <span>Best months: {{ formatBestMonths(featured.bestVisitMonths) }}</span> }</div><a class="btn btn-primary" [routerLink]="['/attractions', featured.id]">View attraction</a></div>
   </section>
 }
 
@@ -164,7 +164,7 @@
     <form class="catalogue-search" (ngSubmit)="goToCatalogue()">
       <label class="catalogue-query">
         <span>Search attractions</span>
-        <input type="search" name="catalogueSearch" placeholder="Name, category, description, opening hours, or travel tips" [ngModel]="search()" (ngModelChange)="onSearchInput($event)" autocomplete="off" />
+        <input type="search" name="catalogueSearch" placeholder="Name, category, short description, or opening hours" [ngModel]="search()" (ngModelChange)="onSearchInput($event)" autocomplete="off" />
       </label>
       <label class="distance-filter">
         <span>Distance from Kandy</span>
@@ -234,7 +234,7 @@
                 <h3>{{ item.name }}</h3>
                 <span class="distance">{{ item.distanceKm }} km</span>
               </div>
-              <p class="blurb">{{ item.description }}</p>
+              <p class="blurb">{{ item.shortDescription }}</p>
               <p class="hours">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                   <circle cx="12" cy="12" r="9" />

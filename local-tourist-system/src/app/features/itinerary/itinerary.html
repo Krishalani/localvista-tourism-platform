@@ -42,7 +42,7 @@
 
               <article class="stop">
                 <div class="stop-gallery">
-                  <a class="thumb" [routerLink]="['/attractions', item.id]">
+                  <a class="thumb" [routerLink]="['/attractions', item.id]" [queryParams]="{ from: 'itinerary' }">
                     <img [src]="primaryImageUrl(item)" [alt]="item.name" />
                   </a>
                   @if (item.imageUrls.length > 1) {
@@ -56,9 +56,12 @@
                 <div class="stop-body">
                   <span class="tag">{{ item.category }}</span>
                   <h3>
-                    <a [routerLink]="['/attractions', item.id]">{{ item.name }}</a>
+                    <a [routerLink]="['/attractions', item.id]" [queryParams]="{ from: 'itinerary' }">{{ item.name }}</a>
                   </h3>
                   <p class="meta">{{ item.distanceKm }} km from Kandy · {{ item.openingHours }}</p>
+                  @if (item.shortDescription) {
+                    <p class="stop-summary">{{ item.shortDescription }}</p>
+                  }
                   <div class="stop-actions">
                     <button type="button" class="order" [disabled]="first" (click)="moveUp(item.id)">
                       Move up
@@ -66,8 +69,8 @@
                     <button type="button" class="order" [disabled]="last" (click)="moveDown(item.id)">
                       Move down
                     </button>
-                    <a class="text-link" [routerLink]="['/attractions', item.id]">Open details</a>
-                    <a class="text-link" [routerLink]="['/attractions', item.id]" fragment="feedback">Rate this place</a>
+                    <a class="text-link" [routerLink]="['/attractions', item.id]" [queryParams]="{ from: 'itinerary' }">Open details</a>
+                    <a class="text-link" [routerLink]="['/attractions', item.id]" [queryParams]="{ from: 'itinerary' }" fragment="feedback">Rate this place</a>
                   </div>
                 </div>
                 <button
@@ -92,7 +95,7 @@
         <h2>Ready when you are</h2>
         <p class="summary-copy">
           This is a simple ordered list for one day near Kandy. Distances are from the city centre, not between stops.
-          Closing the browser session clears the plan.
+          Your plan is kept in this browser across visits.
         </p>
 
         <dl class="stats">
@@ -146,7 +149,7 @@
                   <h3><a [routerLink]="['/attractions', place.id]">{{ place.name }}</a></h3>
                   <span>{{ place.nearbyDistanceKm.toFixed(1) }} km</span>
                 </div>
-                <p>{{ place.description }}</p>
+                <p>{{ place.shortDescription }}</p>
                 <button type="button" class="nearby-add" (click)="addNearby(place.id, $event)">Add to my plan</button>
               </div>
             </article>

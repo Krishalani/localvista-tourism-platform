@@ -2,7 +2,10 @@
   <a routerLink="/admin" class="back">← Back to catalogue</a>
   <p class="eyebrow">Administrator</p>
   <h1>{{ isEdit() ? 'Edit place' : 'Add place' }}</h1>
-  <p class="lede">All fields are required. Add at least one valid image URL.</p>
+  <p class="lede">
+    Short description appears on Explore and plan cards. Full description and contact details appear on the place page.
+    Add at least one valid image URL.
+  </p>
 
   <form (ngSubmit)="submit()" novalidate>
     <label>
@@ -28,8 +31,14 @@
     </label>
 
     <label>
-      Description *
-      <textarea name="description" rows="4" [(ngModel)]="model.description" required [attr.aria-invalid]="isInvalid('description')"></textarea>
+      Short description * <span class="hint">(cards / plan stops, max 400)</span>
+      <textarea name="shortDescription" rows="2" [(ngModel)]="model.shortDescription" required maxlength="400" [attr.aria-invalid]="isInvalid('shortDescription')"></textarea>
+      @if (fieldError('shortDescription'); as message) { <span class="field-error">{{ message }}</span> }
+    </label>
+
+    <label>
+      Full description *
+      <textarea name="description" rows="5" [(ngModel)]="model.description" required [attr.aria-invalid]="isInvalid('description')"></textarea>
       @if (fieldError('description'); as message) { <span class="field-error">{{ message }}</span> }
     </label>
 
@@ -51,6 +60,31 @@
       <textarea name="travelTips" rows="3" [(ngModel)]="model.travelTips" required [attr.aria-invalid]="isInvalid('travelTips')"></textarea>
       @if (fieldError('travelTips'); as message) { <span class="field-error">{{ message }}</span> }
     </label>
+
+    <fieldset class="contact">
+      <legend>Contact details</legend>
+      <p class="seasonality-help">Optional. Shown on the place details page.</p>
+      <div class="row">
+        <label>
+          Phone
+          <input name="contactPhone" [(ngModel)]="model.contactPhone" maxlength="40" />
+        </label>
+        <label>
+          Email
+          <input name="contactEmail" type="email" [(ngModel)]="model.contactEmail" maxlength="200" [attr.aria-invalid]="isInvalid('contactEmail')" />
+          @if (fieldError('contactEmail'); as message) { <span class="field-error">{{ message }}</span> }
+        </label>
+      </div>
+      <label>
+        Website
+        <input name="websiteUrl" [(ngModel)]="model.websiteUrl" maxlength="500" placeholder="https://…" [attr.aria-invalid]="isInvalid('websiteUrl')" />
+        @if (fieldError('websiteUrl'); as message) { <span class="field-error">{{ message }}</span> }
+      </label>
+      <label>
+        Address
+        <input name="address" [(ngModel)]="model.address" maxlength="300" />
+      </label>
+    </fieldset>
 
     <fieldset class="seasonality">
       <legend>Best visiting months</legend>

@@ -56,6 +56,12 @@ textarea {
   background: #fff;
 }
 
+.hint {
+  font-weight: 500;
+  color: color-mix(in srgb, var(--lv-ink) 55%, transparent);
+}
+
+.contact,
 .seasonality {
   margin: 0;
   padding: 1rem;
@@ -64,6 +70,7 @@ textarea {
   background: #f5f9fa;
 }
 
+.contact legend,
 .seasonality legend {
   padding: 0 0.35rem;
   font-weight: 700;

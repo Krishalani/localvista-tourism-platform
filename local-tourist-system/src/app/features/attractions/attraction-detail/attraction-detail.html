@@ -1,7 +1,7 @@
 @if (attraction(); as item) {
   <article class="detail">
     <nav class="crumb" aria-label="Breadcrumb">
-      <button type="button" class="back" (click)="goBack()">Places</button>
+      <button type="button" class="back" (click)="goBack()">{{ backLabel() }}</button>
       <span aria-hidden="true">/</span>
       <span class="crumb-current">{{ item.name }}</span>
     </nav>
@@ -55,6 +55,52 @@
     </header>
 
     <div class="body">
+      <section class="about" aria-labelledby="about-title">
+        <div class="section-label">
+          <h2 id="about-title">About this place</h2>
+          <p>Full visit details beyond the short card summary.</p>
+        </div>
+        <p class="about-copy">{{ item.description }}</p>
+        @if (item.bestVisitMonths.length) {
+          <p class="best-months"><strong>Best months:</strong> {{ formatBestMonths(item.bestVisitMonths) }}</p>
+        }
+      </section>
+
+      @if (hasContactDetails(item)) {
+        <section class="contact" aria-labelledby="contact-title">
+          <div class="section-label">
+            <h2 id="contact-title">Contact details</h2>
+            <p>Reach the place before you travel.</p>
+          </div>
+          <dl class="contact-list">
+            @if (item.address?.trim()) {
+              <div>
+                <dt>Address</dt>
+                <dd>{{ item.address }}</dd>
+              </div>
+            }
+            @if (item.contactPhone?.trim()) {
+              <div>
+                <dt>Phone</dt>
+                <dd><a [href]="'tel:' + item.contactPhone">{{ item.contactPhone }}</a></dd>
+              </div>
+            }
+            @if (item.contactEmail?.trim()) {
+              <div>
+                <dt>Email</dt>
+                <dd><a [href]="'mailto:' + item.contactEmail">{{ item.contactEmail }}</a></dd>
+              </div>
+            }
+            @if (item.websiteUrl?.trim()) {
+              <div>
+                <dt>Website</dt>
+                <dd><a [href]="item.websiteUrl" target="_blank" rel="noopener noreferrer">{{ item.websiteUrl }}</a></dd>
+              </div>
+            }
+          </dl>
+        </section>
+      }
+
       <section class="tips" aria-labelledby="tips-title">
         <div class="section-label">
           <h2 id="tips-title">Plan smarter</h2>
@@ -247,7 +293,7 @@
                 <div class="nearby-copy">
                   <span class="nearby-category">{{ suggestion.place.category }}</span>
                   <h3>{{ suggestion.place.name }}</h3>
-                  <p>{{ suggestion.place.description }}</p>
+                  <p>{{ suggestion.place.shortDescription }}</p>
                   <span class="nearby-link">View place</span>
                 </div>
               </a>

@@ -4,7 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { map } from 'rxjs';
-import { Attraction, primaryImageUrl } from '../../../core/models/attraction.model';
+import {
+  AttractionDetail as AttractionDetailModel,
+  AttractionSummary,
+  hasContactDetails,
+  primaryImageUrl,
+} from '../../../core/models/attraction.model';
 import { AttractionService } from '../../../core/services/attraction.service';
 import { ItineraryService } from '../../../core/services/itinerary.service';
 import { MapPreviewService } from '../../../core/services/map-preview.service';
@@ -38,8 +43,8 @@ export class AttractionDetail {
   protected readonly message = signal('');
   protected readonly mapsApiConfigured = this.mapPreview.isConfigured;
   protected readonly activeImageIndex = signal(0);
-  protected readonly attraction = signal<Attraction | undefined>(undefined);
-  protected readonly nearbyPlaces = signal<{ place: Attraction; distanceKm: number }[]>([]);
+  protected readonly attraction = signal<AttractionDetailModel | undefined>(undefined);
+  protected readonly nearbyPlaces = signal<{ place: AttractionSummary; distanceKm: number }[]>([]);
   protected readonly feedback = signal<FeedbackSummary | undefined>(undefined);
   protected readonly feedbackLoading = signal(true);
   protected readonly feedbackSaving = signal(false);
@@ -48,6 +53,16 @@ export class AttractionDetail {
   protected readonly ratingOptions = [1, 2, 3, 4, 5];
   protected feedbackDraft = { displayName: '', rating: 0, comment: '' };
   protected readonly primaryImageUrl = primaryImageUrl;
+  protected readonly hasContactDetails = hasContactDetails;
+
+  private readonly from = toSignal(
+    this.route.queryParamMap.pipe(map((params) => params.get('from'))),
+    { initialValue: this.route.snapshot.queryParamMap.get('from') },
+  );
+
+  protected readonly backLabel = computed(() =>
+    this.from() === 'itinerary' ? 'My plan' : 'Places',
+  );
 
   protected readonly activeImage = computed(() => {
     const a = this.attraction();
@@ -100,7 +115,7 @@ export class AttractionDetail {
     });
   }
 
-  private async loadNearbyPlaces(current: Attraction, routeId: number): Promise<void> {
+  private async loadNearbyPlaces(current: AttractionSummary, routeId: number): Promise<void> {
     try {
       const places = await this.attractionService.query();
       if (this.id() !== routeId) {
@@ -182,7 +197,7 @@ export class AttractionDetail {
     );
   }
 
-  private distanceBetween(a: Attraction, b: Attraction): number {
+  private distanceBetween(a: AttractionSummary, b: AttractionSummary): number {
     const radians = (degrees: number) => (degrees * Math.PI) / 180;
     const latitudeDelta = radians(b.latitude - a.latitude);
     const longitudeDelta = radians(b.longitude - a.longitude);
@@ -200,9 +215,24 @@ export class AttractionDetail {
   }
 
   goBack(): void {
+    if (this.from() === 'itinerary') {
+      void this.router.navigateByUrl('/itinerary');
+      return;
+    }
     void this.router.navigate(['/'], {
       queryParamsHandling: 'preserve',
     });
+  }
+
+  formatBestMonths(months: number[]): string {
+    if (!months?.length) {
+      return '';
+    }
+    return months
+      .map((month) =>
+        new Intl.DateTimeFormat('en', { month: 'short' }).format(new Date(2024, month - 1, 1)),
+      )
+      .join(', ');
   }
 
   addToPlan(): void {

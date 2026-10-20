@@ -48,8 +48,7 @@ export class AttractionList {
       const searchableText = [
         place.name,
         place.category,
-        place.description,
-        place.travelTips,
+        place.shortDescription,
         place.openingHours,
         `${place.distanceKm} km`,
         `distance ${place.distanceKm} km from kandy`,

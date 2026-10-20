@@ -3,9 +3,10 @@ import { isPlatformBrowser } from '@angular/common';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import {
-  Attraction,
   AttractionCategory,
+  AttractionDetail,
   AttractionFormModel,
+  AttractionSummary,
 } from '../models/attraction.model';
 import { environment } from '../../../environments/environment';
 
@@ -19,7 +20,7 @@ export interface AttractionQuery {
 export class AttractionService {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly http = inject(HttpClient);
-  private readonly attractionsSignal = signal<Attraction[]>([]);
+  private readonly attractionsSignal = signal<AttractionSummary[]>([]);
   private readonly categoriesSignal = signal<AttractionCategory[]>([]);
   private readonly loadingSignal = signal(false);
   private readonly errorSignal = signal('');
@@ -51,7 +52,7 @@ export class AttractionService {
     }
   }
 
-  async query(query: AttractionQuery = {}): Promise<Attraction[]> {
+  async query(query: AttractionQuery = {}): Promise<AttractionSummary[]> {
     if (!isPlatformBrowser(this.platformId)) {
       return [];
     }
@@ -69,13 +70,13 @@ export class AttractionService {
     }
 
     return firstValueFrom(
-      this.http.get<Attraction[]>(`${environment.apiBaseUrl}/attractions`, {
+      this.http.get<AttractionSummary[]>(`${environment.apiBaseUrl}/attractions`, {
         params,
       }),
     );
   }
 
-  async load(query: AttractionQuery = {}): Promise<Attraction[]> {
+  async load(query: AttractionQuery = {}): Promise<AttractionSummary[]> {
     if (!isPlatformBrowser(this.platformId)) {
       return [];
     }
@@ -97,32 +98,32 @@ export class AttractionService {
     }
   }
 
-  async getById(id: number): Promise<Attraction | undefined> {
+  async getById(id: number): Promise<AttractionDetail | undefined> {
     if (!isPlatformBrowser(this.platformId)) {
       return undefined;
     }
 
     try {
       return await firstValueFrom(
-        this.http.get<Attraction>(`${environment.apiBaseUrl}/attractions/${id}`),
+        this.http.get<AttractionDetail>(`${environment.apiBaseUrl}/attractions/${id}`),
       );
     } catch {
       return undefined;
     }
   }
 
-  async add(form: AttractionFormModel): Promise<Attraction> {
+  async add(form: AttractionFormModel): Promise<AttractionDetail> {
     return firstValueFrom(
-      this.http.post<Attraction>(
+      this.http.post<AttractionDetail>(
         `${environment.apiBaseUrl}/attractions`,
         this.toWriteBody(form),
       ),
     );
   }
 
-  async update(id: number, form: AttractionFormModel): Promise<Attraction> {
+  async update(id: number, form: AttractionFormModel): Promise<AttractionDetail> {
     return firstValueFrom(
-      this.http.put<Attraction>(
+      this.http.put<AttractionDetail>(
         `${environment.apiBaseUrl}/attractions/${id}`,
         this.toWriteBody(form),
       ),
@@ -140,6 +141,7 @@ export class AttractionService {
     return {
       name: form.name.trim(),
       category: form.category,
+      shortDescription: form.shortDescription.trim(),
       description: form.description.trim(),
       openingHours: form.openingHours?.trim() ?? '',
       travelTips: form.travelTips?.trim() ?? '',
@@ -148,6 +150,10 @@ export class AttractionService {
       imageUrls: (form.imageUrls ?? []).map((u) => u.trim()).filter(Boolean),
       latitude: Number(form.latitude),
       longitude: Number(form.longitude),
+      contactPhone: form.contactPhone?.trim() || null,
+      contactEmail: form.contactEmail?.trim() || null,
+      websiteUrl: form.websiteUrl?.trim() || null,
+      address: form.address?.trim() || null,
     };
   }
 }

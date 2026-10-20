@@ -125,8 +125,14 @@ export class AdminAttractionForm implements OnInit {
             : '';
       case 'category':
         return this.model.category.trim() ? '' : 'Select a category.';
+      case 'shortDescription':
+        return !this.model.shortDescription.trim()
+          ? 'Short description is required.'
+          : this.model.shortDescription.trim().length > 400
+            ? 'Short description must be 400 characters or fewer.'
+            : '';
       case 'description':
-        return this.model.description.trim() ? '' : 'Description is required.';
+        return this.model.description.trim() ? '' : 'Full description is required.';
       case 'openingHours':
         return !this.model.openingHours.trim()
           ? 'Opening hours are required.'
@@ -153,6 +159,17 @@ export class AdminAttractionForm implements OnInit {
           Number(this.model.longitude) >= -180 && Number(this.model.longitude) <= 180
           ? ''
           : 'Longitude must be between -180 and 180.';
+      case 'contactEmail': {
+        const email = this.model.contactEmail?.trim() ?? '';
+        return !email || email.includes('@') ? '' : 'Enter a valid email or leave blank.';
+      }
+      case 'websiteUrl': {
+        const website = this.model.websiteUrl?.trim() ?? '';
+        if (!website) {
+          return '';
+        }
+        return this.isValidHttpUrl(website) ? '' : 'Website must start with http:// or https://.';
+      }
       case 'images':
         return this.model.imageUrls.some((url) => this.isValidImageUrl(url))
           ? ''
@@ -183,8 +200,8 @@ export class AdminAttractionForm implements OnInit {
 
   private isFormValid(): boolean {
     const scalarFields = [
-      'name', 'category', 'description', 'openingHours', 'travelTips',
-      'distanceKm', 'latitude', 'longitude',
+      'name', 'category', 'shortDescription', 'description', 'openingHours', 'travelTips',
+      'distanceKm', 'latitude', 'longitude', 'contactEmail', 'websiteUrl',
     ];
     return scalarFields.every((field) => !this.fieldError(field)) &&
       !this.fieldError('images') &&
@@ -196,8 +213,12 @@ export class AdminAttractionForm implements OnInit {
     if (url.startsWith('/images/')) {
       return true;
     }
+    return this.isValidHttpUrl(url);
+  }
+
+  private isValidHttpUrl(value: string): boolean {
     try {
-      const parsed = new URL(url);
+      const parsed = new URL(value.trim());
       return parsed.protocol === 'http:' || parsed.protocol === 'https:';
     } catch {
       return false;
@@ -239,6 +260,11 @@ export class AdminAttractionForm implements OnInit {
     this.editId.set(id);
     this.model = {
       ...existing,
+      shortDescription: existing.shortDescription ?? '',
+      contactPhone: existing.contactPhone ?? '',
+      contactEmail: existing.contactEmail ?? '',
+      websiteUrl: existing.websiteUrl ?? '',
+      address: existing.address ?? '',
       imageUrls: [...existing.imageUrls],
     };
   }
@@ -247,10 +273,15 @@ export class AdminAttractionForm implements OnInit {
     return {
       name: '',
       category: 'Nature',
+      shortDescription: '',
       description: '',
       openingHours: '',
       travelTips: '',
       bestVisitMonths: [],
+      contactPhone: '',
+      contactEmail: '',
+      websiteUrl: '',
+      address: '',
       distanceKm: 0,
       imageUrls: [],
       latitude: 7.2905,

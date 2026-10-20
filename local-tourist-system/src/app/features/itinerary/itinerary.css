@@ -271,6 +271,13 @@
   line-height: 1.45;
 }
 
+.stop-summary {
+  margin: 0.35rem 0 0;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  color: color-mix(in srgb, var(--lv-ink) 78%, transparent);
+}
+
 .stop-actions {
   display: flex;
   flex-wrap: wrap;
