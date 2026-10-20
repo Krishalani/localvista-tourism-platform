@@ -386,6 +386,30 @@ body:has(app-attraction-list) app-attraction-list .popular-section {
   background: #f2f8f6;
 }
 
+body:has(app-attraction-list) app-attraction-list .theme-section {
+  width: min(100%, 1440px);
+  margin: 0 auto;
+  padding: clamp(3.5rem, 7vw, 6rem) clamp(1.25rem, 5vw, 4.5rem) clamp(2.5rem, 5vw, 4rem);
+}
+body:has(app-attraction-list) app-attraction-list .theme-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 2.2rem;
+}
+body:has(app-attraction-list) app-attraction-list .theme-card {
+  position: relative; display: flex; min-height: 190px; flex-direction: column; align-items: flex-start;
+  padding: 1.4rem; border: 1px solid #dfe9e4; border-radius: 1rem; background: #fff; color: #102a43;
+  text-decoration: none; transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+body:has(app-attraction-list) app-attraction-list .theme-card:hover { transform: translateY(-3px); box-shadow: 0 14px 30px rgb(16 42 67 / 8%); }
+body:has(app-attraction-list) app-attraction-list .theme-number { position: absolute; top: 1rem; right: 1rem; color: #87989a; font-size: 0.7rem; letter-spacing: 0.1em; }
+body:has(app-attraction-list) app-attraction-list .theme-icon { display: grid; width: 2.7rem; height: 2.7rem; place-items: center; margin-bottom: 0.65rem; border-radius: 50%; background: #edf4ec; color: #087f68; font-size: 1.15rem; }
+body:has(app-attraction-list) app-attraction-list .theme-card strong { font-size: 1rem; }
+body:has(app-attraction-list) app-attraction-list .theme-card small { margin-top: 0.45rem; color: #687b89; font-size: 0.75rem; }
+body:has(app-attraction-list) app-attraction-list .theme-arrow { margin: auto 0 0 auto; color: #087f68; }
+body:has(app-attraction-list) app-attraction-list .popular-rating { margin-top: 0.35rem; color: #ffda72; font-size: 0.88rem; font-weight: 700; }
+
 body:has(app-attraction-list) app-attraction-list .split-head {
   display: flex;
   align-items: end;
@@ -403,6 +427,13 @@ body:has(app-attraction-list) app-attraction-list .popular-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
+}
+
+@media (max-width: 900px) {
+  body:has(app-attraction-list) app-attraction-list .theme-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 520px) {
+  body:has(app-attraction-list) app-attraction-list .theme-grid { grid-template-columns: 1fr; }
 }
 
 body:has(app-attraction-list) app-attraction-list .popular-card {
@@ -1043,6 +1074,129 @@ body:has(app-attraction-list) app-attraction-list .dock-form input {
   outline: 0;
   color: var(--lv-ink);
   font: inherit;
+}
+
+body:has(app-attraction-list) app-attraction-list .search-dock { margin-bottom: 0.75rem; }
+body:has(app-attraction-list) app-attraction-list .dock-form {
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1rem;
+}
+body:has(app-attraction-list) app-attraction-list .dock-divider,
+body:has(app-attraction-list) app-attraction-list .dock-hint { display: none; }
+body:has(app-attraction-list) app-attraction-list .dock-form select {
+  width: 100%;
+  min-height: 2.5rem;
+  border: 0;
+  background: transparent;
+  color: var(--lv-ink);
+  font: inherit;
+}
+body:has(app-attraction-list) app-attraction-list .home-search-results {
+  width: min(1120px, calc(100% - 2 * var(--lv-gutter)));
+  margin: 0 auto clamp(2.5rem, 5vw, 4rem);
+  padding: 1rem 1.25rem 1.25rem;
+  border: 1px solid var(--lv-line);
+  border-radius: 1rem;
+  background: #fff;
+  box-shadow: 0 12px 32px rgb(13 37 47 / 7%);
+}
+body:has(app-attraction-list) app-attraction-list .home-results-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.8rem;
+  color: var(--lv-ink);
+  font-size: 0.86rem;
+}
+body:has(app-attraction-list) app-attraction-list .home-results-heading span { color: var(--lv-muted); }
+body:has(app-attraction-list) app-attraction-list .home-results-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+body:has(app-attraction-list) app-attraction-list .home-result-card {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.55rem;
+  border: 1px solid #e8efec;
+  border-radius: 0.75rem;
+  color: var(--lv-ink);
+  text-decoration: none;
+}
+body:has(app-attraction-list) app-attraction-list .home-result-card:hover { border-color: #91cbbd; background: #f7fbfa; }
+body:has(app-attraction-list) app-attraction-list .home-result-card img { width: 3.5rem; height: 3.5rem; flex: none; border-radius: 0.55rem; object-fit: cover; }
+body:has(app-attraction-list) app-attraction-list .home-result-card > span { display: grid; min-width: 0; gap: 0.2rem; }
+body:has(app-attraction-list) app-attraction-list .home-result-card small { overflow: hidden; color: var(--lv-muted); font-size: 0.7rem; text-overflow: ellipsis; white-space: nowrap; }
+body:has(app-attraction-list) app-attraction-list .home-result-card strong { overflow: hidden; font-size: 0.88rem; text-overflow: ellipsis; white-space: nowrap; }
+body:has(app-attraction-list) app-attraction-list .home-result-card b { margin-left: auto; color: var(--lv-lake); }
+body:has(app-attraction-list) app-attraction-list .home-results-empty { margin: 0; padding: 1rem 0; color: var(--lv-muted); font-size: 0.9rem; }
+
+@media (max-width: 640px) {
+  body:has(app-attraction-list) app-attraction-list .home-results-grid { grid-template-columns: 1fr; }
+  body:has(app-attraction-list) app-attraction-list .home-results-heading { flex-direction: column; gap: 0.25rem; }
+}
+
+/* Let the home hero fill the viewport and keep its search panel over the photo. */
+body:has(app-attraction-list .hero-cover) .page-inner {
+  width: 100%;
+  max-width: none;
+  padding: 0;
+}
+body:has(app-attraction-list .hero-cover) app-attraction-list .hero-cover {
+  width: 100%;
+  height: calc(100svh - 4.5rem);
+  min-height: 720px;
+  margin: 0;
+  padding: 3rem clamp(1.25rem, 9vw, 9rem) 12rem;
+  background-position: center center;
+}
+body:has(app-attraction-list .hero-cover) app-attraction-list .hero-cover-content {
+  width: min(100%, 1400px);
+}
+body:has(app-attraction-list .hero-cover) app-attraction-list .hero-scroll { bottom: 11rem; }
+body:has(app-attraction-list .hero-cover) app-attraction-list .search-dock {
+  margin: -10.5rem auto 3rem;
+}
+
+@media (max-width: 640px) {
+  body:has(app-attraction-list .hero-cover) app-attraction-list .hero-cover {
+    height: auto;
+    min-height: 760px;
+    padding: 3rem 1.25rem 13rem;
+    background-position: 58% center;
+  }
+  body:has(app-attraction-list .hero-cover) app-attraction-list .search-dock { margin-top: -11.5rem; }
+  body:has(app-attraction-list .hero-cover) app-attraction-list .hero-scroll { bottom: 12rem; }
+}
+
+body:has(app-attraction-list .hero-cover) app-attraction-list .search-dock {
+  width: min(900px, calc(100% - 2 * var(--lv-gutter)));
+  margin: -8.5rem auto 3rem;
+  padding: 1rem 1.15rem;
+  border-radius: 1.15rem;
+  box-shadow: 0 18px 46px rgb(8 35 38 / 22%);
+}
+body:has(app-attraction-list .hero-cover) app-attraction-list .dock-form {
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1rem;
+  padding: 0;
+}
+body:has(app-attraction-list .hero-cover) app-attraction-list .dock-form label { gap: 0.1rem; }
+body:has(app-attraction-list .hero-cover) app-attraction-list .dock-form label > span { font-size: 0.7rem; }
+body:has(app-attraction-list .hero-cover) app-attraction-list .dock-form input { min-height: 2.5rem; font-size: 1rem; }
+body:has(app-attraction-list .hero-cover) app-attraction-list .dock-form .btn { min-height: 3rem; padding-inline: 1.35rem; }
+body:has(app-attraction-list .hero-cover) app-attraction-list .hero-scroll { bottom: 9.5rem; }
+
+@media (max-width: 640px) {
+  body:has(app-attraction-list .hero-cover) app-attraction-list .search-dock {
+    width: calc(100% - 2rem);
+    margin-top: -8rem;
+    padding: 0.85rem;
+  }
+  body:has(app-attraction-list .hero-cover) app-attraction-list .dock-form { grid-template-columns: 1fr; gap: 0.5rem; }
+  body:has(app-attraction-list .hero-cover) app-attraction-list .dock-form .btn { width: 100%; }
 }
 
 body:has(app-attraction-list) app-attraction-list .dock-divider {

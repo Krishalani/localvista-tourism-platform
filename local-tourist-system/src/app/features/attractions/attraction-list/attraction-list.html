@@ -81,12 +81,6 @@
     <p class="hero-kicker"><span></span> KANDY · SRI LANKA</p>
     <h1>Your journey<br />starts <em>here.</em></h1>
     <p class="hero-copy">Find quiet gardens, sacred places, tea country and mountain views—all close enough for one memorable day.</p>
-    <form class="hero-search" (ngSubmit)="goToCatalogue()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
-      <input type="search" name="q" aria-label="Search by place name" placeholder="Where would you like to go?" [ngModel]="search()" (ngModelChange)="onSearchInput($event)" autocomplete="off" />
-      <button type="submit" class="btn btn-primary">Find places <span aria-hidden="true">→</span></button>
-    </form>
-    <a class="hero-cta btn btn-primary" routerLink="/attractions">Explore attractions</a>
     <div class="hero-meta"><span><strong>{{ total() }}</strong> places to discover</span><i></i><span><strong>{{ categories().length }}</strong> categories</span><i></i><span>All within 25 km of Kandy</span></div>
     @if (error()) { <p class="api-error" role="alert">{{ error() }}</p> }
     @if (loading()) { <p class="api-status">Finding places around Kandy…</p> }
@@ -95,19 +89,27 @@
 </section>
 
 <section class="search-dock" aria-label="Search attractions">
-  <div class="search-tabs"><span class="search-tab active">Attractions</span><a class="search-tab" routerLink="/itinerary">One-day plan</a></div>
   <form class="dock-form" (ngSubmit)="goToCatalogue()">
-    <label><span>Find a place</span><input type="search" name="q" aria-label="Search by place name" placeholder="Try gardens, temples or tea trails" [ngModel]="search()" (ngModelChange)="onSearchInput($event)" autocomplete="off" /></label>
+    <label><span>What are you looking for?</span><input type="search" name="q" aria-label="Search places by name, keyword, or distance" placeholder="Enter a place, keyword, or distance (e.g. temple, 10 km)" [ngModel]="search()" (ngModelChange)="onSearchInput($event)" autocomplete="off" /></label>
     <div class="dock-divider"></div><div class="dock-hint"><span>Explore around</span><strong>Kandy · up to 25 km</strong></div>
     <button type="submit" class="btn btn-primary">Search places <span aria-hidden="true">→</span></button>
   </form>
 </section>
 
-<section class="promo-strip" aria-label="Featured local attractions">
-  @for (promo of spotlight().slice(0, 3); track promo.id) {
-    <a class="promo-card" [routerLink]="['/attractions', promo.id]"><img [src]="primaryImageUrl(promo)" [alt]="promo.name" loading="lazy" /><span class="promo-shade"></span><span class="promo-label">{{ promo.category }}</span><strong>{{ promo.name }}</strong><span class="promo-cta">Discover place →</span></a>
-  }
-</section>
+@if (search().trim()) {
+  <section class="home-search-results" aria-live="polite" aria-label="Matching attractions">
+    <div class="home-results-heading"><strong>{{ homeSearchResults().length }} matching place{{ homeSearchResults().length === 1 ? '' : 's' }}</strong><span>Choose a place to see its details</span></div>
+    @if (homeSearchResults().length) {
+      <div class="home-results-grid">
+        @for (place of homeSearchResults(); track place.id) {
+          <a class="home-result-card" [routerLink]="['/attractions', place.id]"><img [src]="primaryImageUrl(place)" [alt]="place.name" loading="lazy" /><span><small>{{ place.category }} · {{ place.distanceKm }} km from Kandy</small><strong>{{ place.name }}</strong></span><b aria-hidden="true">↗</b></a>
+        }
+      </div>
+    } @else {
+      <p class="home-results-empty">No places match that search. Try another place name or keyword.</p>
+    }
+  </section>
+}
 
 @if (featuredPlace(); as featured) {
   <section class="feature-section">
@@ -116,11 +118,20 @@
   </section>
 }
 
+<section class="theme-section">
+  <header class="landing-section-head split-head"><div><p class="section-kicker">FIND YOUR KIND OF DAY</p><h2>Explore Kandy your way</h2><p>Choose a theme and find a place that feels right.</p></div><a class="text-action" routerLink="/attractions">All places →</a></header>
+  <div class="theme-grid">
+    @for (category of categories(); track category; let i = $index) {
+      <a class="theme-card" [routerLink]="['/attractions']" [queryParams]="{ categories: category }"><span class="theme-number">{{ i + 1 }}</span><span class="theme-icon" aria-hidden="true">{{ categoryIcon(i) }}</span><strong>{{ category }}</strong><small>Discover places around Kandy</small><span class="theme-arrow" aria-hidden="true">↗</span></a>
+    }
+  </div>
+</section>
+
 <section class="popular-section">
   <header class="landing-section-head split-head"><div><p class="section-kicker">ONE DAY TRIP IDEAS</p><h2>Make a day of it</h2><p>Choose a place to start exploring around Kandy.</p></div><a class="text-action" routerLink="/attractions">Browse all attractions</a></header>
   <div class="popular-grid">
-    @for (spot of spotlight(); track spot.id) {
-      <a class="popular-card" [routerLink]="['/attractions', spot.id]"><img [src]="primaryImageUrl(spot)" [alt]="spot.name" loading="lazy" /><span class="popular-overlay"></span><span class="popular-category">{{ spot.category }}</span><span class="popular-copy"><strong>{{ spot.name }}</strong><small>{{ spot.distanceKm }} km from Kandy</small></span><span class="popular-arrow" aria-hidden="true">↗</span></a>
+    @for (spot of topRated(); track spot.id) {
+      <a class="popular-card" [routerLink]="['/attractions', spot.id]"><img [src]="primaryImageUrl(spot)" [alt]="spot.name" loading="lazy" /><span class="popular-overlay"></span><span class="popular-category">{{ spot.category }}</span><span class="popular-copy"><strong>{{ spot.name }}</strong><small>{{ spot.distanceKm }} km from Kandy</small><span class="popular-rating">&#9733; {{ ratingFor(spot.id).count ? ratingFor(spot.id).average.toFixed(1) : 'New' }}</span></span><span class="popular-arrow" aria-hidden="true">↗</span></a>
     }
   </div>
 </section>

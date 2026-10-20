@@ -9,6 +9,7 @@ import {
 } from '../../../core/models/attraction.model';
 import { AttractionService } from '../../../core/services/attraction.service';
 import { ItineraryService } from '../../../core/services/itinerary.service';
+import { FeedbackService } from '../../../core/services/feedback.service';
 
 @Component({
   selector: 'app-attraction-list',
@@ -22,6 +23,7 @@ export class AttractionList {
   private readonly attractionService = inject(AttractionService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly feedbackService = inject(FeedbackService);
   protected readonly itinerary = inject(ItineraryService);
   protected readonly primaryImageUrl = primaryImageUrl;
 
@@ -39,6 +41,28 @@ export class AttractionList {
   protected readonly visibleCount = signal(9);
   protected readonly visibleResults = computed(() => this.results().slice(0, this.visibleCount()));
   protected readonly spotlight = signal<Attraction[]>([]);
+  protected readonly homeSearchResults = computed(() => {
+    const terms = this.search().trim().toLocaleLowerCase().split(/\s+/).filter(Boolean);
+    if (!terms.length) return [];
+    return this.allPlaces().filter((place) => {
+      const searchableText = [
+        place.name,
+        place.category,
+        place.description,
+        place.travelTips,
+        place.openingHours,
+        `${place.distanceKm} km`,
+        `distance ${place.distanceKm} km from kandy`,
+        `within ${place.distanceKm} km`,
+      ].join(' ').toLocaleLowerCase();
+      return terms.every((term) => searchableText.includes(term));
+    }).slice(0, 6);
+  });
+  protected readonly ratings = signal<Record<number, { average: number; count: number }>>({});
+  protected readonly topRated = computed(() => [...this.allPlaces()]
+    .sort((a, b) => (this.ratings()[b.id]?.average ?? 0) - (this.ratings()[a.id]?.average ?? 0)
+      || (this.ratings()[b.id]?.count ?? 0) - (this.ratings()[a.id]?.count ?? 0))
+    .slice(0, 6));
   protected readonly featuredPlace = computed(() =>
     this.allPlaces().find((item) => item.bestVisitMonths?.includes(this.currentMonth)) ??
     this.allPlaces()[0] ?? this.spotlight()[0],
@@ -98,6 +122,14 @@ export class AttractionList {
     return this.selectedCategories().includes(category);
   }
 
+  categoryIcon(index: number): string {
+    return ['◇', '∿', '✿', '⚝', '⌂', '✦'][index % 6];
+  }
+
+  ratingFor(id: number): { average: number; count: number } {
+    return this.ratings()[id] ?? { average: 0, count: 0 };
+  }
+
   formatBestMonths(months: number[]): string {
     return months
       .filter((month) => month >= 1 && month <= 12)
@@ -154,6 +186,17 @@ export class AttractionList {
     this.allPlaces.set(all);
     // Spotlight from live API results only (no hardcoded attraction ids).
     this.spotlight.set(all.slice(0, 6));
+    const ratingEntries = await Promise.all(all.map(async (place) => {
+      try {
+        const summary = await this.feedbackService.getForAttraction(place.id);
+        return [place.id, { average: summary.averageRating, count: summary.reviewCount }] as const;
+      } catch {
+        return [place.id, { average: 0, count: 0 }] as const;
+      }
+    }));
+    if (version === this.reloadVersion) {
+      this.ratings.set(Object.fromEntries(ratingEntries));
+    }
     void this.itinerary.refreshItems();
   }
 
